@@ -25,7 +25,8 @@ void setup() {
   pinMode(in2_2, OUTPUT);
 
   servo1.attach(10);
-  servo1.write(110);
+  servo1.write(90);
+  // middle 90
 }
 
 void loop() {
@@ -40,9 +41,6 @@ void loop() {
   digitalWrite(in2_2, LOW);
   analogWrite(enA, 0);
   analogWrite(enB, 0);
-
-servo1.read()
   
-  servo1.write((steeringangle/2)+100);
-
+  servo1.write(steeringangle);
 }

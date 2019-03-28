@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.100
+ * Model version                  : 1.117
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Tue Mar 26 10:54:35 2019
+ * C/C++ source code generated on : Thu Mar 28 11:45:22 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -85,43 +85,40 @@
 
 /* Block signals (default storage) */
 typedef struct {
-  uint8_T V4L2VideoCapture_o1[480000]; /* '<Root>/V4L2 Video Capture' */
-  uint8_T V4L2VideoCapture_o2[240000]; /* '<Root>/V4L2 Video Capture' */
-  uint8_T V4L2VideoCapture_o3[240000]; /* '<Root>/V4L2 Video Capture' */
   real_T x_data[4800];
   real_T y_data[4800];
+  real_T rtb_imgOUT_m[4800];
   real_T dv0[4800];
-  real_T dv1[4800];
   int32_T i_data[4800];
-  uint8_T Resize3[19200];              /* '<Root>/Resize3' */
   int8_T j_data[4800];
-  uint8_T CbDot[4800];                 /* '<Root>/MATLAB Function' */
-  uint8_T Resize1[2400];               /* '<Root>/Resize1' */
-  uint8_T Resize2[2400];               /* '<Root>/Resize2' */
-  uint8_T imgEdge[4800];               /* '<Root>/MATLAB Function' */
+  uint8_T imgOUT[4800];                /* '<Root>/MATLAB Function1' */
   uint8_T pln2[2400];
   uint8_T pln3[2400];
   real_T xx_data[160];
   real_T b_y_data[160];
   int32_T b_data[160];
   int32_T c_data[30];
+  uint8_T TxDataLocChar[8];
+  real_T Add;                          /* '<Root>/Add' */
+  uint8_T V4L2VideoCapture_o1[19200];  /* '<Root>/V4L2 Video Capture' */
+  uint8_T V4L2VideoCapture_o2[9600];   /* '<Root>/V4L2 Video Capture' */
+  uint8_T V4L2VideoCapture_o3[9600];   /* '<Root>/V4L2 Video Capture' */
+  uint8_T Resize1[2400];               /* '<Root>/Resize1' */
+  uint8_T Resize2[2400];               /* '<Root>/Resize2' */
+  uint8_T imgEdge[4800];               /* '<Root>/MATLAB Function' */
   real_T xCenter;
   real_T yCenter;
   real_T maxval;
   real_T minval;
-  int32_T indxTblX;
   int32_T idx;
   int32_T ii;
   int32_T jj;
-  int8_T Cast;                         /* '<Root>/Cast' */
 } B_lanedetection_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  uint8_T Resize3_IntBuffer[96000];    /* '<Root>/Resize3' */
   uint8_T Resize2_IntBuffer[4800];     /* '<Root>/Resize2' */
   uint8_T Resize1_IntBuffer[4800];     /* '<Root>/Resize1' */
-  uint8_T Resize3_LineBuffer[800];     /* '<Root>/Resize3' */
   uint8_T Resize1_LineBuffer[160];     /* '<Root>/Resize1' */
   codertarget_linux_blocks_SDLV_T obj; /* '<S3>/MATLAB System' */
   codertarget_raspi_internal_SC_T obj_n;/* '<Root>/Serial Write' */
@@ -129,32 +126,12 @@ typedef struct {
 
 /* Constant parameters (default storage) */
 typedef struct {
-  /* Computed Parameter: Resize3_Yindex
-   * Referenced by: '<Root>/Resize3'
-   */
-  int32_T Resize3_Yindex[1600];
-
-  /* Computed Parameter: Resize3_Xindex
-   * Referenced by: '<Root>/Resize3'
-   */
-  int32_T Resize3_Xindex[1200];
-
   /* Pooled Parameter (Expression: )
    * Referenced by:
    *   '<Root>/Resize1'
    *   '<Root>/Resize2'
    */
   int32_T pooled2[320];
-
-  /* Computed Parameter: Resize3_Yweights
-   * Referenced by: '<Root>/Resize3'
-   */
-  int8_T Resize3_Yweights[1600];
-
-  /* Computed Parameter: Resize3_Xweights
-   * Referenced by: '<Root>/Resize3'
-   */
-  int8_T Resize3_Xweights[1200];
 
   /* Pooled Parameter (Expression: )
    * Referenced by:
@@ -168,6 +145,16 @@ typedef struct {
    */
   uint8_T V4L2VideoCapture_p1[12];
 } ConstP_lanedetection_T;
+
+/* Parameters (default storage) */
+struct P_lanedetection_T_ {
+  real_T Gain_Gain;                    /* Expression: 0.005
+                                        * Referenced by: '<Root>/Gain'
+                                        */
+  real_T Constant_Value;               /* Expression: 90
+                                        * Referenced by: '<Root>/Constant'
+                                        */
+};
 
 /* Real-time Model Data Structure */
 struct tag_RTM_lanedetection_T {
@@ -206,6 +193,9 @@ struct tag_RTM_lanedetection_T {
     boolean_T stopRequestedFlag;
   } Timing;
 };
+
+/* Block parameters (default storage) */
+extern P_lanedetection_T lanedetection_P;
 
 /* Block signals (default storage) */
 extern B_lanedetection_T lanedetection_B;

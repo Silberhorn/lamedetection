@@ -5,7 +5,7 @@
   ;%***********************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 0;
+    nTotSects     = 1;
     sectIdxOffset = 0;
     
     ;%
@@ -22,11 +22,27 @@
     ;%
     paramMap.nSections           = nTotSects;
     paramMap.sectIdxOffset       = sectIdxOffset;
+      paramMap.sections(nTotSects) = dumSection; %prealloc
     paramMap.nTotData            = -1;
     
     ;%
     ;% Auto data (lanedetection_P)
     ;%
+      section.nData     = 2;
+      section.data(2)  = dumData; %prealloc
+      
+	  ;% lanedetection_P.Gain_Gain
+	  section.data(1).logicalSrcIdx = 0;
+	  section.data(1).dtTransOffset = 0;
+	
+	  ;% lanedetection_P.Constant_Value
+	  section.data(2).logicalSrcIdx = 1;
+	  section.data(2).dtTransOffset = 1;
+	
+      nTotData = nTotData + section.nData;
+      paramMap.sections(1) = section;
+      clear section
+      
     
       ;%
       ;% Non-auto Data (parameter)
@@ -45,7 +61,7 @@
   ;%**************************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 4;
+    nTotSects     = 2;
     sectIdxOffset = 0;
     
     ;%
@@ -68,64 +84,46 @@
     ;%
     ;% Auto data (lanedetection_B)
     ;%
-      section.nData     = 3;
-      section.data(3)  = dumData; %prealloc
+      section.nData     = 1;
+      section.data(1)  = dumData; %prealloc
       
-	  ;% lanedetection_B.V4L2VideoCapture_o1
+	  ;% lanedetection_B.Add
 	  section.data(1).logicalSrcIdx = 0;
 	  section.data(1).dtTransOffset = 0;
-	
-	  ;% lanedetection_B.V4L2VideoCapture_o2
-	  section.data(2).logicalSrcIdx = 1;
-	  section.data(2).dtTransOffset = 480000;
-	
-	  ;% lanedetection_B.V4L2VideoCapture_o3
-	  section.data(3).logicalSrcIdx = 2;
-	  section.data(3).dtTransOffset = 720000;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(1) = section;
       clear section
       
-      section.nData     = 1;
-      section.data(1)  = dumData; %prealloc
+      section.nData     = 6;
+      section.data(6)  = dumData; %prealloc
       
-	  ;% lanedetection_B.Resize3
-	  section.data(1).logicalSrcIdx = 3;
+	  ;% lanedetection_B.V4L2VideoCapture_o1
+	  section.data(1).logicalSrcIdx = 1;
 	  section.data(1).dtTransOffset = 0;
+	
+	  ;% lanedetection_B.V4L2VideoCapture_o2
+	  section.data(2).logicalSrcIdx = 2;
+	  section.data(2).dtTransOffset = 19200;
+	
+	  ;% lanedetection_B.V4L2VideoCapture_o3
+	  section.data(3).logicalSrcIdx = 3;
+	  section.data(3).dtTransOffset = 28800;
+	
+	  ;% lanedetection_B.Resize1
+	  section.data(4).logicalSrcIdx = 4;
+	  section.data(4).dtTransOffset = 38400;
+	
+	  ;% lanedetection_B.Resize2
+	  section.data(5).logicalSrcIdx = 5;
+	  section.data(5).dtTransOffset = 40800;
+	
+	  ;% lanedetection_B.imgEdge
+	  section.data(6).logicalSrcIdx = 6;
+	  section.data(6).dtTransOffset = 43200;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(2) = section;
-      clear section
-      
-      section.nData     = 3;
-      section.data(3)  = dumData; %prealloc
-      
-	  ;% lanedetection_B.Resize1
-	  section.data(1).logicalSrcIdx = 4;
-	  section.data(1).dtTransOffset = 0;
-	
-	  ;% lanedetection_B.Resize2
-	  section.data(2).logicalSrcIdx = 5;
-	  section.data(2).dtTransOffset = 2400;
-	
-	  ;% lanedetection_B.imgEdge
-	  section.data(3).logicalSrcIdx = 6;
-	  section.data(3).dtTransOffset = 4800;
-	
-      nTotData = nTotData + section.nData;
-      sigMap.sections(3) = section;
-      clear section
-      
-      section.nData     = 1;
-      section.data(1)  = dumData; %prealloc
-      
-	  ;% lanedetection_B.Cast
-	  section.data(1).logicalSrcIdx = 7;
-	  section.data(1).dtTransOffset = 0;
-	
-      nTotData = nTotData + section.nData;
-      sigMap.sections(4) = section;
       clear section
       
     
@@ -147,7 +145,7 @@
       
     nTotData      = 0; %add to this count as we go
     nTotSects     = 2;
-    sectIdxOffset = 4;
+    sectIdxOffset = 2;
     
     ;%
     ;% Define dummy sections & preallocate arrays
@@ -217,8 +215,8 @@
   ;%
 
 
-  targMap.checksum0 = 2187559452;
-  targMap.checksum1 = 2390752517;
-  targMap.checksum2 = 2578938969;
-  targMap.checksum3 = 3153663096;
+  targMap.checksum0 = 859956058;
+  targMap.checksum1 = 3130290242;
+  targMap.checksum2 = 3001912187;
+  targMap.checksum3 = 427575432;
 

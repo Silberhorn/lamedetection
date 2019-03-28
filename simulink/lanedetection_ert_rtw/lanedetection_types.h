@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.100
+ * Model version                  : 1.117
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Tue Mar 26 10:54:35 2019
+ * C/C++ source code generated on : Thu Mar 28 11:45:22 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -58,6 +58,9 @@ typedef struct {
 } codertarget_linux_blocks_SDLV_T;
 
 #endif                                 /*typedef_codertarget_linux_blocks_SDLV_T*/
+
+/* Parameters (default storage) */
+typedef struct P_lanedetection_T_ P_lanedetection_T;
 
 /* Forward declaration for rtModel */
 typedef struct tag_RTM_lanedetection_T RT_MODEL_lanedetection_T;

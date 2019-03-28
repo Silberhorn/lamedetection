@@ -7,9 +7,9 @@
  *
  * Code generation for model "lanedetection".
  *
- * Model version              : 1.100
+ * Model version              : 1.117
  * Simulink Coder version : 8.14 (R2018a) 06-Feb-2018
- * C source code generated on : Tue Mar 26 10:54:35 2019
+ * C source code generated on : Thu Mar 28 11:45:22 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -65,13 +65,9 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&lanedetection_B.V4L2VideoCapture_o1[0]), 3, 0, 960000 },
+  { (char_T *)(&lanedetection_B.Add), 0, 0, 1 },
 
-  { (char_T *)(&lanedetection_B.Resize3[0]), 3, 0, 19200 },
-
-  { (char_T *)(&lanedetection_B.Resize1[0]), 3, 0, 9600 },
-
-  { (char_T *)(&lanedetection_B.Cast), 2, 0, 1 }
+  { (char_T *)(&lanedetection_B.V4L2VideoCapture_o1[0]), 3, 0, 48000 }
   ,
 
   { (char_T *)(&lanedetection_DW.obj), 15, 0, 1 },
@@ -81,8 +77,19 @@ static DataTypeTransition rtBTransitions[] = {
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  6U,
+  4U,
   rtBTransitions
+};
+
+/* data type transitions for Parameters structure */
+static DataTypeTransition rtPTransitions[] = {
+  { (char_T *)(&lanedetection_P.Gain_Gain), 0, 0, 2 }
+};
+
+/* data type transition table for Parameters structure */
+static DataTypeTransitionTable rtPTransTable = {
+  1U,
+  rtPTransitions
 };
 
 /* [EOF] lanedetection_dt.h */
