@@ -15,7 +15,7 @@ Servo servo1;
 
 void setup() {
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   pinMode(enA, OUTPUT);
   pinMode(enB, OUTPUT);
@@ -39,8 +39,8 @@ void loop() {
   digitalWrite(in1_2, LOW);
   digitalWrite(in2_1, HIGH);
   digitalWrite(in2_2, LOW);
-  analogWrite(enA, 0);
-  analogWrite(enB, 0);
+  analogWrite(enA, 180);
+  analogWrite(enB, 180);
   
   servo1.write(steeringangle);
 }

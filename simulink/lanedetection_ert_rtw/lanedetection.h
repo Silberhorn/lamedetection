@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.117
+ * Model version                  : 1.142
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Thu Mar 28 11:45:22 2019
+ * C/C++ source code generated on : Fri Mar 29 13:03:24 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -90,29 +90,29 @@ typedef struct {
   real_T rtb_imgOUT_m[4800];
   real_T dv0[4800];
   int32_T i_data[4800];
+  uint8_T V4L2VideoCapture_o1[19200];  /* '<Root>/V4L2 Video Capture' */
+  uint8_T V4L2VideoCapture_o2[9600];   /* '<Root>/V4L2 Video Capture' */
+  uint8_T V4L2VideoCapture_o3[9600];   /* '<Root>/V4L2 Video Capture' */
   int8_T j_data[4800];
   uint8_T imgOUT[4800];                /* '<Root>/MATLAB Function1' */
+  uint8_T Resize1[2400];               /* '<Root>/Resize1' */
+  uint8_T Resize2[2400];               /* '<Root>/Resize2' */
+  uint8_T imgEdge[4800];               /* '<Root>/MATLAB Function' */
   uint8_T pln2[2400];
   uint8_T pln3[2400];
   real_T xx_data[160];
   real_T b_y_data[160];
   int32_T b_data[160];
   int32_T c_data[30];
-  uint8_T TxDataLocChar[8];
-  real_T Add;                          /* '<Root>/Add' */
-  uint8_T V4L2VideoCapture_o1[19200];  /* '<Root>/V4L2 Video Capture' */
-  uint8_T V4L2VideoCapture_o2[9600];   /* '<Root>/V4L2 Video Capture' */
-  uint8_T V4L2VideoCapture_o3[9600];   /* '<Root>/V4L2 Video Capture' */
-  uint8_T Resize1[2400];               /* '<Root>/Resize1' */
-  uint8_T Resize2[2400];               /* '<Root>/Resize2' */
-  uint8_T imgEdge[4800];               /* '<Root>/MATLAB Function' */
-  real_T xCenter;
+  real_T xCenter;                      /* '<Root>/MATLAB Function' */
   real_T yCenter;
   real_T maxval;
   real_T minval;
   int32_T idx;
   int32_T ii;
   int32_T jj;
+  int32_T nm1d2;
+  int8_T Add;                          /* '<Root>/Add' */
 } B_lanedetection_T;
 
 /* Block states (default storage) for system '<Root>' */
@@ -148,10 +148,10 @@ typedef struct {
 
 /* Parameters (default storage) */
 struct P_lanedetection_T_ {
-  real_T Gain_Gain;                    /* Expression: 0.005
+  real_T Gain_Gain;                    /* Expression: -0.009
                                         * Referenced by: '<Root>/Gain'
                                         */
-  real_T Constant_Value;               /* Expression: 90
+  int8_T Constant_Value;               /* Computed Parameter: Constant_Value
                                         * Referenced by: '<Root>/Constant'
                                         */
 };

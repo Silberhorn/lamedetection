@@ -15,8 +15,6 @@ function RTW_rtwnameSIDMap() {
 	this.sidHashMap["lanedetection:76"] = {rtwname: "<Root>/Cast"};
 	this.rtwnameHashMap["<Root>/Constant"] = {sid: "lanedetection:82"};
 	this.sidHashMap["lanedetection:82"] = {rtwname: "<Root>/Constant"};
-	this.rtwnameHashMap["<Root>/Display"] = {sid: "lanedetection:71"};
-	this.sidHashMap["lanedetection:71"] = {rtwname: "<Root>/Display"};
 	this.rtwnameHashMap["<Root>/Gain"] = {sid: "lanedetection:79"};
 	this.sidHashMap["lanedetection:79"] = {rtwname: "<Root>/Gain"};
 	this.rtwnameHashMap["<Root>/MATLAB Function"] = {sid: "lanedetection:2"};
@@ -39,6 +37,10 @@ function RTW_rtwnameSIDMap() {
 	this.sidHashMap["lanedetection:66"] = {rtwname: "<Root>/Terminator1"};
 	this.rtwnameHashMap["<Root>/V4L2 Video Capture"] = {sid: "lanedetection:1"};
 	this.sidHashMap["lanedetection:1"] = {rtwname: "<Root>/V4L2 Video Capture"};
+	this.rtwnameHashMap["<Root>/steeringAngle"] = {sid: "lanedetection:71"};
+	this.sidHashMap["lanedetection:71"] = {rtwname: "<Root>/steeringAngle"};
+	this.rtwnameHashMap["<Root>/xCenter"] = {sid: "lanedetection:83"};
+	this.sidHashMap["lanedetection:83"] = {rtwname: "<Root>/xCenter"};
 	this.rtwnameHashMap["<S1>:1"] = {sid: "lanedetection:2:1"};
 	this.sidHashMap["lanedetection:2:1"] = {rtwname: "<S1>:1"};
 	this.rtwnameHashMap["<S2>:1"] = {sid: "lanedetection:69:1"};

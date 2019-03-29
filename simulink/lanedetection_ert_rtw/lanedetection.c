@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.117
+ * Model version                  : 1.142
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Thu Mar 28 11:45:22 2019
+ * C/C++ source code generated on : Fri Mar 29 13:03:24 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -183,41 +183,49 @@ static void matlabCodegenHandle_matlabCod_d(codertarget_linux_blocks_SDLV_T *obj
 static void SystemProp_matlabCodegenSetAnyP(codertarget_raspi_internal_SC_T *obj,
   boolean_T value)
 {
+  /* Start for MATLABSystem: '<Root>/Serial Write' */
   obj->matlabCodegenIsDeleted = value;
 }
 
 static void lanedetectio_SystemCore_release(const
   codertarget_raspi_internal_SC_T *obj)
 {
+  /* Start for MATLABSystem: '<Root>/Serial Write' */
   if ((obj->isInitialized == 1) && obj->isSetupComplete) {
     MW_SCI_Close(obj->MW_SCIHANDLE);
   }
+
+  /* End of Start for MATLABSystem: '<Root>/Serial Write' */
 }
 
 static void lanedetection_SystemCore_delete(const
   codertarget_raspi_internal_SC_T *obj)
 {
+  /* Start for MATLABSystem: '<Root>/Serial Write' */
   lanedetectio_SystemCore_release(obj);
 }
 
 static void matlabCodegenHandle_matlabCodeg(codertarget_raspi_internal_SC_T *obj)
 {
+  /* Start for MATLABSystem: '<Root>/Serial Write' */
   if (!obj->matlabCodegenIsDeleted) {
     SystemProp_matlabCodegenSetAnyP(obj, true);
     lanedetection_SystemCore_delete(obj);
   }
+
+  /* End of Start for MATLABSystem: '<Root>/Serial Write' */
 }
 
 /* Model step function */
 void lanedetection_step(void)
 {
-  int32_T nm1d2;
   int32_T apnd;
   int32_T cdiff;
   int32_T b_nm1d2;
   int32_T b_k;
   static const real_T f[9] = { 1.0, 2.0, 1.0, 0.0, 0.0, 0.0, -1.0, -2.0, -1.0 };
 
+  uint8_T TxDataLocChar;
   boolean_T exitg1;
   boolean_T guard1 = false;
 
@@ -289,7 +297,7 @@ void lanedetection_step(void)
     lanedetection_B.x_data[apnd] = lanedetection_B.i_data[apnd];
   }
 
-  nm1d2 = lanedetection_B.ii;
+  b_nm1d2 = lanedetection_B.ii;
   for (apnd = 0; apnd < lanedetection_B.ii; apnd++) {
     lanedetection_B.y_data[apnd] = lanedetection_B.j_data[apnd];
   }
@@ -297,7 +305,7 @@ void lanedetection_step(void)
   lanedetection_B.xCenter = rt_roundd_snf(lanedetection_mean
     (lanedetection_B.x_data, &cdiff));
   lanedetection_B.yCenter = rt_roundd_snf(lanedetection_mean
-    (lanedetection_B.y_data, &nm1d2));
+    (lanedetection_B.y_data, &b_nm1d2));
   if ((1.0 > lanedetection_B.xCenter - 2.0) || rtIsNaN(lanedetection_B.xCenter -
        2.0)) {
     lanedetection_B.maxval = 1.0;
@@ -326,12 +334,13 @@ void lanedetection_step(void)
     apnd = (int32_T)lanedetection_B.maxval + lanedetection_B.jj;
     cdiff = apnd - (int32_T)lanedetection_B.minval;
     if ((int32_T)lanedetection_B.maxval > (int32_T)lanedetection_B.minval) {
-      nm1d2 = (int32_T)lanedetection_B.maxval;
+      lanedetection_B.nm1d2 = (int32_T)lanedetection_B.maxval;
     } else {
-      nm1d2 = (int32_T)lanedetection_B.minval;
+      lanedetection_B.nm1d2 = (int32_T)lanedetection_B.minval;
     }
 
-    if (fabs((real_T)cdiff) < 4.4408920985006262E-16 * (real_T)nm1d2) {
+    if (fabs((real_T)cdiff) < 4.4408920985006262E-16 * (real_T)
+        lanedetection_B.nm1d2) {
       lanedetection_B.jj++;
       apnd = (int32_T)lanedetection_B.minval;
     } else if (cdiff > 0) {
@@ -351,20 +360,21 @@ void lanedetection_step(void)
       lanedetection_B.xx_data[0] = lanedetection_B.maxval;
       if (cdiff + 1 > 1) {
         lanedetection_B.xx_data[cdiff] = apnd;
-        nm1d2 = cdiff / 2;
-        for (b_nm1d2 = 1; b_nm1d2 < nm1d2; b_nm1d2++) {
+        lanedetection_B.nm1d2 = cdiff / 2;
+        for (b_nm1d2 = 1; b_nm1d2 < lanedetection_B.nm1d2; b_nm1d2++) {
           lanedetection_B.xx_data[b_nm1d2] = lanedetection_B.maxval + (real_T)
             b_nm1d2;
           lanedetection_B.xx_data[cdiff - b_nm1d2] = apnd - b_nm1d2;
         }
 
-        if (nm1d2 << 1 == cdiff) {
-          lanedetection_B.xx_data[nm1d2] = (lanedetection_B.maxval + (real_T)
-            apnd) / 2.0;
+        if (lanedetection_B.nm1d2 << 1 == cdiff) {
+          lanedetection_B.xx_data[lanedetection_B.nm1d2] =
+            (lanedetection_B.maxval + (real_T)apnd) / 2.0;
         } else {
-          lanedetection_B.xx_data[nm1d2] = lanedetection_B.maxval + (real_T)
-            nm1d2;
-          lanedetection_B.xx_data[nm1d2 + 1] = apnd - nm1d2;
+          lanedetection_B.xx_data[lanedetection_B.nm1d2] =
+            lanedetection_B.maxval + (real_T)lanedetection_B.nm1d2;
+          lanedetection_B.xx_data[lanedetection_B.nm1d2 + 1] = apnd -
+            lanedetection_B.nm1d2;
         }
       }
     }
@@ -384,11 +394,11 @@ void lanedetection_step(void)
   }
 
   if (lanedetection_B.yCenter < lanedetection_B.maxval) {
-    nm1d2 = 0;
+    lanedetection_B.nm1d2 = 0;
   } else if (lanedetection_B.maxval == lanedetection_B.maxval) {
     cdiff = (int32_T)((real32_T)lanedetection_B.yCenter - (real32_T)
                       lanedetection_B.maxval);
-    nm1d2 = cdiff + 1;
+    lanedetection_B.nm1d2 = cdiff + 1;
     for (apnd = 0; apnd <= cdiff; apnd++) {
       lanedetection_B.b_y_data[apnd] = lanedetection_B.maxval + (real_T)apnd;
     }
@@ -396,17 +406,18 @@ void lanedetection_step(void)
     apnd = (int32_T)floor((lanedetection_B.yCenter - lanedetection_B.maxval) +
                           0.5);
     cdiff = (int32_T)lanedetection_B.maxval + apnd;
-    nm1d2 = cdiff - (int32_T)lanedetection_B.yCenter;
+    lanedetection_B.nm1d2 = cdiff - (int32_T)lanedetection_B.yCenter;
     if ((int32_T)lanedetection_B.maxval > (int32_T)lanedetection_B.yCenter) {
       b_nm1d2 = (int32_T)lanedetection_B.maxval;
     } else {
       b_nm1d2 = (int32_T)lanedetection_B.yCenter;
     }
 
-    if (fabs((real_T)nm1d2) < 4.4408920985006262E-16 * (real_T)b_nm1d2) {
+    if (fabs((real_T)lanedetection_B.nm1d2) < 4.4408920985006262E-16 * (real_T)
+        b_nm1d2) {
       apnd++;
       cdiff = (int32_T)lanedetection_B.yCenter;
-    } else if (nm1d2 > 0) {
+    } else if (lanedetection_B.nm1d2 > 0) {
       cdiff = ((int32_T)lanedetection_B.maxval + apnd) - 1;
     } else {
       apnd++;
@@ -418,7 +429,7 @@ void lanedetection_step(void)
       apnd = -1;
     }
 
-    nm1d2 = apnd + 1;
+    lanedetection_B.nm1d2 = apnd + 1;
     if (apnd + 1 > 0) {
       lanedetection_B.b_y_data[0] = lanedetection_B.maxval;
       if (apnd + 1 > 1) {
@@ -447,11 +458,11 @@ void lanedetection_step(void)
       lanedetection_B.b_data[apnd] = (int32_T)lanedetection_B.xx_data[apnd];
     }
 
-    for (apnd = 0; apnd < nm1d2; apnd++) {
+    for (apnd = 0; apnd < lanedetection_B.nm1d2; apnd++) {
       lanedetection_B.c_data[apnd] = (int32_T)lanedetection_B.b_y_data[apnd];
     }
 
-    for (apnd = 0; apnd < nm1d2; apnd++) {
+    for (apnd = 0; apnd < lanedetection_B.nm1d2; apnd++) {
       for (lanedetection_B.idx = 0; lanedetection_B.idx < lanedetection_B.jj;
            lanedetection_B.idx++) {
         lanedetection_B.imgOUT[(lanedetection_B.b_data[lanedetection_B.idx] +
@@ -463,11 +474,11 @@ void lanedetection_step(void)
       lanedetection_B.b_data[apnd] = (int32_T)lanedetection_B.xx_data[apnd];
     }
 
-    for (apnd = 0; apnd < nm1d2; apnd++) {
+    for (apnd = 0; apnd < lanedetection_B.nm1d2; apnd++) {
       lanedetection_B.c_data[apnd] = (int32_T)lanedetection_B.b_y_data[apnd];
     }
 
-    for (apnd = 0; apnd < nm1d2; apnd++) {
+    for (apnd = 0; apnd < lanedetection_B.nm1d2; apnd++) {
       for (lanedetection_B.idx = 0; lanedetection_B.idx < lanedetection_B.jj;
            lanedetection_B.idx++) {
         lanedetection_B.imgOUT[(lanedetection_B.b_data[lanedetection_B.idx] +
@@ -518,45 +529,45 @@ void lanedetection_step(void)
         (lanedetection_DW.Resize1_LineBuffer[lanedetection_ConstP.pooled2[lanedetection_B.ii]]
          * lanedetection_ConstP.pooled5[lanedetection_B.ii]) << 3;
       apnd = lanedetection_B.ii + 80;
-      nm1d2 =
+      lanedetection_B.nm1d2 =
         (lanedetection_DW.Resize1_LineBuffer[lanedetection_ConstP.pooled2[apnd]]
          * lanedetection_ConstP.pooled5[apnd]) << 3;
-      if ((lanedetection_B.jj < 0) && (nm1d2 < MIN_int32_T - lanedetection_B.jj))
-      {
+      if ((lanedetection_B.jj < 0) && (lanedetection_B.nm1d2 < MIN_int32_T
+           - lanedetection_B.jj)) {
         lanedetection_B.jj = MIN_int32_T;
-      } else if ((lanedetection_B.jj > 0) && (nm1d2 > MAX_int32_T
-                  - lanedetection_B.jj)) {
+      } else if ((lanedetection_B.jj > 0) && (lanedetection_B.nm1d2 >
+                  MAX_int32_T - lanedetection_B.jj)) {
         lanedetection_B.jj = MAX_int32_T;
       } else {
-        lanedetection_B.jj += nm1d2;
+        lanedetection_B.jj += lanedetection_B.nm1d2;
       }
 
       apnd += 80;
-      nm1d2 =
+      lanedetection_B.nm1d2 =
         (lanedetection_DW.Resize1_LineBuffer[lanedetection_ConstP.pooled2[apnd]]
          * lanedetection_ConstP.pooled5[apnd]) << 3;
-      if ((lanedetection_B.jj < 0) && (nm1d2 < MIN_int32_T - lanedetection_B.jj))
-      {
+      if ((lanedetection_B.jj < 0) && (lanedetection_B.nm1d2 < MIN_int32_T
+           - lanedetection_B.jj)) {
         lanedetection_B.jj = MIN_int32_T;
-      } else if ((lanedetection_B.jj > 0) && (nm1d2 > MAX_int32_T
-                  - lanedetection_B.jj)) {
+      } else if ((lanedetection_B.jj > 0) && (lanedetection_B.nm1d2 >
+                  MAX_int32_T - lanedetection_B.jj)) {
         lanedetection_B.jj = MAX_int32_T;
       } else {
-        lanedetection_B.jj += nm1d2;
+        lanedetection_B.jj += lanedetection_B.nm1d2;
       }
 
       apnd += 80;
-      nm1d2 =
+      lanedetection_B.nm1d2 =
         (lanedetection_DW.Resize1_LineBuffer[lanedetection_ConstP.pooled2[apnd]]
          * lanedetection_ConstP.pooled5[apnd]) << 3;
-      if ((lanedetection_B.jj < 0) && (nm1d2 < MIN_int32_T - lanedetection_B.jj))
-      {
+      if ((lanedetection_B.jj < 0) && (lanedetection_B.nm1d2 < MIN_int32_T
+           - lanedetection_B.jj)) {
         lanedetection_B.jj = MIN_int32_T;
-      } else if ((lanedetection_B.jj > 0) && (nm1d2 > MAX_int32_T
-                  - lanedetection_B.jj)) {
+      } else if ((lanedetection_B.jj > 0) && (lanedetection_B.nm1d2 >
+                  MAX_int32_T - lanedetection_B.jj)) {
         lanedetection_B.jj = MAX_int32_T;
       } else {
-        lanedetection_B.jj += nm1d2;
+        lanedetection_B.jj += lanedetection_B.nm1d2;
       }
 
       apnd = ((lanedetection_B.jj & 512U) != 0U) + (lanedetection_B.jj >> 10);
@@ -609,45 +620,45 @@ void lanedetection_step(void)
         (lanedetection_DW.Resize1_LineBuffer[lanedetection_ConstP.pooled2[lanedetection_B.ii]]
          * lanedetection_ConstP.pooled5[lanedetection_B.ii]) << 3;
       apnd = lanedetection_B.ii + 80;
-      nm1d2 =
+      lanedetection_B.nm1d2 =
         (lanedetection_DW.Resize1_LineBuffer[lanedetection_ConstP.pooled2[apnd]]
          * lanedetection_ConstP.pooled5[apnd]) << 3;
-      if ((lanedetection_B.jj < 0) && (nm1d2 < MIN_int32_T - lanedetection_B.jj))
-      {
+      if ((lanedetection_B.jj < 0) && (lanedetection_B.nm1d2 < MIN_int32_T
+           - lanedetection_B.jj)) {
         lanedetection_B.jj = MIN_int32_T;
-      } else if ((lanedetection_B.jj > 0) && (nm1d2 > MAX_int32_T
-                  - lanedetection_B.jj)) {
+      } else if ((lanedetection_B.jj > 0) && (lanedetection_B.nm1d2 >
+                  MAX_int32_T - lanedetection_B.jj)) {
         lanedetection_B.jj = MAX_int32_T;
       } else {
-        lanedetection_B.jj += nm1d2;
+        lanedetection_B.jj += lanedetection_B.nm1d2;
       }
 
       apnd += 80;
-      nm1d2 =
+      lanedetection_B.nm1d2 =
         (lanedetection_DW.Resize1_LineBuffer[lanedetection_ConstP.pooled2[apnd]]
          * lanedetection_ConstP.pooled5[apnd]) << 3;
-      if ((lanedetection_B.jj < 0) && (nm1d2 < MIN_int32_T - lanedetection_B.jj))
-      {
+      if ((lanedetection_B.jj < 0) && (lanedetection_B.nm1d2 < MIN_int32_T
+           - lanedetection_B.jj)) {
         lanedetection_B.jj = MIN_int32_T;
-      } else if ((lanedetection_B.jj > 0) && (nm1d2 > MAX_int32_T
-                  - lanedetection_B.jj)) {
+      } else if ((lanedetection_B.jj > 0) && (lanedetection_B.nm1d2 >
+                  MAX_int32_T - lanedetection_B.jj)) {
         lanedetection_B.jj = MAX_int32_T;
       } else {
-        lanedetection_B.jj += nm1d2;
+        lanedetection_B.jj += lanedetection_B.nm1d2;
       }
 
       apnd += 80;
-      nm1d2 =
+      lanedetection_B.nm1d2 =
         (lanedetection_DW.Resize1_LineBuffer[lanedetection_ConstP.pooled2[apnd]]
          * lanedetection_ConstP.pooled5[apnd]) << 3;
-      if ((lanedetection_B.jj < 0) && (nm1d2 < MIN_int32_T - lanedetection_B.jj))
-      {
+      if ((lanedetection_B.jj < 0) && (lanedetection_B.nm1d2 < MIN_int32_T
+           - lanedetection_B.jj)) {
         lanedetection_B.jj = MIN_int32_T;
-      } else if ((lanedetection_B.jj > 0) && (nm1d2 > MAX_int32_T
-                  - lanedetection_B.jj)) {
+      } else if ((lanedetection_B.jj > 0) && (lanedetection_B.nm1d2 >
+                  MAX_int32_T - lanedetection_B.jj)) {
         lanedetection_B.jj = MAX_int32_T;
       } else {
-        lanedetection_B.jj += nm1d2;
+        lanedetection_B.jj += lanedetection_B.nm1d2;
       }
 
       apnd = ((lanedetection_B.jj & 512U) != 0U) + (lanedetection_B.jj >> 10);
@@ -680,38 +691,37 @@ void lanedetection_step(void)
    *  MATLAB Function: '<Root>/MATLAB Function'
    *  Product: '<Root>/Multiply'
    */
-  lanedetection_B.xCenter = floor((lanedetection_B.xCenter - 80.0) *
+  lanedetection_B.yCenter = floor((lanedetection_B.xCenter - 80.0) *
     (lanedetection_B.xCenter - 80.0) * (lanedetection_B.xCenter - 80.0) *
     lanedetection_P.Gain_Gain);
-  if (rtIsNaN(lanedetection_B.xCenter) || rtIsInf(lanedetection_B.xCenter)) {
-    lanedetection_B.xCenter = 0.0;
+  if (rtIsNaN(lanedetection_B.yCenter) || rtIsInf(lanedetection_B.yCenter)) {
+    lanedetection_B.yCenter = 0.0;
   } else {
-    lanedetection_B.xCenter = fmod(lanedetection_B.xCenter, 256.0);
+    lanedetection_B.yCenter = fmod(lanedetection_B.yCenter, 256.0);
   }
 
   /* Sum: '<Root>/Add' incorporates:
    *  Constant: '<Root>/Constant'
    *  DataTypeConversion: '<Root>/Cast'
    */
-  lanedetection_B.Add = (real_T)(lanedetection_B.xCenter < 0.0 ? (int32_T)
-    (int8_T)-(int8_T)(uint8_T)-lanedetection_B.xCenter : (int32_T)(int8_T)
-    (uint8_T)lanedetection_B.xCenter) + lanedetection_P.Constant_Value;
+  lanedetection_B.Add = (int8_T)((lanedetection_B.yCenter < 0.0 ? (int32_T)
+    (int8_T)-(int8_T)(uint8_T)-lanedetection_B.yCenter : (int32_T)(int8_T)
+    (uint8_T)lanedetection_B.yCenter) + lanedetection_P.Constant_Value);
 
-  /* MATLABSystem: '<Root>/Serial Write' */
-  memcpy((void *)&lanedetection_B.TxDataLocChar[0], (void *)&lanedetection_B.Add,
-         (uint32_T)((size_t)8 * sizeof(uint8_T)));
-  MW_SCI_Transmit(lanedetection_DW.obj_n.MW_SCIHANDLE,
-                  lanedetection_B.TxDataLocChar, 8U);
+  /* Start for MATLABSystem: '<Root>/Serial Write' */
+  memcpy((void *)&TxDataLocChar, (void *)&lanedetection_B.Add, (uint32_T)
+         ((size_t)1 * sizeof(uint8_T)));
+  MW_SCI_Transmit(lanedetection_DW.obj_n.MW_SCIHANDLE, &TxDataLocChar, 1U);
 
   /* External mode */
   rtExtModeUploadCheckTrigger(1);
 
-  {                                    /* Sample time: [0.05s, 0.0s] */
+  {                                    /* Sample time: [0.011111111111111112s, 0.0s] */
     rtExtModeUpload(0, lanedetection_M->Timing.taskTime0);
   }
 
   /* signal main to stop simulation */
-  {                                    /* Sample time: [0.05s, 0.0s] */
+  {                                    /* Sample time: [0.011111111111111112s, 0.0s] */
     if ((rtmGetTFinal(lanedetection_M)!=-1) &&
         !((rtmGetTFinal(lanedetection_M)-lanedetection_M->Timing.taskTime0) >
           lanedetection_M->Timing.taskTime0 * (DBL_EPSILON))) {
@@ -745,13 +755,13 @@ void lanedetection_initialize(void)
   (void) memset((void *)lanedetection_M, 0,
                 sizeof(RT_MODEL_lanedetection_T));
   rtmSetTFinal(lanedetection_M, -1);
-  lanedetection_M->Timing.stepSize0 = 0.05;
+  lanedetection_M->Timing.stepSize0 = 0.011111111111111112;
 
   /* External mode info */
-  lanedetection_M->Sizes.checksums[0] = (859956058U);
-  lanedetection_M->Sizes.checksums[1] = (3130290242U);
-  lanedetection_M->Sizes.checksums[2] = (3001912187U);
-  lanedetection_M->Sizes.checksums[3] = (427575432U);
+  lanedetection_M->Sizes.checksums[0] = (1883644034U);
+  lanedetection_M->Sizes.checksums[1] = (2126461276U);
+  lanedetection_M->Sizes.checksums[2] = (3592030381U);
+  lanedetection_M->Sizes.checksums[3] = (1005100626U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -811,7 +821,7 @@ void lanedetection_initialize(void)
 
     /* Start for S-Function (v4l2_video_capture_sfcn): '<Root>/V4L2 Video Capture' */
     MW_videoCaptureInit(lanedetection_ConstP.V4L2VideoCapture_p1, 0, 0, 0, 0,
-                        160U, 120U, 1U, 2U, 1U, 0.05);
+                        160U, 120U, 1U, 2U, 1U, 0.011111111111111112);
 
     /* Start for MATLABSystem: '<S3>/MATLAB System' */
     lanedetection_DW.obj.matlabCodegenIsDeleted = true;
@@ -841,7 +851,7 @@ void lanedetection_initialize(void)
 
     SCIModuleLoc[12] = '\x00';
     obj->MW_SCIHANDLE = MW_SCI_Open(SCIModuleLoc, true, RxPinLoc, TxPinLoc);
-    MW_SCI_SetBaudrate(lanedetection_DW.obj_n.MW_SCIHANDLE, 9600U);
+    MW_SCI_SetBaudrate(lanedetection_DW.obj_n.MW_SCIHANDLE, 115200U);
     StopBitsValue = MW_SCI_STOPBITS_1;
     ParityValue = MW_SCI_PARITY_NONE;
     MW_SCI_SetFrameFormat(lanedetection_DW.obj_n.MW_SCIHANDLE, 8, ParityValue,

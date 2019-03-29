@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.117
+ * Model version                  : 1.142
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Thu Mar 28 11:45:22 2019
+ * C/C++ source code generated on : Fri Mar 29 13:03:24 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -22,15 +22,15 @@
 
 /* Block parameters (default storage) */
 P_lanedetection_T lanedetection_P = {
-  /* Expression: 0.005
+  /* Expression: -0.009
    * Referenced by: '<Root>/Gain'
    */
-  0.005,
+  -0.009,
 
-  /* Expression: 90
+  /* Computed Parameter: Constant_Value
    * Referenced by: '<Root>/Constant'
    */
-  90.0
+  90
 };
 
 /* Constant parameters (default storage) */

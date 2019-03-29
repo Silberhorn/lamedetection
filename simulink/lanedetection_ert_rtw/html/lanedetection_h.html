@@ -29,11 +29,11 @@
 <tr name="9" id="9">
 <td><a id="l9" class='ln'>9</a></td><td><span class="ct"> *</span></td></tr>
 <tr name="10" id="10">
-<td><a id="l10" class='ln'>10</a></td><td><span class="ct"> * Model version                  : 1.117</span></td></tr>
+<td><a id="l10" class='ln'>10</a></td><td><span class="ct"> * Model version                  : 1.142</span></td></tr>
 <tr name="11" id="11">
 <td><a id="l11" class='ln'>11</a></td><td><span class="ct"> * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018</span></td></tr>
 <tr name="12" id="12">
-<td><a id="l12" class='ln'>12</a></td><td><span class="ct"> * C/C++ source code generated on : Thu Mar 28 11:45:22 2019</span></td></tr>
+<td><a id="l12" class='ln'>12</a></td><td><span class="ct"> * C/C++ source code generated on : Fri Mar 29 13:03:24 2019</span></td></tr>
 <tr name="13" id="13">
 <td><a id="l13" class='ln'>13</a></td><td><span class="ct"> *</span></td></tr>
 <tr name="14" id="14">
@@ -195,51 +195,51 @@
 <tr name="92" id="92">
 <td><a id="l92" class='ln'>92</a></td><td>  <a id="92c3" class="tk">int32_T</a> <a id="92c11" class="tk">i_data</a>[4800];</td></tr>
 <tr name="93" id="93">
-<td><a id="l93" class='ln'>93</a></td><td>  <a id="93c3" class="tk">int8_T</a> <a id="93c10" class="tk">j_data</a>[4800];</td></tr>
+<td><a id="l93" class='ln'>93</a></td><td>  <a id="93c3" class="tk">uint8_T</a> <a id="93c11" class="tk">V4L2VideoCapture_o1</a>[19200];  <span class="ct">/* '<a class="ct blk" blk_line="93">&lt;Root&gt;/V4L2 Video Capture</a>' */</span></td></tr>
 <tr name="94" id="94">
-<td><a id="l94" class='ln'>94</a></td><td>  <a id="94c3" class="tk">uint8_T</a> <a id="94c11" class="tk">imgOUT</a>[4800];                <span class="ct">/* '<a class="ct blk" blk_line="94">&lt;Root&gt;/MATLAB Function1</a>' */</span></td></tr>
+<td><a id="l94" class='ln'>94</a></td><td>  <a id="94c3" class="tk">uint8_T</a> <a id="94c11" class="tk">V4L2VideoCapture_o2</a>[9600];   <span class="ct">/* '<a class="ct blk" blk_line="94">&lt;Root&gt;/V4L2 Video Capture</a>' */</span></td></tr>
 <tr name="95" id="95">
-<td><a id="l95" class='ln'>95</a></td><td>  <a id="95c3" class="tk">uint8_T</a> <a id="95c11" class="tk">pln2</a>[2400];</td></tr>
+<td><a id="l95" class='ln'>95</a></td><td>  <a id="95c3" class="tk">uint8_T</a> <a id="95c11" class="tk">V4L2VideoCapture_o3</a>[9600];   <span class="ct">/* '<a class="ct blk" blk_line="95">&lt;Root&gt;/V4L2 Video Capture</a>' */</span></td></tr>
 <tr name="96" id="96">
-<td><a id="l96" class='ln'>96</a></td><td>  <a id="96c3" class="tk">uint8_T</a> <a id="96c11" class="tk">pln3</a>[2400];</td></tr>
+<td><a id="l96" class='ln'>96</a></td><td>  <a id="96c3" class="tk">int8_T</a> <a id="96c10" class="tk">j_data</a>[4800];</td></tr>
 <tr name="97" id="97">
-<td><a id="l97" class='ln'>97</a></td><td>  <a id="97c3" class="tk">real_T</a> <a id="97c10" class="tk">xx_data</a>[160];</td></tr>
+<td><a id="l97" class='ln'>97</a></td><td>  <a id="97c3" class="tk">uint8_T</a> <a id="97c11" class="tk">imgOUT</a>[4800];                <span class="ct">/* '<a class="ct blk" blk_line="97">&lt;Root&gt;/MATLAB Function1</a>' */</span></td></tr>
 <tr name="98" id="98">
-<td><a id="l98" class='ln'>98</a></td><td>  <a id="98c3" class="tk">real_T</a> <a id="98c10" class="tk">b_y_data</a>[160];</td></tr>
+<td><a id="l98" class='ln'>98</a></td><td>  <a id="98c3" class="tk">uint8_T</a> <a id="98c11" class="tk">Resize1</a>[2400];               <span class="ct">/* '<a class="ct blk" blk_line="98">&lt;Root&gt;/Resize1</a>' */</span></td></tr>
 <tr name="99" id="99">
-<td><a id="l99" class='ln'>99</a></td><td>  <a id="99c3" class="tk">int32_T</a> <a id="99c11" class="tk">b_data</a>[160];</td></tr>
+<td><a id="l99" class='ln'>99</a></td><td>  <a id="99c3" class="tk">uint8_T</a> <a id="99c11" class="tk">Resize2</a>[2400];               <span class="ct">/* '<a class="ct blk" blk_line="99">&lt;Root&gt;/Resize2</a>' */</span></td></tr>
 <tr name="100" id="100">
-<td><a id="l100" class='ln'>100</a></td><td>  <a id="100c3" class="tk">int32_T</a> <a id="100c11" class="tk">c_data</a>[30];</td></tr>
+<td><a id="l100" class='ln'>100</a></td><td>  <a id="100c3" class="tk">uint8_T</a> <a id="100c11" class="tk">imgEdge</a>[4800];               <span class="ct">/* '<a class="ct blk" blk_line="100">&lt;Root&gt;/MATLAB Function</a>' */</span></td></tr>
 <tr name="101" id="101">
-<td><a id="l101" class='ln'>101</a></td><td>  <a id="101c3" class="tk">uint8_T</a> <a id="101c11" class="tk">TxDataLocChar</a>[8];</td></tr>
+<td><a id="l101" class='ln'>101</a></td><td>  <a id="101c3" class="tk">uint8_T</a> <a id="101c11" class="tk">pln2</a>[2400];</td></tr>
 <tr name="102" id="102">
-<td><a id="l102" class='ln'>102</a></td><td>  <a id="102c3" class="tk">real_T</a> <a id="102c10" class="tk">Add</a>;                          <span class="ct">/* '<a class="ct blk" blk_line="102">&lt;Root&gt;/Add</a>' */</span></td></tr>
+<td><a id="l102" class='ln'>102</a></td><td>  <a id="102c3" class="tk">uint8_T</a> <a id="102c11" class="tk">pln3</a>[2400];</td></tr>
 <tr name="103" id="103">
-<td><a id="l103" class='ln'>103</a></td><td>  <a id="103c3" class="tk">uint8_T</a> <a id="103c11" class="tk">V4L2VideoCapture_o1</a>[19200];  <span class="ct">/* '<a class="ct blk" blk_line="103">&lt;Root&gt;/V4L2 Video Capture</a>' */</span></td></tr>
+<td><a id="l103" class='ln'>103</a></td><td>  <a id="103c3" class="tk">real_T</a> <a id="103c10" class="tk">xx_data</a>[160];</td></tr>
 <tr name="104" id="104">
-<td><a id="l104" class='ln'>104</a></td><td>  <a id="104c3" class="tk">uint8_T</a> <a id="104c11" class="tk">V4L2VideoCapture_o2</a>[9600];   <span class="ct">/* '<a class="ct blk" blk_line="104">&lt;Root&gt;/V4L2 Video Capture</a>' */</span></td></tr>
+<td><a id="l104" class='ln'>104</a></td><td>  <a id="104c3" class="tk">real_T</a> <a id="104c10" class="tk">b_y_data</a>[160];</td></tr>
 <tr name="105" id="105">
-<td><a id="l105" class='ln'>105</a></td><td>  <a id="105c3" class="tk">uint8_T</a> <a id="105c11" class="tk">V4L2VideoCapture_o3</a>[9600];   <span class="ct">/* '<a class="ct blk" blk_line="105">&lt;Root&gt;/V4L2 Video Capture</a>' */</span></td></tr>
+<td><a id="l105" class='ln'>105</a></td><td>  <a id="105c3" class="tk">int32_T</a> <a id="105c11" class="tk">b_data</a>[160];</td></tr>
 <tr name="106" id="106">
-<td><a id="l106" class='ln'>106</a></td><td>  <a id="106c3" class="tk">uint8_T</a> <a id="106c11" class="tk">Resize1</a>[2400];               <span class="ct">/* '<a class="ct blk" blk_line="106">&lt;Root&gt;/Resize1</a>' */</span></td></tr>
+<td><a id="l106" class='ln'>106</a></td><td>  <a id="106c3" class="tk">int32_T</a> <a id="106c11" class="tk">c_data</a>[30];</td></tr>
 <tr name="107" id="107">
-<td><a id="l107" class='ln'>107</a></td><td>  <a id="107c3" class="tk">uint8_T</a> <a id="107c11" class="tk">Resize2</a>[2400];               <span class="ct">/* '<a class="ct blk" blk_line="107">&lt;Root&gt;/Resize2</a>' */</span></td></tr>
+<td><a id="l107" class='ln'>107</a></td><td>  <a id="107c3" class="tk">real_T</a> <a id="107c10" class="tk">xCenter</a>;                      <span class="ct">/* '<a class="ct blk" blk_line="107">&lt;Root&gt;/MATLAB Function</a>' */</span></td></tr>
 <tr name="108" id="108">
-<td><a id="l108" class='ln'>108</a></td><td>  <a id="108c3" class="tk">uint8_T</a> <a id="108c11" class="tk">imgEdge</a>[4800];               <span class="ct">/* '<a class="ct blk" blk_line="108">&lt;Root&gt;/MATLAB Function</a>' */</span></td></tr>
+<td><a id="l108" class='ln'>108</a></td><td>  <a id="108c3" class="tk">real_T</a> <a id="108c10" class="tk">yCenter</a>;</td></tr>
 <tr name="109" id="109">
-<td><a id="l109" class='ln'>109</a></td><td>  <a id="109c3" class="tk">real_T</a> <a id="109c10" class="tk">xCenter</a>;</td></tr>
+<td><a id="l109" class='ln'>109</a></td><td>  <a id="109c3" class="tk">real_T</a> <a id="109c10" class="tk">maxval</a>;</td></tr>
 <tr name="110" id="110">
-<td><a id="l110" class='ln'>110</a></td><td>  <a id="110c3" class="tk">real_T</a> <a id="110c10" class="tk">yCenter</a>;</td></tr>
+<td><a id="l110" class='ln'>110</a></td><td>  <a id="110c3" class="tk">real_T</a> <a id="110c10" class="tk">minval</a>;</td></tr>
 <tr name="111" id="111">
-<td><a id="l111" class='ln'>111</a></td><td>  <a id="111c3" class="tk">real_T</a> <a id="111c10" class="tk">maxval</a>;</td></tr>
+<td><a id="l111" class='ln'>111</a></td><td>  <a id="111c3" class="tk">int32_T</a> <a id="111c11" class="tk">idx</a>;</td></tr>
 <tr name="112" id="112">
-<td><a id="l112" class='ln'>112</a></td><td>  <a id="112c3" class="tk">real_T</a> <a id="112c10" class="tk">minval</a>;</td></tr>
+<td><a id="l112" class='ln'>112</a></td><td>  <a id="112c3" class="tk">int32_T</a> <a id="112c11" class="tk">ii</a>;</td></tr>
 <tr name="113" id="113">
-<td><a id="l113" class='ln'>113</a></td><td>  <a id="113c3" class="tk">int32_T</a> <a id="113c11" class="tk">idx</a>;</td></tr>
+<td><a id="l113" class='ln'>113</a></td><td>  <a id="113c3" class="tk">int32_T</a> <a id="113c11" class="tk">jj</a>;</td></tr>
 <tr name="114" id="114">
-<td><a id="l114" class='ln'>114</a></td><td>  <a id="114c3" class="tk">int32_T</a> <a id="114c11" class="tk">ii</a>;</td></tr>
+<td><a id="l114" class='ln'>114</a></td><td>  <a id="114c3" class="tk">int32_T</a> <a id="114c11" class="tk">nm1d2</a>;</td></tr>
 <tr name="115" id="115">
-<td><a id="l115" class='ln'>115</a></td><td>  <a id="115c3" class="tk">int32_T</a> <a id="115c11" class="tk">jj</a>;</td></tr>
+<td><a id="l115" class='ln'>115</a></td><td>  <a id="115c3" class="tk">int8_T</a> <a id="115c10" class="tk">Add</a>;                          <span class="ct">/* '<a class="ct blk" blk_line="115">&lt;Root&gt;/Add</a>' */</span></td></tr>
 <tr name="116" id="116">
 <td><a id="l116" class='ln'>116</a></td><td><span class="br">}</span> <a id="116c3" class="tk">B_lanedetection_T</a>;</td></tr>
 <tr name="117" id="117">
@@ -311,13 +311,13 @@
 <tr name="150" id="150">
 <td><a id="l150" class='ln'>150</a></td><td><span class="kw">struct</span> <a id="150c8" class="tk">P_lanedetection_T_</a> <span class="br">{</span></td></tr>
 <tr name="151" id="151">
-<td><a id="l151" class='ln'>151</a></td><td>  <a id="151c3" class="tk">real_T</a> <a id="151c10" class="tk">Gain_Gain</a>;                    <span class="ct">/* Expression: 0.005</span></td></tr>
+<td><a id="l151" class='ln'>151</a></td><td>  <a id="151c3" class="tk">real_T</a> <a id="151c10" class="tk">Gain_Gain</a>;                    <span class="ct">/* Expression: -0.009</span></td></tr>
 <tr name="152" id="152">
 <td><a id="l152" class='ln'>152</a></td><td><span class="ct">                                        * Referenced by: '<a class="ct blk" blk_line="152">&lt;Root&gt;/Gain</a>'</span></td></tr>
 <tr name="153" id="153">
 <td><a id="l153" class='ln'>153</a></td><td><span class="ct">                                        */</span></td></tr>
 <tr name="154" id="154">
-<td><a id="l154" class='ln'>154</a></td><td>  <a id="154c3" class="tk">real_T</a> <a id="154c10" class="tk">Constant_Value</a>;               <span class="ct">/* Expression: 90</span></td></tr>
+<td><a id="l154" class='ln'>154</a></td><td>  <a id="154c3" class="tk">int8_T</a> <a id="154c10" class="tk">Constant_Value</a>;               <span class="ct">/* Computed Parameter: Constant_Value</span></td></tr>
 <tr name="155" id="155">
 <td><a id="l155" class='ln'>155</a></td><td><span class="ct">                                        * Referenced by: '<a class="ct blk" blk_line="155">&lt;Root&gt;/Constant</a>'</span></td></tr>
 <tr name="156" id="156">

@@ -5,7 +5,7 @@
   ;%***********************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 1;
+    nTotSects     = 2;
     sectIdxOffset = 0;
     
     ;%
@@ -28,19 +28,26 @@
     ;%
     ;% Auto data (lanedetection_P)
     ;%
-      section.nData     = 2;
-      section.data(2)  = dumData; %prealloc
+      section.nData     = 1;
+      section.data(1)  = dumData; %prealloc
       
 	  ;% lanedetection_P.Gain_Gain
 	  section.data(1).logicalSrcIdx = 0;
 	  section.data(1).dtTransOffset = 0;
 	
-	  ;% lanedetection_P.Constant_Value
-	  section.data(2).logicalSrcIdx = 1;
-	  section.data(2).dtTransOffset = 1;
-	
       nTotData = nTotData + section.nData;
       paramMap.sections(1) = section;
+      clear section
+      
+      section.nData     = 1;
+      section.data(1)  = dumData; %prealloc
+      
+	  ;% lanedetection_P.Constant_Value
+	  section.data(1).logicalSrcIdx = 1;
+	  section.data(1).dtTransOffset = 0;
+	
+      nTotData = nTotData + section.nData;
+      paramMap.sections(2) = section;
       clear section
       
     
@@ -61,7 +68,7 @@
   ;%**************************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 2;
+    nTotSects     = 4;
     sectIdxOffset = 0;
     
     ;%
@@ -84,19 +91,8 @@
     ;%
     ;% Auto data (lanedetection_B)
     ;%
-      section.nData     = 1;
-      section.data(1)  = dumData; %prealloc
-      
-	  ;% lanedetection_B.Add
-	  section.data(1).logicalSrcIdx = 0;
-	  section.data(1).dtTransOffset = 0;
-	
-      nTotData = nTotData + section.nData;
-      sigMap.sections(1) = section;
-      clear section
-      
-      section.nData     = 6;
-      section.data(6)  = dumData; %prealloc
+      section.nData     = 3;
+      section.data(3)  = dumData; %prealloc
       
 	  ;% lanedetection_B.V4L2VideoCapture_o1
 	  section.data(1).logicalSrcIdx = 1;
@@ -110,20 +106,49 @@
 	  section.data(3).logicalSrcIdx = 3;
 	  section.data(3).dtTransOffset = 28800;
 	
+      nTotData = nTotData + section.nData;
+      sigMap.sections(1) = section;
+      clear section
+      
+      section.nData     = 3;
+      section.data(3)  = dumData; %prealloc
+      
 	  ;% lanedetection_B.Resize1
-	  section.data(4).logicalSrcIdx = 4;
-	  section.data(4).dtTransOffset = 38400;
+	  section.data(1).logicalSrcIdx = 4;
+	  section.data(1).dtTransOffset = 0;
 	
 	  ;% lanedetection_B.Resize2
-	  section.data(5).logicalSrcIdx = 5;
-	  section.data(5).dtTransOffset = 40800;
+	  section.data(2).logicalSrcIdx = 5;
+	  section.data(2).dtTransOffset = 2400;
 	
 	  ;% lanedetection_B.imgEdge
-	  section.data(6).logicalSrcIdx = 6;
-	  section.data(6).dtTransOffset = 43200;
+	  section.data(3).logicalSrcIdx = 6;
+	  section.data(3).dtTransOffset = 4800;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(2) = section;
+      clear section
+      
+      section.nData     = 1;
+      section.data(1)  = dumData; %prealloc
+      
+	  ;% lanedetection_B.xCenter
+	  section.data(1).logicalSrcIdx = 0;
+	  section.data(1).dtTransOffset = 0;
+	
+      nTotData = nTotData + section.nData;
+      sigMap.sections(3) = section;
+      clear section
+      
+      section.nData     = 1;
+      section.data(1)  = dumData; %prealloc
+      
+	  ;% lanedetection_B.Add
+	  section.data(1).logicalSrcIdx = 7;
+	  section.data(1).dtTransOffset = 0;
+	
+      nTotData = nTotData + section.nData;
+      sigMap.sections(4) = section;
       clear section
       
     
@@ -145,7 +170,7 @@
       
     nTotData      = 0; %add to this count as we go
     nTotSects     = 2;
-    sectIdxOffset = 2;
+    sectIdxOffset = 4;
     
     ;%
     ;% Define dummy sections & preallocate arrays
@@ -215,8 +240,8 @@
   ;%
 
 
-  targMap.checksum0 = 859956058;
-  targMap.checksum1 = 3130290242;
-  targMap.checksum2 = 3001912187;
-  targMap.checksum3 = 427575432;
+  targMap.checksum0 = 1883644034;
+  targMap.checksum1 = 2126461276;
+  targMap.checksum2 = 3592030381;
+  targMap.checksum3 = 1005100626;
 
