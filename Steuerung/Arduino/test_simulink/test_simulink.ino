@@ -39,8 +39,8 @@ void loop() {
   digitalWrite(in1_2, LOW);
   digitalWrite(in2_1, HIGH);
   digitalWrite(in2_2, LOW);
-  analogWrite(enA, 160);
-  analogWrite(enB, 160);
+  analogWrite(enA, 200);
+  analogWrite(enB, 200);
   
   servo1.write(steeringangle);
 }
