@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.142
+ * Model version                  : 1.193
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Fri Mar 29 13:03:24 2019
+ * C/C++ source code generated on : Wed Apr 10 15:33:34 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -23,7 +23,6 @@
 #include "lanedetection_private.h"
 #include "rtwtypes.h"
 #include "limits.h"
-#include "rt_nonfinite.h"
 #include "linuxinitialize.h"
 #define UNUSED(x)                      x = x
 
@@ -136,7 +135,7 @@ int main(int argc, char **argv)
   rtERTExtModeStartMsg();
 
   /* Call RTOS Initialization function */
-  myRTOSInit(0.011111111111111112, 0);
+  myRTOSInit(0.05, 0);
 
   /* Wait for stop semaphore */
   sem_wait(&stopSem);

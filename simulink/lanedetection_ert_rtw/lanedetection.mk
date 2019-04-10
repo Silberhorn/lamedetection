@@ -2,7 +2,7 @@
 ## Makefile generated for Simulink model 'lanedetection'. 
 ## 
 ## Makefile     : lanedetection.mk
-## Generated on : Mon Mar 25 18:12:45 2019
+## Generated on : Wed Apr 10 15:03:41 2019
 ## MATLAB Coder version: 4.0 (R2018a)
 ## 
 ## Build Info:
@@ -204,7 +204,7 @@ DEFINES = $(DEFINES_) $(DEFINES_BUILD_ARGS) $(DEFINES_IMPLIED) $(DEFINES_OPTS) $
 ## SOURCE FILES
 ###########################################################################
 
-SRCS = MW_SCI.c MW_SDL_video_display.c v4l2_capture.c v4l2_capture_linux.c lanedetection.c lanedetection_data.c rtGetInf.c rtGetNaN.c rt_nonfinite.c ext_svr.c updown.c ext_work.c rtiostream_utils.c linuxinitialize.c rtiostream_interface.c rtiostream_tcpip.c
+SRCS = MW_SDL_video_display.c v4l2_capture.c v4l2_capture_linux.c hough_d_rt.c hough_r_rt.c lanedetection.c lanedetection_data.c ext_svr.c updown.c ext_work.c rtiostream_utils.c linuxinitialize.c rtiostream_interface.c rtiostream_tcpip.c
 
 MAIN_SRC = ert_main.c
 
@@ -214,7 +214,7 @@ ALL_SRCS = $(SRCS) $(MAIN_SRC)
 ## OBJECTS
 ###########################################################################
 
-OBJS = MW_SCI.c.o MW_SDL_video_display.c.o v4l2_capture.c.o v4l2_capture_linux.c.o lanedetection.c.o lanedetection_data.c.o rtGetInf.c.o rtGetNaN.c.o rt_nonfinite.c.o ext_svr.c.o updown.c.o ext_work.c.o rtiostream_utils.c.o linuxinitialize.c.o rtiostream_interface.c.o rtiostream_tcpip.c.o
+OBJS = MW_SDL_video_display.c.o v4l2_capture.c.o v4l2_capture_linux.c.o hough_d_rt.c.o hough_r_rt.c.o lanedetection.c.o lanedetection_data.c.o ext_svr.c.o updown.c.o ext_work.c.o rtiostream_utils.c.o linuxinitialize.c.o rtiostream_interface.c.o rtiostream_tcpip.c.o
 
 MAIN_OBJ = ert_main.c.o
 

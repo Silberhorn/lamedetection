@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.142
+ * Model version                  : 1.193
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Fri Mar 29 13:03:24 2019
+ * C/C++ source code generated on : Wed Apr 10 15:33:34 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -25,22 +25,21 @@
 #include <stddef.h>
 #ifndef lanedetection_COMMON_INCLUDES_
 # define lanedetection_COMMON_INCLUDES_
+#include <math.h>
 #include "rtwtypes.h"
 #include "rtw_extmode.h"
 #include "sysran_types.h"
 #include "dt_info.h"
 #include "ext_work.h"
-#include "MW_SCI.h"
 #include "MW_SDL_video_display.h"
 #include "v4l2_capture.h"
+#include "viphough_rt.h"
 #endif                                 /* lanedetection_COMMON_INCLUDES_ */
 
 #include "lanedetection_types.h"
 
 /* Shared type includes */
 #include "multiword_types.h"
-#include "rt_nonfinite.h"
-#include "rtGetInf.h"
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetFinalTime
@@ -85,60 +84,82 @@
 
 /* Block signals (default storage) */
 typedef struct {
-  real_T x_data[4800];
-  real_T y_data[4800];
-  real_T rtb_imgOUT_m[4800];
-  real_T dv0[4800];
-  int32_T i_data[4800];
-  uint8_T V4L2VideoCapture_o1[19200];  /* '<Root>/V4L2 Video Capture' */
-  uint8_T V4L2VideoCapture_o2[9600];   /* '<Root>/V4L2 Video Capture' */
-  uint8_T V4L2VideoCapture_o3[9600];   /* '<Root>/V4L2 Video Capture' */
-  int8_T j_data[4800];
-  uint8_T imgOUT[4800];                /* '<Root>/MATLAB Function1' */
-  uint8_T Resize1[2400];               /* '<Root>/Resize1' */
-  uint8_T Resize2[2400];               /* '<Root>/Resize2' */
-  uint8_T imgEdge[4800];               /* '<Root>/MATLAB Function' */
-  uint8_T pln2[2400];
-  uint8_T pln3[2400];
-  real_T xx_data[160];
-  real_T b_y_data[160];
-  int32_T b_data[160];
-  int32_T c_data[30];
-  real_T xCenter;                      /* '<Root>/MATLAB Function' */
-  real_T yCenter;
-  real_T maxval;
-  real_T minval;
-  int32_T idx;
-  int32_T ii;
-  int32_T jj;
-  int32_T nm1d2;
-  int8_T Add;                          /* '<Root>/Add' */
+  real_T V[32000];
+  uint8_T Resize[76800];               /* '<Root>/Resize' */
+  uint8_T Resize1[76800];              /* '<Root>/Resize1' */
+  uint8_T DrawShapes_o3[76800];        /* '<Root>/Draw Shapes' */
+  uint8_T DrawShapes_o2[76800];        /* '<Root>/Draw Shapes' */
+  uint8_T pln2[38400];
+  uint8_T pln3[38400];
+  uint8_T imgOUT[32000];               /* '<Root>/MATLAB Function1' */
+  boolean_T Transpose[32000];          /* '<Root>/Transpose' */
+  boolean_T imgEdge[32000];            /* '<Root>/MATLAB Function' */
+  real32_T HoughTransform_o2[180];     /* '<Root>/Hough Transform' */
+  real32_T HoughTransform_o3[671];     /* '<Root>/Hough Transform' */
+  int32_T HoughLines[8];               /* '<Root>/Hough Lines' */
+  uint8_T V4L2VideoCapture_o1[76800];  /* '<Root>/V4L2 Video Capture' */
+  uint8_T V4L2VideoCapture_o2[38400];  /* '<Root>/V4L2 Video Capture' */
+  uint8_T V4L2VideoCapture_o3[38400];  /* '<Root>/V4L2 Video Capture' */
+  uint8_T DrawShapes_o1[76800];        /* '<Root>/Draw Shapes' */
+  uint8_T Resize2[38400];              /* '<Root>/Resize2' */
+  uint8_T Resize3[38400];              /* '<Root>/Resize3' */
+  int32_T tmpOutRC[4];
+  uint32_T Submatrix1[2];              /* '<Root>/Submatrix1' */
+  uint32_T Submatrix[2];               /* '<Root>/Submatrix' */
+  real32_T HoughTransform_o1[120780];  /* '<Root>/Hough Transform' */
+  uint32_T FindLocalMaxima_o1[2];
+  real32_T tmpRound;
+  real32_T y2;
+  int32_T acc3;
+  int32_T intPart;
+  int32_T idxCol1;
+  int32_T idxRow2;
+  int32_T idxCol2;
+  int32_T idxTmp;
+  int32_T numUniquePix;
+  int32_T loc;
+  int32_T loc_m;
+  int32_T idxOld;
+  int32_T idxNew;
 } B_lanedetection_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  uint8_T Resize2_IntBuffer[4800];     /* '<Root>/Resize2' */
-  uint8_T Resize1_IntBuffer[4800];     /* '<Root>/Resize1' */
-  uint8_T Resize1_LineBuffer[160];     /* '<Root>/Resize1' */
+  uint8_T Resize3_IntBuffer[76800];    /* '<Root>/Resize3' */
+  uint8_T Resize2_IntBuffer[76800];    /* '<Root>/Resize2' */
+  uint8_T Resize2_LineBuffer[320];     /* '<Root>/Resize2' */
+  int32_T DrawShapes_DW_Polygon[72];   /* '<Root>/Draw Shapes' */
+  uint8_T Resize_LineBuffer[160];      /* '<Root>/Resize' */
+  int32_T DrawShapes_DW_Points[16];    /* '<Root>/Draw Shapes' */
   codertarget_linux_blocks_SDLV_T obj; /* '<S3>/MATLAB System' */
-  codertarget_raspi_internal_SC_T obj_n;/* '<Root>/Serial Write' */
+  real32_T FindLocalMaxima_TEMP_IN_DWORKS[120780];/* '<Root>/Find Local Maxima' */
 } DW_lanedetection_T;
 
 /* Constant parameters (default storage) */
 typedef struct {
   /* Pooled Parameter (Expression: )
    * Referenced by:
-   *   '<Root>/Resize1'
    *   '<Root>/Resize2'
+   *   '<Root>/Resize3'
    */
-  int32_T pooled2[320];
+  int32_T pooled2[640];
+
+  /* Computed Parameter: HoughTransform_SINE_TABLE_RTP
+   * Referenced by: '<Root>/Hough Transform'
+   */
+  real32_T HoughTransform_SINE_TABLE_RTP[91];
+
+  /* Computed Parameter: HoughTransform_FIRSTRHO_RTP
+   * Referenced by: '<Root>/Hough Transform'
+   */
+  real32_T HoughTransform_FIRSTRHO_RTP;
 
   /* Pooled Parameter (Expression: )
    * Referenced by:
-   *   '<Root>/Resize1'
    *   '<Root>/Resize2'
+   *   '<Root>/Resize3'
    */
-  int8_T pooled5[320];
+  int8_T pooled7[640];
 
   /* Expression: devName
    * Referenced by: '<Root>/V4L2 Video Capture'
@@ -148,11 +169,17 @@ typedef struct {
 
 /* Parameters (default storage) */
 struct P_lanedetection_T_ {
-  real_T Gain_Gain;                    /* Expression: -0.009
-                                        * Referenced by: '<Root>/Gain'
+  int32_T DrawShapes_lineWidth;        /* Mask Parameter: DrawShapes_lineWidth
+                                        * Referenced by: '<Root>/Draw Shapes'
                                         */
-  int8_T Constant_Value;               /* Computed Parameter: Constant_Value
-                                        * Referenced by: '<Root>/Constant'
+  real32_T FindLocalMaxima_threshold;  /* Mask Parameter: FindLocalMaxima_threshold
+                                        * Referenced by: '<Root>/Find Local Maxima'
+                                        */
+  uint8_T DrawShapes_color[3];         /* Mask Parameter: DrawShapes_color
+                                        * Referenced by: '<Root>/Draw Shapes'
+                                        */
+  uint8_T Threshold_Value;             /* Computed Parameter: Threshold_Value
+                                        * Referenced by: '<Root>/Threshold'
                                         */
 };
 

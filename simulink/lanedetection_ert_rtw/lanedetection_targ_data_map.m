@@ -5,7 +5,7 @@
   ;%***********************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 2;
+    nTotSects     = 3;
     sectIdxOffset = 0;
     
     ;%
@@ -31,7 +31,7 @@
       section.nData     = 1;
       section.data(1)  = dumData; %prealloc
       
-	  ;% lanedetection_P.Gain_Gain
+	  ;% lanedetection_P.DrawShapes_lineWidth
 	  section.data(1).logicalSrcIdx = 0;
 	  section.data(1).dtTransOffset = 0;
 	
@@ -42,12 +42,27 @@
       section.nData     = 1;
       section.data(1)  = dumData; %prealloc
       
-	  ;% lanedetection_P.Constant_Value
+	  ;% lanedetection_P.FindLocalMaxima_threshold
 	  section.data(1).logicalSrcIdx = 1;
 	  section.data(1).dtTransOffset = 0;
 	
       nTotData = nTotData + section.nData;
       paramMap.sections(2) = section;
+      clear section
+      
+      section.nData     = 2;
+      section.data(2)  = dumData; %prealloc
+      
+	  ;% lanedetection_P.DrawShapes_color
+	  section.data(1).logicalSrcIdx = 2;
+	  section.data(1).dtTransOffset = 0;
+	
+	  ;% lanedetection_P.Threshold_Value
+	  section.data(2).logicalSrcIdx = 3;
+	  section.data(2).dtTransOffset = 3;
+	
+      nTotData = nTotData + section.nData;
+      paramMap.sections(3) = section;
       clear section
       
     
@@ -68,7 +83,7 @@
   ;%**************************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 4;
+    nTotSects     = 7;
     sectIdxOffset = 0;
     
     ;%
@@ -91,50 +106,42 @@
     ;%
     ;% Auto data (lanedetection_B)
     ;%
-      section.nData     = 3;
-      section.data(3)  = dumData; %prealloc
+      section.nData     = 2;
+      section.data(2)  = dumData; %prealloc
       
-	  ;% lanedetection_B.V4L2VideoCapture_o1
-	  section.data(1).logicalSrcIdx = 1;
+	  ;% lanedetection_B.Resize
+	  section.data(1).logicalSrcIdx = 13;
 	  section.data(1).dtTransOffset = 0;
 	
-	  ;% lanedetection_B.V4L2VideoCapture_o2
-	  section.data(2).logicalSrcIdx = 2;
-	  section.data(2).dtTransOffset = 19200;
-	
-	  ;% lanedetection_B.V4L2VideoCapture_o3
-	  section.data(3).logicalSrcIdx = 3;
-	  section.data(3).dtTransOffset = 28800;
+	  ;% lanedetection_B.Resize1
+	  section.data(2).logicalSrcIdx = 14;
+	  section.data(2).dtTransOffset = 76800;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(1) = section;
       clear section
       
-      section.nData     = 3;
-      section.data(3)  = dumData; %prealloc
+      section.nData     = 1;
+      section.data(1)  = dumData; %prealloc
       
-	  ;% lanedetection_B.Resize1
-	  section.data(1).logicalSrcIdx = 4;
+	  ;% lanedetection_B.Transpose
+	  section.data(1).logicalSrcIdx = 15;
 	  section.data(1).dtTransOffset = 0;
-	
-	  ;% lanedetection_B.Resize2
-	  section.data(2).logicalSrcIdx = 5;
-	  section.data(2).dtTransOffset = 2400;
-	
-	  ;% lanedetection_B.imgEdge
-	  section.data(3).logicalSrcIdx = 6;
-	  section.data(3).dtTransOffset = 4800;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(2) = section;
       clear section
       
-      section.nData     = 1;
-      section.data(1)  = dumData; %prealloc
+      section.nData     = 2;
+      section.data(2)  = dumData; %prealloc
       
-	  ;% lanedetection_B.xCenter
-	  section.data(1).logicalSrcIdx = 0;
+	  ;% lanedetection_B.HoughTransform_o2
+	  section.data(1).logicalSrcIdx = 4;
 	  section.data(1).dtTransOffset = 0;
+	
+	  ;% lanedetection_B.HoughTransform_o3
+	  section.data(2).logicalSrcIdx = 5;
+	  section.data(2).dtTransOffset = 180;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(3) = section;
@@ -143,12 +150,69 @@
       section.nData     = 1;
       section.data(1)  = dumData; %prealloc
       
-	  ;% lanedetection_B.Add
-	  section.data(1).logicalSrcIdx = 7;
+	  ;% lanedetection_B.HoughLines
+	  section.data(1).logicalSrcIdx = 6;
 	  section.data(1).dtTransOffset = 0;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(4) = section;
+      clear section
+      
+      section.nData     = 6;
+      section.data(6)  = dumData; %prealloc
+      
+	  ;% lanedetection_B.V4L2VideoCapture_o1
+	  section.data(1).logicalSrcIdx = 7;
+	  section.data(1).dtTransOffset = 0;
+	
+	  ;% lanedetection_B.V4L2VideoCapture_o2
+	  section.data(2).logicalSrcIdx = 8;
+	  section.data(2).dtTransOffset = 76800;
+	
+	  ;% lanedetection_B.V4L2VideoCapture_o3
+	  section.data(3).logicalSrcIdx = 9;
+	  section.data(3).dtTransOffset = 115200;
+	
+	  ;% lanedetection_B.DrawShapes_o1
+	  section.data(4).logicalSrcIdx = 10;
+	  section.data(4).dtTransOffset = 153600;
+	
+	  ;% lanedetection_B.Resize2
+	  section.data(5).logicalSrcIdx = 11;
+	  section.data(5).dtTransOffset = 230400;
+	
+	  ;% lanedetection_B.Resize3
+	  section.data(6).logicalSrcIdx = 12;
+	  section.data(6).dtTransOffset = 268800;
+	
+      nTotData = nTotData + section.nData;
+      sigMap.sections(5) = section;
+      clear section
+      
+      section.nData     = 2;
+      section.data(2)  = dumData; %prealloc
+      
+	  ;% lanedetection_B.Submatrix1
+	  section.data(1).logicalSrcIdx = 1;
+	  section.data(1).dtTransOffset = 0;
+	
+	  ;% lanedetection_B.Submatrix
+	  section.data(2).logicalSrcIdx = 2;
+	  section.data(2).dtTransOffset = 2;
+	
+      nTotData = nTotData + section.nData;
+      sigMap.sections(6) = section;
+      clear section
+      
+      section.nData     = 1;
+      section.data(1)  = dumData; %prealloc
+      
+	  ;% lanedetection_B.HoughTransform_o1
+	  section.data(1).logicalSrcIdx = 3;
+	  section.data(1).dtTransOffset = 0;
+	
+      nTotData = nTotData + section.nData;
+      sigMap.sections(7) = section;
       clear section
       
     
@@ -170,7 +234,7 @@
       
     nTotData      = 0; %add to this count as we go
     nTotSects     = 2;
-    sectIdxOffset = 4;
+    sectIdxOffset = 7;
     
     ;%
     ;% Define dummy sections & preallocate arrays
@@ -206,7 +270,7 @@
       section.nData     = 1;
       section.data(1)  = dumData; %prealloc
       
-	  ;% lanedetection_DW.obj_n
+	  ;% lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS
 	  section.data(1).logicalSrcIdx = 1;
 	  section.data(1).dtTransOffset = 0;
 	
@@ -240,8 +304,8 @@
   ;%
 
 
-  targMap.checksum0 = 1883644034;
-  targMap.checksum1 = 2126461276;
-  targMap.checksum2 = 3592030381;
-  targMap.checksum3 = 1005100626;
+  targMap.checksum0 = 1260964239;
+  targMap.checksum1 = 1201864594;
+  targMap.checksum2 = 1678593302;
+  targMap.checksum3 = 2177331807;
 

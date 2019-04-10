@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.142
+ * Model version                  : 1.193
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Fri Mar 29 13:03:24 2019
+ * C/C++ source code generated on : Wed Apr 10 15:33:34 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -75,7 +75,20 @@ Verification pane for ERT based targets, which will disable the \
 preprocessor word size checks.
 #endif
 
-extern real_T rt_roundd_snf(real_T u);
+extern int16_T rt_sqrt_Us32En14_Ys16E_tOJnWsQ0(int32_T u);
+extern void mul_wide_s32(int32_T in0, int32_T in1, uint32_T *ptrOutBitsHi,
+  uint32_T *ptrOutBitsLo);
+extern int32_T mul_s32_loSR(int32_T a, int32_T b, uint32_T aShift);
+extern int32_T div_repeat_s32_floor(int32_T numerator, int32_T denominator,
+  uint32_T nRepeatSub);
+extern uint32_T div_nzp_repeat_u32_ceiling(uint32_T numerator, uint32_T
+  denominator, uint32_T nRepeatSub);
+extern uint32_T div_nzp_repeat_u32(uint32_T numerator, uint32_T denominator,
+  uint32_T nRepeatSub);
+extern int32_T div_s32_floor(int32_T numerator, int32_T denominator);
+extern void mul_wide_su32(int32_T in0, uint32_T in1, uint32_T *ptrOutBitsHi,
+  uint32_T *ptrOutBitsLo);
+extern int32_T mul_ssu32_sat(int32_T a, uint32_T b);
 
 #endif                                 /* RTW_HEADER_lanedetection_private_h_ */
 

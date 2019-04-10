@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.142
+ * Model version                  : 1.193
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Fri Mar 29 13:03:24 2019
+ * C/C++ source code generated on : Wed Apr 10 15:33:34 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,32 +21,6 @@
 #define RTW_HEADER_lanedetection_types_h_
 #include "rtwtypes.h"
 #include "multiword_types.h"
-
-/* Custom Type definition for MATLABSystem: '<Root>/Serial Write' */
-#include "MW_SVD.h"
-#include <stddef.h>
-#ifndef typedef_codertarget_raspi_internal_Ha_T
-#define typedef_codertarget_raspi_internal_Ha_T
-
-typedef struct {
-  int32_T __dummy;
-} codertarget_raspi_internal_Ha_T;
-
-#endif                                 /*typedef_codertarget_raspi_internal_Ha_T*/
-
-#ifndef typedef_codertarget_raspi_internal_SC_T
-#define typedef_codertarget_raspi_internal_SC_T
-
-typedef struct {
-  boolean_T matlabCodegenIsDeleted;
-  int32_T isInitialized;
-  boolean_T isSetupComplete;
-  codertarget_raspi_internal_Ha_T Hw;
-  MW_Handle_Type MW_SCIHANDLE;
-} codertarget_raspi_internal_SC_T;
-
-#endif                                 /*typedef_codertarget_raspi_internal_SC_T*/
-
 #ifndef typedef_codertarget_linux_blocks_SDLV_T
 #define typedef_codertarget_linux_blocks_SDLV_T
 

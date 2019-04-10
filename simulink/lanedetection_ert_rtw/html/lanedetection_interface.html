@@ -144,7 +144,7 @@ Output entry point of generated code
 Timing
 </td>
 <td width="75%" align="left" valign="top">
-Must be called periodically, every 0.011111 seconds
+Must be called periodically, every 0.05 seconds
 </td>
 
 </tr>
@@ -264,7 +264,7 @@ Interface Parameters
 </a>
 
 </h3>
-<table width="100%" class="AltRow FirstColumn" cellspacing="0">
+<span title="Click to shrink or expand table" onclick="rtwTableShrink(this)">[-]</span><table width="100%" class="AltRow FirstColumn" cellspacing="0">
 <tr class="heading">
 <th width="42%" align="left" valign="top">
 <b>
@@ -294,13 +294,13 @@ Dimension
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('lanedetection:79')" name="code2model" class="code2model">&lt;Root&gt;/Gain</a>
+<a href="matlab:coder.internal.code2model('lanedetection:131')" name="code2model" class="code2model">&lt;Root&gt;/Draw Shapes</a>
 </td>
 <td width="26%" align="left" valign="top">
-lanedetection_P.Gain_Gain
+lanedetection_P.DrawShapes_lineWidth
 </td>
 <td width="21%" align="left" valign="top">
-real_T
+int32_T
 </td>
 <td width="10%" align="right" valign="top">
 1
@@ -309,13 +309,43 @@ real_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('lanedetection:82')" name="code2model" class="code2model">&lt;Root&gt;/Constant</a>
+<a href="matlab:coder.internal.code2model('lanedetection:117')" name="code2model" class="code2model">&lt;Root&gt;/Find Local Maxima</a>
 </td>
 <td width="26%" align="left" valign="top">
-lanedetection_P.Constant_Value
+lanedetection_P.FindLocalMaxima_threshold
 </td>
 <td width="21%" align="left" valign="top">
-int8_T
+real32_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="even">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('lanedetection:131')" name="code2model" class="code2model">&lt;Root&gt;/Draw Shapes</a>
+</td>
+<td width="26%" align="left" valign="top">
+lanedetection_P.DrawShapes_color
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
+</td>
+<td width="10%" align="right" valign="top">
+[1  3]
+</td>
+
+</tr>
+<tr class="odd">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('lanedetection:138')" name="code2model" class="code2model">&lt;Root&gt;/Threshold</a>
+</td>
+<td width="26%" align="left" valign="top">
+lanedetection_P.Threshold_Value
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
 </td>
 <td width="10%" align="right" valign="top">
 1
