@@ -53,13 +53,13 @@
       section.nData     = 2;
       section.data(2)  = dumData; %prealloc
       
-	  ;% lanedetection_P.DrawShapes_color
+	  ;% lanedetection_P.Threshold_Value
 	  section.data(1).logicalSrcIdx = 2;
 	  section.data(1).dtTransOffset = 0;
 	
-	  ;% lanedetection_P.Threshold_Value
+	  ;% lanedetection_P.DrawShapes_RTP_FILLCOLOR
 	  section.data(2).logicalSrcIdx = 3;
-	  section.data(2).dtTransOffset = 3;
+	  section.data(2).dtTransOffset = 1;
 	
       nTotData = nTotData + section.nData;
       paramMap.sections(3) = section;
@@ -83,7 +83,7 @@
   ;%**************************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 7;
+    nTotSects     = 5;
     sectIdxOffset = 0;
     
     ;%
@@ -106,47 +106,6 @@
     ;%
     ;% Auto data (lanedetection_B)
     ;%
-      section.nData     = 2;
-      section.data(2)  = dumData; %prealloc
-      
-	  ;% lanedetection_B.Resize
-	  section.data(1).logicalSrcIdx = 13;
-	  section.data(1).dtTransOffset = 0;
-	
-	  ;% lanedetection_B.Resize1
-	  section.data(2).logicalSrcIdx = 14;
-	  section.data(2).dtTransOffset = 76800;
-	
-      nTotData = nTotData + section.nData;
-      sigMap.sections(1) = section;
-      clear section
-      
-      section.nData     = 1;
-      section.data(1)  = dumData; %prealloc
-      
-	  ;% lanedetection_B.Transpose
-	  section.data(1).logicalSrcIdx = 15;
-	  section.data(1).dtTransOffset = 0;
-	
-      nTotData = nTotData + section.nData;
-      sigMap.sections(2) = section;
-      clear section
-      
-      section.nData     = 2;
-      section.data(2)  = dumData; %prealloc
-      
-	  ;% lanedetection_B.HoughTransform_o2
-	  section.data(1).logicalSrcIdx = 4;
-	  section.data(1).dtTransOffset = 0;
-	
-	  ;% lanedetection_B.HoughTransform_o3
-	  section.data(2).logicalSrcIdx = 5;
-	  section.data(2).dtTransOffset = 180;
-	
-      nTotData = nTotData + section.nData;
-      sigMap.sections(3) = section;
-      clear section
-      
       section.nData     = 1;
       section.data(1)  = dumData; %prealloc
       
@@ -155,11 +114,11 @@
 	  section.data(1).dtTransOffset = 0;
 	
       nTotData = nTotData + section.nData;
-      sigMap.sections(4) = section;
+      sigMap.sections(1) = section;
       clear section
       
-      section.nData     = 6;
-      section.data(6)  = dumData; %prealloc
+      section.nData     = 8;
+      section.data(8)  = dumData; %prealloc
       
 	  ;% lanedetection_B.V4L2VideoCapture_o1
 	  section.data(1).logicalSrcIdx = 7;
@@ -185,8 +144,31 @@
 	  section.data(6).logicalSrcIdx = 12;
 	  section.data(6).dtTransOffset = 268800;
 	
+	  ;% lanedetection_B.Resize
+	  section.data(7).logicalSrcIdx = 13;
+	  section.data(7).dtTransOffset = 307200;
+	
+	  ;% lanedetection_B.Resize1
+	  section.data(8).logicalSrcIdx = 14;
+	  section.data(8).dtTransOffset = 384000;
+	
       nTotData = nTotData + section.nData;
-      sigMap.sections(5) = section;
+      sigMap.sections(2) = section;
+      clear section
+      
+      section.nData     = 2;
+      section.data(2)  = dumData; %prealloc
+      
+	  ;% lanedetection_B.Transpose
+	  section.data(1).logicalSrcIdx = 15;
+	  section.data(1).dtTransOffset = 0;
+	
+	  ;% lanedetection_B.EdgeDetection
+	  section.data(2).logicalSrcIdx = 16;
+	  section.data(2).dtTransOffset = 32000;
+	
+      nTotData = nTotData + section.nData;
+      sigMap.sections(3) = section;
       clear section
       
       section.nData     = 2;
@@ -201,18 +183,26 @@
 	  section.data(2).dtTransOffset = 2;
 	
       nTotData = nTotData + section.nData;
-      sigMap.sections(6) = section;
+      sigMap.sections(4) = section;
       clear section
       
-      section.nData     = 1;
-      section.data(1)  = dumData; %prealloc
+      section.nData     = 3;
+      section.data(3)  = dumData; %prealloc
       
 	  ;% lanedetection_B.HoughTransform_o1
 	  section.data(1).logicalSrcIdx = 3;
 	  section.data(1).dtTransOffset = 0;
 	
+	  ;% lanedetection_B.HoughTransform_o2
+	  section.data(2).logicalSrcIdx = 4;
+	  section.data(2).dtTransOffset = 120780;
+	
+	  ;% lanedetection_B.HoughTransform_o3
+	  section.data(3).logicalSrcIdx = 5;
+	  section.data(3).dtTransOffset = 120960;
+	
       nTotData = nTotData + section.nData;
-      sigMap.sections(7) = section;
+      sigMap.sections(5) = section;
       clear section
       
     
@@ -233,8 +223,8 @@
   ;%*******************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 2;
-    sectIdxOffset = 7;
+    nTotSects     = 3;
+    sectIdxOffset = 5;
     
     ;%
     ;% Define dummy sections & preallocate arrays
@@ -278,6 +268,85 @@
       dworkMap.sections(2) = section;
       clear section
       
+      section.nData     = 18;
+      section.data(18)  = dumData; %prealloc
+      
+	  ;% lanedetection_DW.EdgeDetection_VO_DW
+	  section.data(1).logicalSrcIdx = 2;
+	  section.data(1).dtTransOffset = 0;
+	
+	  ;% lanedetection_DW.EdgeDetection_HO_DW
+	  section.data(2).logicalSrcIdx = 3;
+	  section.data(2).dtTransOffset = 6;
+	
+	  ;% lanedetection_DW.EdgeDetection_VOU_DW
+	  section.data(3).logicalSrcIdx = 4;
+	  section.data(3).dtTransOffset = 12;
+	
+	  ;% lanedetection_DW.EdgeDetection_VOD_DW
+	  section.data(4).logicalSrcIdx = 5;
+	  section.data(4).dtTransOffset = 18;
+	
+	  ;% lanedetection_DW.EdgeDetection_VOL_DW
+	  section.data(5).logicalSrcIdx = 6;
+	  section.data(5).dtTransOffset = 24;
+	
+	  ;% lanedetection_DW.EdgeDetection_VOR_DW
+	  section.data(6).logicalSrcIdx = 7;
+	  section.data(6).dtTransOffset = 30;
+	
+	  ;% lanedetection_DW.EdgeDetection_HOU_DW
+	  section.data(7).logicalSrcIdx = 8;
+	  section.data(7).dtTransOffset = 36;
+	
+	  ;% lanedetection_DW.EdgeDetection_HOD_DW
+	  section.data(8).logicalSrcIdx = 9;
+	  section.data(8).dtTransOffset = 42;
+	
+	  ;% lanedetection_DW.EdgeDetection_HOL_DW
+	  section.data(9).logicalSrcIdx = 10;
+	  section.data(9).dtTransOffset = 48;
+	
+	  ;% lanedetection_DW.EdgeDetection_HOR_DW
+	  section.data(10).logicalSrcIdx = 11;
+	  section.data(10).dtTransOffset = 54;
+	
+	  ;% lanedetection_DW.EdgeDetection_VOUL_DW
+	  section.data(11).logicalSrcIdx = 12;
+	  section.data(11).dtTransOffset = 60;
+	
+	  ;% lanedetection_DW.EdgeDetection_VOLL_DW
+	  section.data(12).logicalSrcIdx = 13;
+	  section.data(12).dtTransOffset = 66;
+	
+	  ;% lanedetection_DW.EdgeDetection_VOUR_DW
+	  section.data(13).logicalSrcIdx = 14;
+	  section.data(13).dtTransOffset = 72;
+	
+	  ;% lanedetection_DW.EdgeDetection_VOLR_DW
+	  section.data(14).logicalSrcIdx = 15;
+	  section.data(14).dtTransOffset = 78;
+	
+	  ;% lanedetection_DW.EdgeDetection_HOUL_DW
+	  section.data(15).logicalSrcIdx = 16;
+	  section.data(15).dtTransOffset = 84;
+	
+	  ;% lanedetection_DW.EdgeDetection_HOLL_DW
+	  section.data(16).logicalSrcIdx = 17;
+	  section.data(16).dtTransOffset = 90;
+	
+	  ;% lanedetection_DW.EdgeDetection_HOUR_DW
+	  section.data(17).logicalSrcIdx = 18;
+	  section.data(17).dtTransOffset = 96;
+	
+	  ;% lanedetection_DW.EdgeDetection_HOLR_DW
+	  section.data(18).logicalSrcIdx = 19;
+	  section.data(18).dtTransOffset = 102;
+	
+      nTotData = nTotData + section.nData;
+      dworkMap.sections(3) = section;
+      clear section
+      
     
       ;%
       ;% Non-auto Data (dwork)
@@ -304,8 +373,8 @@
   ;%
 
 
-  targMap.checksum0 = 1260964239;
-  targMap.checksum1 = 1201864594;
-  targMap.checksum2 = 1678593302;
-  targMap.checksum3 = 2177331807;
+  targMap.checksum0 = 1296803369;
+  targMap.checksum1 = 1334223898;
+  targMap.checksum2 = 2078142638;
+  targMap.checksum3 = 1390297388;
 

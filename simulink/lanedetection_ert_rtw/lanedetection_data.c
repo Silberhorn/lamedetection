@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.193
+ * Model version                  : 1.197
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Wed Apr 10 15:33:34 2019
+ * C/C++ source code generated on : Thu Apr 11 09:57:32 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -32,19 +32,39 @@ P_lanedetection_T lanedetection_P = {
    */
   10.0F,
 
-  /* Mask Parameter: DrawShapes_color
-   * Referenced by: '<Root>/Draw Shapes'
-   */
-  { 0U, 255U, 0U },
-
   /* Computed Parameter: Threshold_Value
    * Referenced by: '<Root>/Threshold'
    */
-  60U
+  60U,
+
+  /* Computed Parameter: DrawShapes_RTP_FILLCOLOR
+   * Referenced by: '<Root>/Draw Shapes'
+   */
+  { 0U, 255U, 0U }
 };
 
 /* Constant parameters (default storage) */
 const ConstP_lanedetection_T lanedetection_ConstP = {
+  /* Computed Parameter: EdgeDetection_VRO_RTP
+   * Referenced by: '<Root>/Edge Detection'
+   */
+  { -1, -1, -1, 1, 1, 1 },
+
+  /* Computed Parameter: EdgeDetection_VCO_RTP
+   * Referenced by: '<Root>/Edge Detection'
+   */
+  { -1, 0, 1, -1, 0, 1 },
+
+  /* Computed Parameter: EdgeDetection_HRO_RTP
+   * Referenced by: '<Root>/Edge Detection'
+   */
+  { -1, -1, 0, 0, 1, 1 },
+
+  /* Computed Parameter: EdgeDetection_HCO_RTP
+   * Referenced by: '<Root>/Edge Detection'
+   */
+  { -1, 1, -1, 1, -1, 1 },
+
   /* Pooled Parameter (Expression: )
    * Referenced by:
    *   '<Root>/Resize2'
@@ -118,6 +138,16 @@ const ConstP_lanedetection_T lanedetection_ConstP = {
    * Referenced by: '<Root>/Hough Transform'
    */
   -335.0F,
+
+  /* Computed Parameter: EdgeDetection_VC_RTP
+   * Referenced by: '<Root>/Edge Detection'
+   */
+  { 16, 32, 16, -16, -32, -16 },
+
+  /* Computed Parameter: EdgeDetection_HC_RTP
+   * Referenced by: '<Root>/Edge Detection'
+   */
+  { 16, -16, 32, -32, 16, -16 },
 
   /* Pooled Parameter (Expression: )
    * Referenced by:

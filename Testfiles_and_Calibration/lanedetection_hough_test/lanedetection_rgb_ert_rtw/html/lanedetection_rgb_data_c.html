@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="./js/coder_app.js"></script>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="./rtwreport_utils.js"></script>
+<script type="text/javascript" src="./rtwannotate.js"></script>
+<link rel="stylesheet" type="text/css" href="./css/coder_app.css"/>
+</head>
+<body onload="srcFileOnload();">
+<pre id="code">
+<table class="code" id="codeTbl">
+<tr name="1" id="1">
+<td><a id="l1" class='ln'>1</a></td><td><span class="ct">/*</span></td></tr>
+<tr name="2" id="2">
+<td><a id="l2" class='ln'>2</a></td><td><span class="ct"> * Academic License - for use in teaching, academic research, and meeting</span></td></tr>
+<tr name="3" id="3">
+<td><a id="l3" class='ln'>3</a></td><td><span class="ct"> * course requirements at degree granting institutions only.  Not for</span></td></tr>
+<tr name="4" id="4">
+<td><a id="l4" class='ln'>4</a></td><td><span class="ct"> * government, commercial, or other organizational use.</span></td></tr>
+<tr name="5" id="5">
+<td><a id="l5" class='ln'>5</a></td><td><span class="ct"> *</span></td></tr>
+<tr name="6" id="6">
+<td><a id="l6" class='ln'>6</a></td><td><span class="ct"> * File: lanedetection_rgb_data.c</span></td></tr>
+<tr name="7" id="7">
+<td><a id="l7" class='ln'>7</a></td><td><span class="ct"> *</span></td></tr>
+<tr name="8" id="8">
+<td><a id="l8" class='ln'>8</a></td><td><span class="ct"> * Code generated for Simulink model 'lanedetection_rgb'.</span></td></tr>
+<tr name="9" id="9">
+<td><a id="l9" class='ln'>9</a></td><td><span class="ct"> *</span></td></tr>
+<tr name="10" id="10">
+<td><a id="l10" class='ln'>10</a></td><td><span class="ct"> * Model version                  : 1.327</span></td></tr>
+<tr name="11" id="11">
+<td><a id="l11" class='ln'>11</a></td><td><span class="ct"> * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018</span></td></tr>
+<tr name="12" id="12">
+<td><a id="l12" class='ln'>12</a></td><td><span class="ct"> * C/C++ source code generated on : Thu Apr 11 16:04:23 2019</span></td></tr>
+<tr name="13" id="13">
+<td><a id="l13" class='ln'>13</a></td><td><span class="ct"> *</span></td></tr>
+<tr name="14" id="14">
+<td><a id="l14" class='ln'>14</a></td><td><span class="ct"> * Target selection: ert.tlc</span></td></tr>
+<tr name="15" id="15">
+<td><a id="l15" class='ln'>15</a></td><td><span class="ct"> * Embedded hardware selection: ARM Compatible-&gt;ARM Cortex</span></td></tr>
+<tr name="16" id="16">
+<td><a id="l16" class='ln'>16</a></td><td><span class="ct"> * Code generation objectives: Unspecified</span></td></tr>
+<tr name="17" id="17">
+<td><a id="l17" class='ln'>17</a></td><td><span class="ct"> * Validation result: Not run</span></td></tr>
+<tr name="18" id="18">
+<td><a id="l18" class='ln'>18</a></td><td><span class="ct"> */</span></td></tr>
+<tr name="19" id="19">
+<td><a id="l19" class='ln'>19</a></td><td></td></tr>
+<tr name="20" id="20">
+<td><a id="l20" class='ln'>20</a></td><td><span class="pp">#include "lanedetection_rgb.h"</span></td></tr>
+<tr name="21" id="21">
+<td><a id="l21" class='ln'>21</a></td><td><span class="pp">#include "lanedetection_rgb_private.h"</span></td></tr>
+<tr name="22" id="22">
+<td><a id="l22" class='ln'>22</a></td><td></td></tr>
+<tr name="23" id="23">
+<td><a id="l23" class='ln'>23</a></td><td><span class="ct">/* Block parameters (default storage) */</span></td></tr>
+<tr name="24" id="24">
+<td><a id="l24" class='ln'>24</a></td><td><a id="24c1" class="tk">P_lanedetection_rgb_T</a> <a id="24c23" class="tk">lanedetection_rgb_P</a> = <span class="br">{</span></td></tr>
+<tr name="25" id="25">
+<td><a id="l25" class='ln'>25</a></td><td>  <span class="ct">/* Mask Parameter: DrawShapes_lineWidth</span></td></tr>
+<tr name="26" id="26">
+<td><a id="l26" class='ln'>26</a></td><td><span class="ct">   * Referenced by: '<a class="ct blk" blk_line="26">&lt;Root&gt;/Draw Shapes</a>'</span></td></tr>
+<tr name="27" id="27">
+<td><a id="l27" class='ln'>27</a></td><td><span class="ct">   */</span></td></tr>
+<tr name="28" id="28">
+<td><a id="l28" class='ln'>28</a></td><td>  2,</td></tr>
+<tr name="29" id="29">
+<td><a id="l29" class='ln'>29</a></td><td></td></tr>
+<tr name="30" id="30">
+<td><a id="l30" class='ln'>30</a></td><td>  <span class="ct">/* Mask Parameter: FindLocalMaxima_threshold</span></td></tr>
+<tr name="31" id="31">
+<td><a id="l31" class='ln'>31</a></td><td><span class="ct">   * Referenced by: '<a class="ct blk" blk_line="31">&lt;Root&gt;/Find Local Maxima</a>'</span></td></tr>
+<tr name="32" id="32">
+<td><a id="l32" class='ln'>32</a></td><td><span class="ct">   */</span></td></tr>
+<tr name="33" id="33">
+<td><a id="l33" class='ln'>33</a></td><td>  5U,</td></tr>
+<tr name="34" id="34">
+<td><a id="l34" class='ln'>34</a></td><td></td></tr>
+<tr name="35" id="35">
+<td><a id="l35" class='ln'>35</a></td><td>  <span class="ct">/* Mask Parameter: DrawShapes_color</span></td></tr>
+<tr name="36" id="36">
+<td><a id="l36" class='ln'>36</a></td><td><span class="ct">   * Referenced by: '<a class="ct blk" blk_line="36">&lt;Root&gt;/Draw Shapes</a>'</span></td></tr>
+<tr name="37" id="37">
+<td><a id="l37" class='ln'>37</a></td><td><span class="ct">   */</span></td></tr>
+<tr name="38" id="38">
+<td><a id="l38" class='ln'>38</a></td><td>  <span class="br">{</span> 255U, 0U, 0U <span class="br">}</span>,</td></tr>
+<tr name="39" id="39">
+<td><a id="l39" class='ln'>39</a></td><td></td></tr>
+<tr name="40" id="40">
+<td><a id="l40" class='ln'>40</a></td><td>  <span class="ct">/* Computed Parameter: Threshold_Value</span></td></tr>
+<tr name="41" id="41">
+<td><a id="l41" class='ln'>41</a></td><td><span class="ct">   * Referenced by: '<a class="ct blk" blk_line="41">&lt;Root&gt;/Threshold</a>'</span></td></tr>
+<tr name="42" id="42">
+<td><a id="l42" class='ln'>42</a></td><td><span class="ct">   */</span></td></tr>
+<tr name="43" id="43">
+<td><a id="l43" class='ln'>43</a></td><td>  60U</td></tr>
+<tr name="44" id="44">
+<td><a id="l44" class='ln'>44</a></td><td><span class="br">}</span>;</td></tr>
+<tr name="45" id="45">
+<td><a id="l45" class='ln'>45</a></td><td></td></tr>
+<tr name="46" id="46">
+<td><a id="l46" class='ln'>46</a></td><td><span class="ct">/* Constant parameters (default storage) */</span></td></tr>
+<tr name="47" id="47">
+<td><a id="l47" class='ln'>47</a></td><td><span class="kw">const</span> <a id="47c7" class="tk">ConstP_lanedetection_rgb_T</a> <a id="47c34" class="tk">lanedetection_rgb_ConstP</a> = <span class="br">{</span></td></tr>
+<tr name="48" id="48">
+<td><a id="l48" class='ln'>48</a></td><td>  <span class="ct">/* Computed Parameter: HoughLines_SINE_TABLE_RTP</span></td></tr>
+<tr name="49" id="49">
+<td><a id="l49" class='ln'>49</a></td><td><span class="ct">   * Referenced by: '<a class="ct blk" blk_line="49">&lt;Root&gt;/Hough Lines</a>'</span></td></tr>
+<tr name="50" id="50">
+<td><a id="l50" class='ln'>50</a></td><td><span class="ct">   */</span></td></tr>
+<tr name="51" id="51">
+<td><a id="l51" class='ln'>51</a></td><td>  <span class="br">{</span> <a id="51c5" class="tk">-</a>8192, <a id="51c12" class="tk">-</a>8191, <a id="51c19" class="tk">-</a>8187, <a id="51c26" class="tk">-</a>8181, <a id="51c33" class="tk">-</a>8172, <a id="51c40" class="tk">-</a>8161, <a id="51c47" class="tk">-</a>8147, <a id="51c54" class="tk">-</a>8131, <a id="51c61" class="tk">-</a>8112, <a id="51c68" class="tk">-</a>8091, <a id="51c75" class="tk">-</a>8068,</td></tr>
+<tr name="52" id="52">
+<td><a id="l52" class='ln'>52</a></td><td>    <a id="52c5" class="tk">-</a>8041, <a id="52c12" class="tk">-</a>8013, <a id="52c19" class="tk">-</a>7982, <a id="52c26" class="tk">-</a>7949, <a id="52c33" class="tk">-</a>7913, <a id="52c40" class="tk">-</a>7875, <a id="52c47" class="tk">-</a>7834, <a id="52c54" class="tk">-</a>7791, <a id="52c61" class="tk">-</a>7746, <a id="52c68" class="tk">-</a>7698, <a id="52c75" class="tk">-</a>7648,</td></tr>
+<tr name="53" id="53">
+<td><a id="l53" class='ln'>53</a></td><td>    <a id="53c5" class="tk">-</a>7595, <a id="53c12" class="tk">-</a>7541, <a id="53c19" class="tk">-</a>7484, <a id="53c26" class="tk">-</a>7424, <a id="53c33" class="tk">-</a>7363, <a id="53c40" class="tk">-</a>7299, <a id="53c47" class="tk">-</a>7233, <a id="53c54" class="tk">-</a>7165, <a id="53c61" class="tk">-</a>7094, <a id="53c68" class="tk">-</a>7022, <a id="53c75" class="tk">-</a>6947,</td></tr>
+<tr name="54" id="54">
+<td><a id="l54" class='ln'>54</a></td><td>    <a id="54c5" class="tk">-</a>6870, <a id="54c12" class="tk">-</a>6791, <a id="54c19" class="tk">-</a>6710, <a id="54c26" class="tk">-</a>6627, <a id="54c33" class="tk">-</a>6542, <a id="54c40" class="tk">-</a>6455, <a id="54c47" class="tk">-</a>6366, <a id="54c54" class="tk">-</a>6275, <a id="54c61" class="tk">-</a>6183, <a id="54c68" class="tk">-</a>6088, <a id="54c75" class="tk">-</a>5991,</td></tr>
+<tr name="55" id="55">
+<td><a id="l55" class='ln'>55</a></td><td>    <a id="55c5" class="tk">-</a>5893, <a id="55c12" class="tk">-</a>5793, <a id="55c19" class="tk">-</a>5691, <a id="55c26" class="tk">-</a>5587, <a id="55c33" class="tk">-</a>5482, <a id="55c40" class="tk">-</a>5374, <a id="55c47" class="tk">-</a>5266, <a id="55c54" class="tk">-</a>5155, <a id="55c61" class="tk">-</a>5043, <a id="55c68" class="tk">-</a>4930, <a id="55c75" class="tk">-</a>4815,</td></tr>
+<tr name="56" id="56">
+<td><a id="l56" class='ln'>56</a></td><td>    <a id="56c5" class="tk">-</a>4699, <a id="56c12" class="tk">-</a>4581, <a id="56c19" class="tk">-</a>4462, <a id="56c26" class="tk">-</a>4341, <a id="56c33" class="tk">-</a>4219, <a id="56c40" class="tk">-</a>4096, <a id="56c47" class="tk">-</a>3972, <a id="56c54" class="tk">-</a>3846, <a id="56c61" class="tk">-</a>3719, <a id="56c68" class="tk">-</a>3591, <a id="56c75" class="tk">-</a>3462,</td></tr>
+<tr name="57" id="57">
+<td><a id="l57" class='ln'>57</a></td><td>    <a id="57c5" class="tk">-</a>3332, <a id="57c12" class="tk">-</a>3201, <a id="57c19" class="tk">-</a>3069, <a id="57c26" class="tk">-</a>2936, <a id="57c33" class="tk">-</a>2802, <a id="57c40" class="tk">-</a>2667, <a id="57c47" class="tk">-</a>2531, <a id="57c54" class="tk">-</a>2395, <a id="57c61" class="tk">-</a>2258, <a id="57c68" class="tk">-</a>2120, <a id="57c75" class="tk">-</a>1982,</td></tr>
+<tr name="58" id="58">
+<td><a id="l58" class='ln'>58</a></td><td>    <a id="58c5" class="tk">-</a>1843, <a id="58c12" class="tk">-</a>1703, <a id="58c19" class="tk">-</a>1563, <a id="58c26" class="tk">-</a>1423, <a id="58c33" class="tk">-</a>1282, <a id="58c40" class="tk">-</a>1140, <a id="58c47" class="tk">-</a>998, <a id="58c53" class="tk">-</a>856, <a id="58c59" class="tk">-</a>714, <a id="58c65" class="tk">-</a>571, <a id="58c71" class="tk">-</a>429, <a id="58c77" class="tk">-</a>286,</td></tr>
+<tr name="59" id="59">
+<td><a id="l59" class='ln'>59</a></td><td>    <a id="59c5" class="tk">-</a>143, 0 <span class="br">}</span>,</td></tr>
+<tr name="60" id="60">
+<td><a id="l60" class='ln'>60</a></td><td></td></tr>
+<tr name="61" id="61">
+<td><a id="l61" class='ln'>61</a></td><td>  <span class="ct">/* Computed Parameter: HoughTransform_SINE_TABLE_RTP</span></td></tr>
+<tr name="62" id="62">
+<td><a id="l62" class='ln'>62</a></td><td><span class="ct">   * Referenced by: '<a class="ct blk" blk_line="62">&lt;Root&gt;/Hough Transform</a>'</span></td></tr>
+<tr name="63" id="63">
+<td><a id="l63" class='ln'>63</a></td><td><span class="ct">   */</span></td></tr>
+<tr name="64" id="64">
+<td><a id="l64" class='ln'>64</a></td><td>  <span class="br">{</span> <a id="64c5" class="tk">-</a>16384, <a id="64c13" class="tk">-</a>16382, <a id="64c21" class="tk">-</a>16374, <a id="64c29" class="tk">-</a>16362, <a id="64c37" class="tk">-</a>16344, <a id="64c45" class="tk">-</a>16322, <a id="64c53" class="tk">-</a>16294, <a id="64c61" class="tk">-</a>16262, <a id="64c69" class="tk">-</a>16225,</td></tr>
+<tr name="65" id="65">
+<td><a id="l65" class='ln'>65</a></td><td>    <a id="65c5" class="tk">-</a>16182, <a id="65c13" class="tk">-</a>16135, <a id="65c21" class="tk">-</a>16083, <a id="65c29" class="tk">-</a>16026, <a id="65c37" class="tk">-</a>15964, <a id="65c45" class="tk">-</a>15897, <a id="65c53" class="tk">-</a>15826, <a id="65c61" class="tk">-</a>15749, <a id="65c69" class="tk">-</a>15668,</td></tr>
+<tr name="66" id="66">
+<td><a id="l66" class='ln'>66</a></td><td>    <a id="66c5" class="tk">-</a>15582, <a id="66c13" class="tk">-</a>15491, <a id="66c21" class="tk">-</a>15396, <a id="66c29" class="tk">-</a>15296, <a id="66c37" class="tk">-</a>15191, <a id="66c45" class="tk">-</a>15082, <a id="66c53" class="tk">-</a>14968, <a id="66c61" class="tk">-</a>14849, <a id="66c69" class="tk">-</a>14726,</td></tr>
+<tr name="67" id="67">
+<td><a id="l67" class='ln'>67</a></td><td>    <a id="67c5" class="tk">-</a>14598, <a id="67c13" class="tk">-</a>14466, <a id="67c21" class="tk">-</a>14330, <a id="67c29" class="tk">-</a>14189, <a id="67c37" class="tk">-</a>14044, <a id="67c45" class="tk">-</a>13894, <a id="67c53" class="tk">-</a>13741, <a id="67c61" class="tk">-</a>13583, <a id="67c69" class="tk">-</a>13421,</td></tr>
+<tr name="68" id="68">
+<td><a id="l68" class='ln'>68</a></td><td>    <a id="68c5" class="tk">-</a>13255, <a id="68c13" class="tk">-</a>13085, <a id="68c21" class="tk">-</a>12911, <a id="68c29" class="tk">-</a>12733, <a id="68c37" class="tk">-</a>12551, <a id="68c45" class="tk">-</a>12365, <a id="68c53" class="tk">-</a>12176, <a id="68c61" class="tk">-</a>11982, <a id="68c69" class="tk">-</a>11786,</td></tr>
+<tr name="69" id="69">
+<td><a id="l69" class='ln'>69</a></td><td>    <a id="69c5" class="tk">-</a>11585, <a id="69c13" class="tk">-</a>11381, <a id="69c21" class="tk">-</a>11174, <a id="69c29" class="tk">-</a>10963, <a id="69c37" class="tk">-</a>10749, <a id="69c45" class="tk">-</a>10531, <a id="69c53" class="tk">-</a>10311, <a id="69c61" class="tk">-</a>10087, <a id="69c69" class="tk">-</a>9860, <a id="69c76" class="tk">-</a>9630,</td></tr>
+<tr name="70" id="70">
+<td><a id="l70" class='ln'>70</a></td><td>    <a id="70c5" class="tk">-</a>9397, <a id="70c12" class="tk">-</a>9162, <a id="70c19" class="tk">-</a>8923, <a id="70c26" class="tk">-</a>8682, <a id="70c33" class="tk">-</a>8438, <a id="70c40" class="tk">-</a>8192, <a id="70c47" class="tk">-</a>7943, <a id="70c54" class="tk">-</a>7692, <a id="70c61" class="tk">-</a>7438, <a id="70c68" class="tk">-</a>7182, <a id="70c75" class="tk">-</a>6924,</td></tr>
+<tr name="71" id="71">
+<td><a id="l71" class='ln'>71</a></td><td>    <a id="71c5" class="tk">-</a>6664, <a id="71c12" class="tk">-</a>6402, <a id="71c19" class="tk">-</a>6138, <a id="71c26" class="tk">-</a>5872, <a id="71c33" class="tk">-</a>5604, <a id="71c40" class="tk">-</a>5334, <a id="71c47" class="tk">-</a>5063, <a id="71c54" class="tk">-</a>4790, <a id="71c61" class="tk">-</a>4516, <a id="71c68" class="tk">-</a>4240, <a id="71c75" class="tk">-</a>3964,</td></tr>
+<tr name="72" id="72">
+<td><a id="l72" class='ln'>72</a></td><td>    <a id="72c5" class="tk">-</a>3686, <a id="72c12" class="tk">-</a>3406, <a id="72c19" class="tk">-</a>3126, <a id="72c26" class="tk">-</a>2845, <a id="72c33" class="tk">-</a>2563, <a id="72c40" class="tk">-</a>2280, <a id="72c47" class="tk">-</a>1997, <a id="72c54" class="tk">-</a>1713, <a id="72c61" class="tk">-</a>1428, <a id="72c68" class="tk">-</a>1143, <a id="72c75" class="tk">-</a>857,</td></tr>
+<tr name="73" id="73">
+<td><a id="l73" class='ln'>73</a></td><td>    <a id="73c5" class="tk">-</a>572, <a id="73c11" class="tk">-</a>286, 0 <span class="br">}</span>,</td></tr>
+<tr name="74" id="74">
+<td><a id="l74" class='ln'>74</a></td><td></td></tr>
+<tr name="75" id="75">
+<td><a id="l75" class='ln'>75</a></td><td>  <span class="ct">/* Expression: devName</span></td></tr>
+<tr name="76" id="76">
+<td><a id="l76" class='ln'>76</a></td><td><span class="ct">   * Referenced by: '<a class="ct blk" blk_line="76">&lt;Root&gt;/V4L2 Video Capture</a>'</span></td></tr>
+<tr name="77" id="77">
+<td><a id="l77" class='ln'>77</a></td><td><span class="ct">   */</span></td></tr>
+<tr name="78" id="78">
+<td><a id="l78" class='ln'>78</a></td><td>  <span class="br">{</span> 47U, 100U, 101U, 118U, 47U, 118U, 105U, 100U, 101U, 111U, 48U, 0U <span class="br">}</span></td></tr>
+<tr name="79" id="79">
+<td><a id="l79" class='ln'>79</a></td><td><span class="br">}</span>;</td></tr>
+<tr name="80" id="80">
+<td><a id="l80" class='ln'>80</a></td><td></td></tr>
+<tr name="81" id="81">
+<td><a id="l81" class='ln'>81</a></td><td><span class="ct">/*</span></td></tr>
+<tr name="82" id="82">
+<td><a id="l82" class='ln'>82</a></td><td><span class="ct"> * File trailer for generated code.</span></td></tr>
+<tr name="83" id="83">
+<td><a id="l83" class='ln'>83</a></td><td><span class="ct"> *</span></td></tr>
+<tr name="84" id="84">
+<td><a id="l84" class='ln'>84</a></td><td><span class="ct"> * [EOF]</span></td></tr>
+<tr name="85" id="85">
+<td><a id="l85" class='ln'>85</a></td><td><span class="ct"> */</span></td></tr>
+<tr name="86" id="86">
+<td><a id="l86" class='ln'>86</a></td><td></td></tr>
+</table>
+</pre>
+</body>
+</html>

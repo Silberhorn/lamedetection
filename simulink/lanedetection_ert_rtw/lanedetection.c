@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'lanedetection'.
  *
- * Model version                  : 1.193
+ * Model version                  : 1.197
  * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018
- * C/C++ source code generated on : Wed Apr 10 15:33:34 2019
+ * C/C++ source code generated on : Thu Apr 11 09:57:32 2019
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -291,37 +291,29 @@ int16_T rt_sqrt_Us32En14_Ys16E_tOJnWsQ0(int32_T u)
 static void SystemProp_matlabCodegenSetAnyP(codertarget_linux_blocks_SDLV_T *obj,
   boolean_T value)
 {
-  /* Start for MATLABSystem: '<S3>/MATLAB System' */
   obj->matlabCodegenIsDeleted = value;
 }
 
 static void lanedetectio_SystemCore_release(const
   codertarget_linux_blocks_SDLV_T *obj)
 {
-  /* Start for MATLABSystem: '<S3>/MATLAB System' */
   if ((obj->isInitialized == 1) && obj->isSetupComplete) {
     MW_SDL_videoDisplayTerminate(0, 0);
   }
-
-  /* End of Start for MATLABSystem: '<S3>/MATLAB System' */
 }
 
 static void lanedetection_SystemCore_delete(const
   codertarget_linux_blocks_SDLV_T *obj)
 {
-  /* Start for MATLABSystem: '<S3>/MATLAB System' */
   lanedetectio_SystemCore_release(obj);
 }
 
 static void matlabCodegenHandle_matlabCodeg(codertarget_linux_blocks_SDLV_T *obj)
 {
-  /* Start for MATLABSystem: '<S3>/MATLAB System' */
   if (!obj->matlabCodegenIsDeleted) {
     SystemProp_matlabCodegenSetAnyP(obj, true);
     lanedetection_SystemCore_delete(obj);
   }
-
-  /* End of Start for MATLABSystem: '<S3>/MATLAB System' */
 }
 
 /* Model step function */
@@ -331,19 +323,21 @@ void lanedetection_step(void)
   boolean_T isMore;
   boolean_T prevEdgeIsVertical;
   int8_T idxTmpArray[2];
-  int32_T numActiveEdge;
-  int32_T edgeTmp;
-  int32_T lastColA;
-  int32_T iC;
-  int32_T iA;
-  int32_T iB;
-  int32_T aidx;
-  int32_T cidx;
-  static const int8_T b[9] = { 1, 2, 1, 0, 0, 0, -1, -2, -1 };
-
   boolean_T done;
-  int32_T max_idx;
+  int32_T jRowsIn;
+  int32_T q2;
+  int32_T p;
+  int32_T i;
   real32_T maxValue;
+  int8_T threshSquared;
+  int8_T accumFour;
+  int8_T accumThree;
+  int8_T accumTwo;
+  int8_T accumOne;
+  int32_T imgRow;
+  int32_T imgCol;
+  int32_T imgIdx;
+  int32_T qY;
   int32_T edgeTmp_tmp;
   int32_T DrawShapes_DW_Polygon_tmp;
 
@@ -356,118 +350,115 @@ void lanedetection_step(void)
   /* S-Function (svipresize): '<Root>/Resize' */
   /* this algorithm computes interpolation weights on demand as oppose to using a lookup table */
   /* first resize along X-axis direction */
-  aidx = 0;
-  for (lastColA = 0; lastColA < 240; lastColA++) {
-    iA = lastColA << 10;
-    max_idx = iA >> 10;
-    lanedetection_B.intPart = max_idx * 160;
-    if (max_idx < 239) {
-      iB = lanedetection_B.intPart + 160;
+  q2 = 0;
+  for (imgRow = 0; imgRow < 240; imgRow++) {
+    imgIdx = imgRow << 10;
+    i = imgIdx >> 10;
+    jRowsIn = i * 160;
+    if (i < 239) {
+      p = jRowsIn + 160;
     } else {
-      iB = lanedetection_B.intPart;
+      p = jRowsIn;
     }
 
-    iA -= max_idx << 10;
+    imgIdx -= i << 10;
 
     /* bilinear interpolation */
-    cidx = 1024 - iA;
+    qY = 1024 - imgIdx;
 
     /* adjust offsets so that the input image index will not exceed the image bounds */
-    if (iB > 38240) {
-      iB = 38240;
+    if (p > 38240) {
+      p = 38240;
     }
 
-    for (iC = 0; iC < 160; iC++) {
-      lanedetection_B.acc3 = mul_ssu32_sat(cidx,
-        lanedetection_B.V4L2VideoCapture_o2[iC + lanedetection_B.intPart]);
-      max_idx = mul_ssu32_sat(iA, lanedetection_B.V4L2VideoCapture_o2[iB + iC]);
-      if ((lanedetection_B.acc3 < 0) && (max_idx < MIN_int32_T
+    for (i = 0; i < 160; i++) {
+      lanedetection_B.acc3 = mul_ssu32_sat(qY,
+        lanedetection_B.V4L2VideoCapture_o2[i + jRowsIn]);
+      imgCol = mul_ssu32_sat(imgIdx, lanedetection_B.V4L2VideoCapture_o2[p + i]);
+      if ((lanedetection_B.acc3 < 0) && (imgCol < MIN_int32_T
            - lanedetection_B.acc3)) {
-        max_idx = MIN_int32_T;
-      } else if ((lanedetection_B.acc3 > 0) && (max_idx > MAX_int32_T
+        imgCol = MIN_int32_T;
+      } else if ((lanedetection_B.acc3 > 0) && (imgCol > MAX_int32_T
                   - lanedetection_B.acc3)) {
-        max_idx = MAX_int32_T;
+        imgCol = MAX_int32_T;
       } else {
-        max_idx += lanedetection_B.acc3;
+        imgCol += lanedetection_B.acc3;
       }
 
-      max_idx = ((max_idx & 512U) != 0U) + (max_idx >> 10);
-      if (max_idx < 0) {
-        max_idx = 0;
+      imgCol = ((imgCol & 512U) != 0U) + (imgCol >> 10);
+      if (imgCol < 0) {
+        imgCol = 0;
       } else {
-        if (max_idx > 255) {
-          max_idx = 255;
+        if (imgCol > 255) {
+          imgCol = 255;
         }
       }
 
-      lanedetection_B.Resize[aidx + iC] = (uint8_T)max_idx;
+      lanedetection_B.Resize[q2 + i] = (uint8_T)imgCol;
     }
 
-    aidx += 320;
+    q2 += 320;
   }
 
   /* resize along Y-axis direction */
   lanedetection_B.acc3 = 0;
-  for (lastColA = 0; lastColA < 240; lastColA++) {
-    max_idx = lastColA * 320;
-    for (iC = 0; iC < 160; iC++) {
-      lanedetection_DW.Resize_LineBuffer[iC] = lanedetection_B.Resize[max_idx];
-      max_idx++;
+  for (imgRow = 0; imgRow < 240; imgRow++) {
+    imgCol = imgRow * 320;
+    for (i = 0; i < 160; i++) {
+      lanedetection_DW.Resize_LineBuffer[i] = lanedetection_B.Resize[imgCol];
+      imgCol++;
     }
 
-    aidx = lanedetection_B.acc3;
-    for (iC = 0; iC < 320; iC++) {
-      iA = (iC << 10) + 512;
-      iA = (((iA & 1U) != 0U) + (iA >> 1)) - 512;
-      lanedetection_B.intPart = iA >> 10;
-      max_idx = lanedetection_B.intPart << 10;
-      if ((iA >= 0) && (max_idx < iA - MAX_int32_T)) {
-        iA = MAX_int32_T;
-      } else if ((iA < 0) && (max_idx > iA - MIN_int32_T)) {
-        iA = MIN_int32_T;
+    q2 = lanedetection_B.acc3;
+    for (i = 0; i < 320; i++) {
+      imgIdx = (i << 10) + 512;
+      imgIdx = (((imgIdx & 1U) != 0U) + (imgIdx >> 1)) - 512;
+      jRowsIn = imgIdx >> 10;
+      imgCol = jRowsIn << 10;
+      if ((imgIdx >= 0) && (imgCol < imgIdx - MAX_int32_T)) {
+        imgIdx = MAX_int32_T;
+      } else if ((imgIdx < 0) && (imgCol > imgIdx - MIN_int32_T)) {
+        imgIdx = MIN_int32_T;
       } else {
-        iA -= max_idx;
+        imgIdx -= imgCol;
       }
 
-      if (lanedetection_B.intPart < 0) {
-        lanedetection_B.intPart = 0;
-        iB = 0;
-      } else if (lanedetection_B.intPart < 159) {
-        iB = lanedetection_B.intPart + 1;
+      if (jRowsIn < 0) {
+        jRowsIn = 0;
+        p = 0;
+      } else if (jRowsIn < 159) {
+        p = jRowsIn + 1;
       } else {
-        iB = 159;
+        p = 159;
       }
 
-      if (iA < -2147482623) {
-        cidx = MAX_int32_T;
+      if (imgIdx < -2147482623) {
+        qY = MAX_int32_T;
       } else {
-        cidx = 1024 - iA;
+        qY = 1024 - imgIdx;
       }
 
-      lanedetection_B.intPart = mul_ssu32_sat(cidx,
-        lanedetection_DW.Resize_LineBuffer[lanedetection_B.intPart]);
-      max_idx = mul_ssu32_sat(iA, lanedetection_DW.Resize_LineBuffer[iB]);
-      if ((lanedetection_B.intPart < 0) && (max_idx < MIN_int32_T
-           - lanedetection_B.intPart)) {
-        iA = MIN_int32_T;
-      } else if ((lanedetection_B.intPart > 0) && (max_idx > MAX_int32_T
-                  - lanedetection_B.intPart)) {
-        iA = MAX_int32_T;
+      jRowsIn = mul_ssu32_sat(qY, lanedetection_DW.Resize_LineBuffer[jRowsIn]);
+      imgCol = mul_ssu32_sat(imgIdx, lanedetection_DW.Resize_LineBuffer[p]);
+      if ((jRowsIn < 0) && (imgCol < MIN_int32_T - jRowsIn)) {
+        imgIdx = MIN_int32_T;
+      } else if ((jRowsIn > 0) && (imgCol > MAX_int32_T - jRowsIn)) {
+        imgIdx = MAX_int32_T;
       } else {
-        iA = lanedetection_B.intPart + max_idx;
+        imgIdx = jRowsIn + imgCol;
       }
 
-      max_idx = ((iA & 512U) != 0U) + (iA >> 10);
-      if (max_idx < 0) {
-        max_idx = 0;
+      imgCol = ((imgIdx & 512U) != 0U) + (imgIdx >> 10);
+      if (imgCol < 0) {
+        imgCol = 0;
       } else {
-        if (max_idx > 255) {
-          max_idx = 255;
+        if (imgCol > 255) {
+          imgCol = 255;
         }
       }
 
-      lanedetection_B.Resize[aidx] = (uint8_T)max_idx;
-      aidx++;
+      lanedetection_B.Resize[q2] = (uint8_T)imgCol;
+      q2++;
     }
 
     lanedetection_B.acc3 += 320;
@@ -478,118 +469,115 @@ void lanedetection_step(void)
   /* S-Function (svipresize): '<Root>/Resize1' */
   /* this algorithm computes interpolation weights on demand as oppose to using a lookup table */
   /* first resize along X-axis direction */
-  aidx = 0;
-  for (lastColA = 0; lastColA < 240; lastColA++) {
-    iA = lastColA << 10;
-    max_idx = iA >> 10;
-    lanedetection_B.intPart = max_idx * 160;
-    if (max_idx < 239) {
-      iB = lanedetection_B.intPart + 160;
+  q2 = 0;
+  for (imgRow = 0; imgRow < 240; imgRow++) {
+    imgIdx = imgRow << 10;
+    i = imgIdx >> 10;
+    jRowsIn = i * 160;
+    if (i < 239) {
+      p = jRowsIn + 160;
     } else {
-      iB = lanedetection_B.intPart;
+      p = jRowsIn;
     }
 
-    iA -= max_idx << 10;
+    imgIdx -= i << 10;
 
     /* bilinear interpolation */
-    cidx = 1024 - iA;
+    qY = 1024 - imgIdx;
 
     /* adjust offsets so that the input image index will not exceed the image bounds */
-    if (iB > 38240) {
-      iB = 38240;
+    if (p > 38240) {
+      p = 38240;
     }
 
-    for (iC = 0; iC < 160; iC++) {
-      lanedetection_B.acc3 = mul_ssu32_sat(cidx,
-        lanedetection_B.V4L2VideoCapture_o3[iC + lanedetection_B.intPart]);
-      max_idx = mul_ssu32_sat(iA, lanedetection_B.V4L2VideoCapture_o3[iB + iC]);
-      if ((lanedetection_B.acc3 < 0) && (max_idx < MIN_int32_T
+    for (i = 0; i < 160; i++) {
+      lanedetection_B.acc3 = mul_ssu32_sat(qY,
+        lanedetection_B.V4L2VideoCapture_o3[i + jRowsIn]);
+      imgCol = mul_ssu32_sat(imgIdx, lanedetection_B.V4L2VideoCapture_o3[p + i]);
+      if ((lanedetection_B.acc3 < 0) && (imgCol < MIN_int32_T
            - lanedetection_B.acc3)) {
-        max_idx = MIN_int32_T;
-      } else if ((lanedetection_B.acc3 > 0) && (max_idx > MAX_int32_T
+        imgCol = MIN_int32_T;
+      } else if ((lanedetection_B.acc3 > 0) && (imgCol > MAX_int32_T
                   - lanedetection_B.acc3)) {
-        max_idx = MAX_int32_T;
+        imgCol = MAX_int32_T;
       } else {
-        max_idx += lanedetection_B.acc3;
+        imgCol += lanedetection_B.acc3;
       }
 
-      max_idx = ((max_idx & 512U) != 0U) + (max_idx >> 10);
-      if (max_idx < 0) {
-        max_idx = 0;
+      imgCol = ((imgCol & 512U) != 0U) + (imgCol >> 10);
+      if (imgCol < 0) {
+        imgCol = 0;
       } else {
-        if (max_idx > 255) {
-          max_idx = 255;
+        if (imgCol > 255) {
+          imgCol = 255;
         }
       }
 
-      lanedetection_B.Resize1[aidx + iC] = (uint8_T)max_idx;
+      lanedetection_B.Resize1[q2 + i] = (uint8_T)imgCol;
     }
 
-    aidx += 320;
+    q2 += 320;
   }
 
   /* resize along Y-axis direction */
   lanedetection_B.acc3 = 0;
-  for (lastColA = 0; lastColA < 240; lastColA++) {
-    max_idx = lastColA * 320;
-    for (iC = 0; iC < 160; iC++) {
-      lanedetection_DW.Resize_LineBuffer[iC] = lanedetection_B.Resize1[max_idx];
-      max_idx++;
+  for (imgRow = 0; imgRow < 240; imgRow++) {
+    imgCol = imgRow * 320;
+    for (i = 0; i < 160; i++) {
+      lanedetection_DW.Resize_LineBuffer[i] = lanedetection_B.Resize1[imgCol];
+      imgCol++;
     }
 
-    aidx = lanedetection_B.acc3;
-    for (iC = 0; iC < 320; iC++) {
-      iA = (iC << 10) + 512;
-      iA = (((iA & 1U) != 0U) + (iA >> 1)) - 512;
-      lanedetection_B.intPart = iA >> 10;
-      max_idx = lanedetection_B.intPart << 10;
-      if ((iA >= 0) && (max_idx < iA - MAX_int32_T)) {
-        iA = MAX_int32_T;
-      } else if ((iA < 0) && (max_idx > iA - MIN_int32_T)) {
-        iA = MIN_int32_T;
+    q2 = lanedetection_B.acc3;
+    for (i = 0; i < 320; i++) {
+      imgIdx = (i << 10) + 512;
+      imgIdx = (((imgIdx & 1U) != 0U) + (imgIdx >> 1)) - 512;
+      jRowsIn = imgIdx >> 10;
+      imgCol = jRowsIn << 10;
+      if ((imgIdx >= 0) && (imgCol < imgIdx - MAX_int32_T)) {
+        imgIdx = MAX_int32_T;
+      } else if ((imgIdx < 0) && (imgCol > imgIdx - MIN_int32_T)) {
+        imgIdx = MIN_int32_T;
       } else {
-        iA -= max_idx;
+        imgIdx -= imgCol;
       }
 
-      if (lanedetection_B.intPart < 0) {
-        lanedetection_B.intPart = 0;
-        iB = 0;
-      } else if (lanedetection_B.intPart < 159) {
-        iB = lanedetection_B.intPart + 1;
+      if (jRowsIn < 0) {
+        jRowsIn = 0;
+        p = 0;
+      } else if (jRowsIn < 159) {
+        p = jRowsIn + 1;
       } else {
-        iB = 159;
+        p = 159;
       }
 
-      if (iA < -2147482623) {
-        cidx = MAX_int32_T;
+      if (imgIdx < -2147482623) {
+        qY = MAX_int32_T;
       } else {
-        cidx = 1024 - iA;
+        qY = 1024 - imgIdx;
       }
 
-      lanedetection_B.intPart = mul_ssu32_sat(cidx,
-        lanedetection_DW.Resize_LineBuffer[lanedetection_B.intPart]);
-      max_idx = mul_ssu32_sat(iA, lanedetection_DW.Resize_LineBuffer[iB]);
-      if ((lanedetection_B.intPart < 0) && (max_idx < MIN_int32_T
-           - lanedetection_B.intPart)) {
-        iA = MIN_int32_T;
-      } else if ((lanedetection_B.intPart > 0) && (max_idx > MAX_int32_T
-                  - lanedetection_B.intPart)) {
-        iA = MAX_int32_T;
+      jRowsIn = mul_ssu32_sat(qY, lanedetection_DW.Resize_LineBuffer[jRowsIn]);
+      imgCol = mul_ssu32_sat(imgIdx, lanedetection_DW.Resize_LineBuffer[p]);
+      if ((jRowsIn < 0) && (imgCol < MIN_int32_T - jRowsIn)) {
+        imgIdx = MIN_int32_T;
+      } else if ((jRowsIn > 0) && (imgCol > MAX_int32_T - jRowsIn)) {
+        imgIdx = MAX_int32_T;
       } else {
-        iA = lanedetection_B.intPart + max_idx;
+        imgIdx = jRowsIn + imgCol;
       }
 
-      max_idx = ((iA & 512U) != 0U) + (iA >> 10);
-      if (max_idx < 0) {
-        max_idx = 0;
+      imgCol = ((imgIdx & 512U) != 0U) + (imgIdx >> 10);
+      if (imgCol < 0) {
+        imgCol = 0;
       } else {
-        if (max_idx > 255) {
-          max_idx = 255;
+        if (imgCol > 255) {
+          imgCol = 255;
         }
       }
 
-      lanedetection_B.Resize1[aidx] = (uint8_T)max_idx;
-      aidx++;
+      lanedetection_B.Resize1[q2] = (uint8_T)imgCol;
+      q2++;
     }
 
     lanedetection_B.acc3 += 320;
@@ -598,177 +586,248 @@ void lanedetection_step(void)
   /* End of S-Function (svipresize): '<Root>/Resize1' */
 
   /* MATLAB Function: '<Root>/MATLAB Function1' */
-  for (max_idx = 0; max_idx < 100; max_idx++) {
-    memcpy(&lanedetection_B.imgOUT[max_idx * 320],
-           &lanedetection_B.V4L2VideoCapture_o1[max_idx * 320 + 38079], 320U *
+  for (imgCol = 0; imgCol < 100; imgCol++) {
+    memcpy(&lanedetection_B.imgOUT[imgCol * 320],
+           &lanedetection_B.V4L2VideoCapture_o1[imgCol * 320 + 38079], 320U *
            sizeof(uint8_T));
   }
 
   /* End of MATLAB Function: '<Root>/MATLAB Function1' */
 
-  /* MATLAB Function: '<Root>/MATLAB Function' incorporates:
+  /* S-Function (svipedge): '<Root>/Edge Detection' incorporates:
    *  Constant: '<Root>/Threshold'
    */
-  memset(&lanedetection_B.V[0], 0, 32000U * sizeof(real_T));
-  for (lanedetection_B.intPart = 0; lanedetection_B.intPart < 3;
-       lanedetection_B.intPart++) {
-    if (lanedetection_B.intPart + 99 < 100) {
-      lastColA = 99;
-    } else {
-      lastColA = 100 - lanedetection_B.intPart;
-    }
-
-    for (max_idx = (lanedetection_B.intPart < 1); max_idx <= lastColA; max_idx++)
-    {
-      iC = lanedetection_B.intPart + max_idx;
-      if (!(iC > 1)) {
-        iC = 1;
+  threshSquared = (int8_T)(((int32_T)((uint32_T)lanedetection_P.Threshold_Value *
+    lanedetection_P.Threshold_Value) << 8) >> 8);
+  for (imgCol = 0; imgCol < 98; imgCol++) {
+    for (imgRow = 0; imgRow < 318; imgRow++) {
+      accumOne = 0;
+      accumTwo = 0;
+      imgIdx = ((imgCol + 1) * 320 + imgRow) + 1;
+      for (i = 0; i < 6; i++) {
+        accumOne += (int8_T)(((lanedetection_B.imgOUT[imgIdx +
+          lanedetection_DW.EdgeDetection_VO_DW[i]] *
+          lanedetection_ConstP.EdgeDetection_VC_RTP[i]) << 1) >> 8);
+        accumTwo += (int8_T)(((lanedetection_B.imgOUT[imgIdx +
+          lanedetection_DW.EdgeDetection_HO_DW[i]] *
+          lanedetection_ConstP.EdgeDetection_HC_RTP[i]) << 1) >> 8);
       }
 
-      iC = (iC - 1) * 320;
-      iA = max_idx * 320 + 1;
-      iB = lanedetection_B.intPart * 3;
-      aidx = iA;
-      cidx = iC;
-      lanedetection_B.acc3 = 1;
-      while (lanedetection_B.acc3 <= 319) {
-        lanedetection_B.V[cidx] += (real_T)(b[iB] * lanedetection_B.imgOUT[aidx]);
-        aidx++;
-        cidx++;
-        lanedetection_B.acc3++;
-      }
-
-      iB++;
-      aidx = iA - 1;
-      cidx = iC;
-      lanedetection_B.acc3 = 1;
-      while (lanedetection_B.acc3 <= 320) {
-        lanedetection_B.V[cidx] += (real_T)(b[iB] * lanedetection_B.imgOUT[aidx]);
-        aidx++;
-        cidx++;
-        lanedetection_B.acc3++;
-      }
-
-      iB++;
-      cidx = iC + 1;
-      aidx = iA - 1;
-      lanedetection_B.acc3 = 1;
-      while (lanedetection_B.acc3 <= 319) {
-        lanedetection_B.V[cidx] += (real_T)(b[iB] * lanedetection_B.imgOUT[aidx]);
-        aidx++;
-        cidx++;
-        lanedetection_B.acc3++;
-      }
+      lanedetection_B.EdgeDetection[imgIdx] = ((int8_T)((int8_T)(((accumOne *
+        accumOne) << 8) >> 8) + (int8_T)(((accumTwo * accumTwo) << 8) >> 8)) >
+        threshSquared);
     }
   }
 
-  for (max_idx = 0; max_idx < 32000; max_idx++) {
-    lanedetection_B.imgEdge[max_idx] = (lanedetection_B.V[max_idx] >
-      lanedetection_P.Threshold_Value);
+  for (imgCol = 0; imgCol < 98; imgCol++) {
+    accumOne = 0;
+    accumTwo = 0;
+    accumThree = 0;
+    accumFour = 0;
+    imgRow = (imgCol + 1) * 320;
+    imgIdx = (imgCol + 1) * 320 + 319;
+    for (i = 0; i < 6; i++) {
+      accumOne += (int8_T)(((lanedetection_B.imgOUT[imgRow +
+        lanedetection_DW.EdgeDetection_HOU_DW[i]] *
+        lanedetection_ConstP.EdgeDetection_HC_RTP[i]) << 1) >> 8);
+      accumTwo += (int8_T)(((lanedetection_B.imgOUT[imgIdx +
+        lanedetection_DW.EdgeDetection_HOD_DW[i]] *
+        lanedetection_ConstP.EdgeDetection_HC_RTP[i]) << 1) >> 8);
+      accumThree += (int8_T)(((lanedetection_B.imgOUT[imgRow +
+        lanedetection_DW.EdgeDetection_VOU_DW[i]] *
+        lanedetection_ConstP.EdgeDetection_VC_RTP[i]) << 1) >> 8);
+      accumFour += (int8_T)(((lanedetection_B.imgOUT[imgIdx +
+        lanedetection_DW.EdgeDetection_VOD_DW[i]] *
+        lanedetection_ConstP.EdgeDetection_VC_RTP[i]) << 1) >> 8);
+    }
+
+    lanedetection_B.EdgeDetection[imgRow] = ((int8_T)((int8_T)(((accumOne *
+      accumOne) << 8) >> 8) + (int8_T)(((accumThree * accumThree) << 8) >> 8)) >
+      threshSquared);
+    lanedetection_B.EdgeDetection[imgIdx] = ((int8_T)((int8_T)(((accumTwo *
+      accumTwo) << 8) >> 8) + (int8_T)(((accumFour * accumFour) << 8) >> 8)) >
+      threshSquared);
   }
 
-  /* End of MATLAB Function: '<Root>/MATLAB Function' */
+  for (imgRow = 0; imgRow < 318; imgRow++) {
+    accumOne = 0;
+    accumTwo = 0;
+    accumThree = 0;
+    accumFour = 0;
+    for (i = 0; i < 6; i++) {
+      accumOne += (int8_T)(((lanedetection_B.imgOUT[(imgRow +
+        lanedetection_DW.EdgeDetection_VOL_DW[i]) + 1] *
+        lanedetection_ConstP.EdgeDetection_VC_RTP[i]) << 1) >> 8);
+      accumTwo += (int8_T)(((lanedetection_B.imgOUT[(imgRow +
+        lanedetection_DW.EdgeDetection_VOR_DW[i]) + 31681] *
+        lanedetection_ConstP.EdgeDetection_VC_RTP[i]) << 1) >> 8);
+      accumThree += (int8_T)(((lanedetection_B.imgOUT[(imgRow +
+        lanedetection_DW.EdgeDetection_HOL_DW[i]) + 1] *
+        lanedetection_ConstP.EdgeDetection_HC_RTP[i]) << 1) >> 8);
+      accumFour += (int8_T)(((lanedetection_B.imgOUT[(imgRow +
+        lanedetection_DW.EdgeDetection_HOR_DW[i]) + 31681] *
+        lanedetection_ConstP.EdgeDetection_HC_RTP[i]) << 1) >> 8);
+    }
+
+    lanedetection_B.EdgeDetection[imgRow + 1] = ((int8_T)((int8_T)(((accumOne *
+      accumOne) << 8) >> 8) + (int8_T)(((accumThree * accumThree) << 8) >> 8)) >
+      threshSquared);
+    lanedetection_B.EdgeDetection[31681 + imgRow] = ((int8_T)((int8_T)
+      (((accumTwo * accumTwo) << 8) >> 8) + (int8_T)(((accumFour * accumFour) <<
+      8) >> 8)) > threshSquared);
+  }
+
+  accumOne = 0;
+  accumTwo = 0;
+  accumThree = 0;
+  accumFour = 0;
+  for (i = 0; i < 6; i++) {
+    accumOne += (int8_T)
+      (((lanedetection_B.imgOUT[lanedetection_DW.EdgeDetection_VOUL_DW[i]] *
+         lanedetection_ConstP.EdgeDetection_VC_RTP[i]) << 1) >> 8);
+    accumTwo += (int8_T)
+      (((lanedetection_B.imgOUT[lanedetection_DW.EdgeDetection_HOUL_DW[i]] *
+         lanedetection_ConstP.EdgeDetection_HC_RTP[i]) << 1) >> 8);
+    accumThree += (int8_T)(((lanedetection_B.imgOUT[319 +
+      lanedetection_DW.EdgeDetection_VOLL_DW[i]] *
+      lanedetection_ConstP.EdgeDetection_VC_RTP[i]) << 1) >> 8);
+    accumFour += (int8_T)(((lanedetection_B.imgOUT[319 +
+      lanedetection_DW.EdgeDetection_HOLL_DW[i]] *
+      lanedetection_ConstP.EdgeDetection_HC_RTP[i]) << 1) >> 8);
+  }
+
+  lanedetection_B.EdgeDetection[0] = ((int8_T)((int8_T)(((accumOne * accumOne) <<
+    8) >> 8) + (int8_T)(((accumTwo * accumTwo) << 8) >> 8)) > threshSquared);
+  lanedetection_B.EdgeDetection[319] = ((int8_T)((int8_T)(((accumThree *
+    accumThree) << 8) >> 8) + (int8_T)(((accumFour * accumFour) << 8) >> 8)) >
+    threshSquared);
+  accumOne = 0;
+  accumTwo = 0;
+  accumThree = 0;
+  accumFour = 0;
+  for (i = 0; i < 6; i++) {
+    accumOne += (int8_T)(((lanedetection_B.imgOUT[31680 +
+      lanedetection_DW.EdgeDetection_VOUR_DW[i]] *
+      lanedetection_ConstP.EdgeDetection_VC_RTP[i]) << 1) >> 8);
+    accumTwo += (int8_T)(((lanedetection_B.imgOUT[31680 +
+      lanedetection_DW.EdgeDetection_HOUR_DW[i]] *
+      lanedetection_ConstP.EdgeDetection_HC_RTP[i]) << 1) >> 8);
+    accumThree += (int8_T)(((lanedetection_B.imgOUT[31999 +
+      lanedetection_DW.EdgeDetection_VOLR_DW[i]] *
+      lanedetection_ConstP.EdgeDetection_VC_RTP[i]) << 1) >> 8);
+    accumFour += (int8_T)(((lanedetection_B.imgOUT[31999 +
+      lanedetection_DW.EdgeDetection_HOLR_DW[i]] *
+      lanedetection_ConstP.EdgeDetection_HC_RTP[i]) << 1) >> 8);
+  }
+
+  lanedetection_B.EdgeDetection[31680] = ((int8_T)((int8_T)(((accumOne *
+    accumOne) << 8) >> 8) + (int8_T)(((accumTwo * accumTwo) << 8) >> 8)) >
+    threshSquared);
+  lanedetection_B.EdgeDetection[31999] = ((int8_T)((int8_T)(((accumThree *
+    accumThree) << 8) >> 8) + (int8_T)(((accumFour * accumFour) << 8) >> 8)) >
+    threshSquared);
+
+  /* End of S-Function (svipedge): '<Root>/Edge Detection' */
 
   /* S-Function (sviphough): '<Root>/Hough Transform' */
-  MWVIP_Hough_R(&lanedetection_B.imgEdge[0], &lanedetection_B.HoughTransform_o1
-                [0], &lanedetection_ConstP.HoughTransform_SINE_TABLE_RTP[0],
+  MWVIP_Hough_R(&lanedetection_B.EdgeDetection[0],
+                &lanedetection_B.HoughTransform_o1[0],
+                &lanedetection_ConstP.HoughTransform_SINE_TABLE_RTP[0],
                 &lanedetection_ConstP.HoughTransform_FIRSTRHO_RTP, 320, 100, 671,
                 91);
 
   /* S-Function (svipfindlocalmax): '<Root>/Find Local Maxima' */
-  iC = 0;
+  imgRow = 0;
   done = false;
-  for (lastColA = 0; lastColA < 120780; lastColA++) {
-    lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[lastColA] =
-      lanedetection_B.HoughTransform_o1[lastColA];
+  for (i = 0; i < 120780; i++) {
+    lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[i] =
+      lanedetection_B.HoughTransform_o1[i];
   }
 
   lanedetection_B.FindLocalMaxima_o1[0] = 0U;
   lanedetection_B.FindLocalMaxima_o1[1] = 0U;
   while (!done) {
-    max_idx = 0;
+    imgCol = 0;
     maxValue = lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[0];
-    for (lastColA = 0; lastColA < 120780; lastColA++) {
-      if (lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[lastColA] > maxValue)
-      {
-        max_idx = lastColA;
-        maxValue = lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[lastColA];
+    for (i = 0; i < 120780; i++) {
+      if (lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[i] > maxValue) {
+        imgCol = i;
+        maxValue = lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[i];
       }
     }
 
-    iB = max_idx % 671;
-    lastColA = max_idx / 671;
-    if (lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[max_idx] >=
+    p = imgCol % 671;
+    i = imgCol / 671;
+    if (lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[imgCol] >=
         lanedetection_P.FindLocalMaxima_threshold) {
-      lanedetection_B.FindLocalMaxima_o1[iC] = (uint32_T)(1 + lastColA);
-      lanedetection_B.FindLocalMaxima_o1[1U + iC] = (uint32_T)(1 + iB);
-      iC++;
-      if (iC == 1) {
+      lanedetection_B.FindLocalMaxima_o1[imgRow] = (uint32_T)(1 + i);
+      lanedetection_B.FindLocalMaxima_o1[1U + imgRow] = (uint32_T)(1 + p);
+      imgRow++;
+      if (imgRow == 1) {
         done = true;
       }
 
-      iA = iB - 2;
-      if (!(iA > 0)) {
-        iA = 0;
+      imgIdx = p - 2;
+      if (!(imgIdx > 0)) {
+        imgIdx = 0;
       }
 
-      iB += 2;
-      if (!(iB < 670)) {
-        iB = 670;
+      p += 2;
+      if (!(p < 670)) {
+        p = 670;
       }
 
-      max_idx = lastColA - 3;
-      aidx = lastColA + 3;
-      if (!((max_idx < 0) || (aidx > 179))) {
-        while (max_idx <= aidx) {
-          cidx = max_idx * 671;
-          for (lastColA = iA; lastColA <= iB; lastColA++) {
-            lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[lastColA + cidx] =
-              0.0F;
+      imgCol = i - 3;
+      q2 = i + 3;
+      if (!((imgCol < 0) || (q2 > 179))) {
+        while (imgCol <= q2) {
+          jRowsIn = imgCol * 671;
+          for (i = imgIdx; i <= p; i++) {
+            lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[i + jRowsIn] = 0.0F;
           }
 
-          max_idx++;
+          imgCol++;
         }
       } else {
-        if (max_idx < 0) {
-          lanedetection_B.intPart = max_idx;
-          while (lanedetection_B.intPart <= aidx) {
-            if (lanedetection_B.intPart < 0) {
-              cidx = (lanedetection_B.intPart + 180) * 671 + 670;
-              for (lastColA = iA; lastColA <= iB; lastColA++) {
-                lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[cidx - lastColA]
-                  = 0.0F;
+        if (imgCol < 0) {
+          lanedetection_B.idxRow2 = imgCol;
+          while (lanedetection_B.idxRow2 <= q2) {
+            if (lanedetection_B.idxRow2 < 0) {
+              jRowsIn = (lanedetection_B.idxRow2 + 180) * 671 + 670;
+              for (i = imgIdx; i <= p; i++) {
+                lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[jRowsIn - i] =
+                  0.0F;
               }
             } else {
-              cidx = lanedetection_B.intPart * 671;
-              for (lastColA = iA; lastColA <= iB; lastColA++) {
-                lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[lastColA + cidx]
-                  = 0.0F;
+              jRowsIn = lanedetection_B.idxRow2 * 671;
+              for (i = imgIdx; i <= p; i++) {
+                lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[i + jRowsIn] =
+                  0.0F;
               }
             }
 
-            lanedetection_B.intPart++;
+            lanedetection_B.idxRow2++;
           }
         }
 
-        if (aidx > 179) {
-          lanedetection_B.intPart = max_idx;
-          while (lanedetection_B.intPart <= aidx) {
-            if (lanedetection_B.intPart > 179) {
-              cidx = (lanedetection_B.intPart - 180) * 671 + 670;
-              for (lastColA = iA; lastColA <= iB; lastColA++) {
-                lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[cidx - lastColA]
-                  = 0.0F;
+        if (q2 > 179) {
+          lanedetection_B.idxRow2 = imgCol;
+          while (lanedetection_B.idxRow2 <= q2) {
+            if (lanedetection_B.idxRow2 > 179) {
+              jRowsIn = (lanedetection_B.idxRow2 - 180) * 671 + 670;
+              for (i = imgIdx; i <= p; i++) {
+                lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[jRowsIn - i] =
+                  0.0F;
               }
             } else {
-              cidx = lanedetection_B.intPart * 671;
-              for (lastColA = iA; lastColA <= iB; lastColA++) {
-                lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[lastColA + cidx]
-                  = 0.0F;
+              jRowsIn = lanedetection_B.idxRow2 * 671;
+              for (i = imgIdx; i <= p; i++) {
+                lanedetection_DW.FindLocalMaxima_TEMP_IN_DWORKS[i + jRowsIn] =
+                  0.0F;
               }
             }
 
-            lanedetection_B.intPart++;
+            lanedetection_B.idxRow2++;
           }
         }
       }
@@ -795,7 +854,7 @@ void lanedetection_step(void)
    *  Selector: '<Root>/Selector'
    *  Selector: '<Root>/Selector1'
    */
-  lastColA = 0;
+  i = 0;
   maxValue = (lanedetection_B.HoughTransform_o3[(int32_T)
               lanedetection_B.Submatrix[0] - 1] + 1.1920929E-7F) / ((real32_T)
     cos(lanedetection_B.HoughTransform_o2[(int32_T)lanedetection_B.Submatrix1[0]
@@ -813,7 +872,7 @@ void lanedetection_step(void)
       lanedetection_B.tmpOutRC[1U] = (int32_T)(lanedetection_B.tmpRound * 0.0F);
     }
 
-    lastColA = 1;
+    i = 1;
   }
 
   lanedetection_B.y2 = (lanedetection_B.HoughTransform_o3[(int32_T)
@@ -826,56 +885,56 @@ void lanedetection_step(void)
   if ((lanedetection_B.tmpRound >= 0.0F) && (lanedetection_B.tmpRound <= 319.0F))
   {
     if (lanedetection_B.tmpRound >= 0.5F) {
-      lanedetection_B.tmpOutRC[lastColA << 1] = (int32_T)(real32_T)floor
+      lanedetection_B.tmpOutRC[i << 1] = (int32_T)(real32_T)floor
         (lanedetection_B.tmpRound + 0.5F);
     } else {
-      lanedetection_B.tmpOutRC[lastColA << 1] = (int32_T)
-        (lanedetection_B.tmpRound * 0.0F);
+      lanedetection_B.tmpOutRC[i << 1] = (int32_T)(lanedetection_B.tmpRound *
+        0.0F);
     }
 
-    lanedetection_B.tmpOutRC[1 + (lastColA << 1)] = 0;
-    lastColA++;
+    lanedetection_B.tmpOutRC[1 + (i << 1)] = 0;
+    i++;
   }
 
   /* part-3: Right vertical axis */
-  if (lastColA < 2) {
+  if (i < 2) {
     lanedetection_B.tmpRound = (real32_T)floor((maxValue - 99.0F) *
       (lanedetection_B.y2 / maxValue) + 0.5F);
     if ((lanedetection_B.tmpRound >= 0.0F) && (lanedetection_B.tmpRound <=
          319.0F)) {
       if (lanedetection_B.tmpRound >= 0.5F) {
-        lanedetection_B.tmpOutRC[lastColA << 1] = (int32_T)(real32_T)floor
+        lanedetection_B.tmpOutRC[i << 1] = (int32_T)(real32_T)floor
           (lanedetection_B.tmpRound + 0.5F);
       } else {
-        lanedetection_B.tmpOutRC[lastColA << 1] = (int32_T)
-          (lanedetection_B.tmpRound * 0.0F);
+        lanedetection_B.tmpOutRC[i << 1] = (int32_T)(lanedetection_B.tmpRound *
+          0.0F);
       }
 
-      lanedetection_B.tmpOutRC[1 + (lastColA << 1)] = 99;
-      lastColA++;
+      lanedetection_B.tmpOutRC[1 + (i << 1)] = 99;
+      i++;
     }
   }
 
   /* part-4: bottom horizontal axis */
-  if (lastColA < 2) {
+  if (i < 2) {
     lanedetection_B.tmpRound = (real32_T)floor((maxValue - maxValue /
       lanedetection_B.y2 * 319.0F) + 0.5F);
     if ((lanedetection_B.tmpRound >= 0.0F) && (lanedetection_B.tmpRound <= 99.0F))
     {
-      lanedetection_B.tmpOutRC[lastColA << 1] = 319;
+      lanedetection_B.tmpOutRC[i << 1] = 319;
       if (lanedetection_B.tmpRound >= 0.5F) {
-        lanedetection_B.tmpOutRC[1 + (lastColA << 1)] = (int32_T)(real32_T)floor
+        lanedetection_B.tmpOutRC[1 + (i << 1)] = (int32_T)(real32_T)floor
           (lanedetection_B.tmpRound + 0.5F);
       } else {
-        lanedetection_B.tmpOutRC[1 + (lastColA << 1)] = (int32_T)
+        lanedetection_B.tmpOutRC[1 + (i << 1)] = (int32_T)
           (lanedetection_B.tmpRound * 0.0F);
       }
 
-      lastColA++;
+      i++;
     }
   }
 
-  if (lastColA < 2) {
+  if (i < 2) {
     lanedetection_B.tmpOutRC[0U] = -1;
     lanedetection_B.tmpOutRC[1U] = -1;
     lanedetection_B.tmpOutRC[2U] = -1;
@@ -886,7 +945,7 @@ void lanedetection_step(void)
   lanedetection_B.HoughLines[2] = lanedetection_B.tmpOutRC[0] + 1;
   lanedetection_B.HoughLines[4] = lanedetection_B.tmpOutRC[3] + 1;
   lanedetection_B.HoughLines[6] = lanedetection_B.tmpOutRC[2] + 1;
-  lastColA = 0;
+  i = 0;
   maxValue = (lanedetection_B.HoughTransform_o3[(int32_T)
               lanedetection_B.Submatrix[1] - 1] + 1.1920929E-7F) / ((real32_T)
     cos(lanedetection_B.HoughTransform_o2[(int32_T)lanedetection_B.Submatrix1[1]
@@ -904,7 +963,7 @@ void lanedetection_step(void)
       lanedetection_B.tmpOutRC[1U] = (int32_T)(lanedetection_B.tmpRound * 0.0F);
     }
 
-    lastColA = 1;
+    i = 1;
   }
 
   lanedetection_B.y2 = (lanedetection_B.HoughTransform_o3[(int32_T)
@@ -917,56 +976,56 @@ void lanedetection_step(void)
   if ((lanedetection_B.tmpRound >= 0.0F) && (lanedetection_B.tmpRound <= 319.0F))
   {
     if (lanedetection_B.tmpRound >= 0.5F) {
-      lanedetection_B.tmpOutRC[lastColA << 1] = (int32_T)(real32_T)floor
+      lanedetection_B.tmpOutRC[i << 1] = (int32_T)(real32_T)floor
         (lanedetection_B.tmpRound + 0.5F);
     } else {
-      lanedetection_B.tmpOutRC[lastColA << 1] = (int32_T)
-        (lanedetection_B.tmpRound * 0.0F);
+      lanedetection_B.tmpOutRC[i << 1] = (int32_T)(lanedetection_B.tmpRound *
+        0.0F);
     }
 
-    lanedetection_B.tmpOutRC[1 + (lastColA << 1)] = 0;
-    lastColA++;
+    lanedetection_B.tmpOutRC[1 + (i << 1)] = 0;
+    i++;
   }
 
   /* part-3: Right vertical axis */
-  if (lastColA < 2) {
+  if (i < 2) {
     lanedetection_B.tmpRound = (real32_T)floor((maxValue - 99.0F) *
       (lanedetection_B.y2 / maxValue) + 0.5F);
     if ((lanedetection_B.tmpRound >= 0.0F) && (lanedetection_B.tmpRound <=
          319.0F)) {
       if (lanedetection_B.tmpRound >= 0.5F) {
-        lanedetection_B.tmpOutRC[lastColA << 1] = (int32_T)(real32_T)floor
+        lanedetection_B.tmpOutRC[i << 1] = (int32_T)(real32_T)floor
           (lanedetection_B.tmpRound + 0.5F);
       } else {
-        lanedetection_B.tmpOutRC[lastColA << 1] = (int32_T)
-          (lanedetection_B.tmpRound * 0.0F);
+        lanedetection_B.tmpOutRC[i << 1] = (int32_T)(lanedetection_B.tmpRound *
+          0.0F);
       }
 
-      lanedetection_B.tmpOutRC[1 + (lastColA << 1)] = 99;
-      lastColA++;
+      lanedetection_B.tmpOutRC[1 + (i << 1)] = 99;
+      i++;
     }
   }
 
   /* part-4: bottom horizontal axis */
-  if (lastColA < 2) {
+  if (i < 2) {
     lanedetection_B.tmpRound = (real32_T)floor((maxValue - maxValue /
       lanedetection_B.y2 * 319.0F) + 0.5F);
     if ((lanedetection_B.tmpRound >= 0.0F) && (lanedetection_B.tmpRound <= 99.0F))
     {
-      lanedetection_B.tmpOutRC[lastColA << 1] = 319;
+      lanedetection_B.tmpOutRC[i << 1] = 319;
       if (lanedetection_B.tmpRound >= 0.5F) {
-        lanedetection_B.tmpOutRC[1 + (lastColA << 1)] = (int32_T)(real32_T)floor
+        lanedetection_B.tmpOutRC[1 + (i << 1)] = (int32_T)(real32_T)floor
           (lanedetection_B.tmpRound + 0.5F);
       } else {
-        lanedetection_B.tmpOutRC[1 + (lastColA << 1)] = (int32_T)
+        lanedetection_B.tmpOutRC[1 + (i << 1)] = (int32_T)
           (lanedetection_B.tmpRound * 0.0F);
       }
 
-      lastColA++;
+      i++;
     }
   }
 
-  if (lastColA < 2) {
+  if (i < 2) {
     lanedetection_B.tmpOutRC[0U] = -1;
     lanedetection_B.tmpOutRC[1U] = -1;
     lanedetection_B.tmpOutRC[2U] = -1;
@@ -993,55 +1052,55 @@ void lanedetection_step(void)
            76800U * sizeof(uint8_T));
 
     /* Update view port. */
-    for (lastColA = 0; lastColA < 2; lastColA++) {
-      aidx = lanedetection_B.HoughLines[lastColA + 2] - 1;
-      lanedetection_B.intPart = lanedetection_B.HoughLines[lastColA] - 1;
-      cidx = lanedetection_B.HoughLines[lastColA + 6] - 1;
-      lanedetection_B.acc3 = lanedetection_B.HoughLines[4 + lastColA] - 1;
-      if ((cidx != aidx) || (lanedetection_B.acc3 != lanedetection_B.intPart)) {
+    for (i = 0; i < 2; i++) {
+      q2 = lanedetection_B.HoughLines[i + 2] - 1;
+      jRowsIn = lanedetection_B.HoughLines[i] - 1;
+      qY = lanedetection_B.HoughLines[i + 6] - 1;
+      lanedetection_B.acc3 = lanedetection_B.HoughLines[4 + i] - 1;
+      if ((qY != q2) || (lanedetection_B.acc3 != jRowsIn)) {
         isMore = false;
 
         /* Find the visible portion of a line. */
         prevEdgeIsVertical = false;
         visited2 = false;
         done = false;
-        max_idx = aidx;
-        iA = lanedetection_B.intPart;
-        iC = cidx;
-        iB = lanedetection_B.acc3;
+        imgCol = q2;
+        imgIdx = jRowsIn;
+        imgRow = qY;
+        p = lanedetection_B.acc3;
         while (!done) {
           lanedetection_B.numUniquePix = 0;
           lanedetection_B.loc = 0;
 
           /* Determine viewport violations. */
-          if (max_idx < 0) {
+          if (imgCol < 0) {
             lanedetection_B.numUniquePix = 4;
           } else {
-            if (max_idx > 319) {
+            if (imgCol > 319) {
               lanedetection_B.numUniquePix = 8;
             }
           }
 
-          if (iC < 0) {
+          if (imgRow < 0) {
             lanedetection_B.loc = 4;
           } else {
-            if (iC > 319) {
+            if (imgRow > 319) {
               lanedetection_B.loc = 8;
             }
           }
 
-          if (iA < 0) {
+          if (imgIdx < 0) {
             lanedetection_B.numUniquePix |= 1U;
           } else {
-            if (iA > 239) {
+            if (imgIdx > 239) {
               lanedetection_B.numUniquePix |= 2U;
             }
           }
 
-          if (iB < 0) {
+          if (p < 0) {
             lanedetection_B.loc |= 1U;
           } else {
-            if (iB > 239) {
+            if (p > 239) {
               lanedetection_B.loc |= 2U;
             }
           }
@@ -1059,12 +1118,12 @@ void lanedetection_step(void)
           } else if ((uint32_T)lanedetection_B.numUniquePix != 0U) {
             /* Clip 1st point; if it's in-bounds, clip 2nd point. */
             if (prevEdgeIsVertical) {
-              max_idx = aidx;
-              iA = lanedetection_B.intPart;
+              imgCol = q2;
+              imgIdx = jRowsIn;
             }
 
-            lanedetection_B.idxCol1 = iC - max_idx;
-            lanedetection_B.idxCol2 = iB - iA;
+            lanedetection_B.idxCol1 = imgRow - imgCol;
+            lanedetection_B.idxCol2 = p - imgIdx;
             if ((lanedetection_B.idxCol1 > 1073741824) ||
                 (lanedetection_B.idxCol1 < -1073741824) ||
                 ((lanedetection_B.idxCol2 > 1073741824) ||
@@ -1075,7 +1134,7 @@ void lanedetection_step(void)
               prevEdgeIsVertical = true;
             } else if ((lanedetection_B.numUniquePix & 4U) != 0U) {
               /* Violated RMin. */
-              lanedetection_B.numUniquePix = -max_idx * lanedetection_B.idxCol2;
+              lanedetection_B.numUniquePix = -imgCol * lanedetection_B.idxCol2;
               if ((lanedetection_B.numUniquePix > 1073741824) ||
                   (lanedetection_B.numUniquePix < -1073741824)) {
                 /* Check for Inf or Nan. */
@@ -1085,18 +1144,18 @@ void lanedetection_step(void)
                           (lanedetection_B.idxCol1 >= 0)) ||
                          ((lanedetection_B.numUniquePix < 0) &&
                           (lanedetection_B.idxCol1 < 0))) {
-                iA += (div_s32_floor(lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol1) + 1) >> 1;
+                imgIdx += (div_s32_floor(lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol1) + 1) >> 1;
               } else {
-                iA -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol1) + 1) >> 1;
+                imgIdx -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol1) + 1) >> 1;
               }
 
-              max_idx = 0;
+              imgCol = 0;
               prevEdgeIsVertical = true;
             } else if ((lanedetection_B.numUniquePix & 8U) != 0U) {
               /* Violated RMax. */
-              lanedetection_B.numUniquePix = (319 - max_idx) *
+              lanedetection_B.numUniquePix = (319 - imgCol) *
                 lanedetection_B.idxCol2;
               if ((lanedetection_B.numUniquePix > 1073741824) ||
                   (lanedetection_B.numUniquePix < -1073741824)) {
@@ -1107,18 +1166,18 @@ void lanedetection_step(void)
                           (lanedetection_B.idxCol1 >= 0)) ||
                          ((lanedetection_B.numUniquePix < 0) &&
                           (lanedetection_B.idxCol1 < 0))) {
-                iA += (div_s32_floor(lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol1) + 1) >> 1;
+                imgIdx += (div_s32_floor(lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol1) + 1) >> 1;
               } else {
-                iA -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol1) + 1) >> 1;
+                imgIdx -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol1) + 1) >> 1;
               }
 
-              max_idx = 319;
+              imgCol = 319;
               prevEdgeIsVertical = true;
             } else if ((lanedetection_B.numUniquePix & 1U) != 0U) {
               /* Violated CMin. */
-              lanedetection_B.numUniquePix = -iA * lanedetection_B.idxCol1;
+              lanedetection_B.numUniquePix = -imgIdx * lanedetection_B.idxCol1;
               if ((lanedetection_B.numUniquePix > 1073741824) ||
                   (lanedetection_B.numUniquePix < -1073741824)) {
                 /* Check for Inf or Nan. */
@@ -1128,18 +1187,18 @@ void lanedetection_step(void)
                           (lanedetection_B.idxCol2 >= 0)) ||
                          ((lanedetection_B.numUniquePix < 0) &&
                           (lanedetection_B.idxCol2 < 0))) {
-                max_idx += (div_s32_floor(lanedetection_B.numUniquePix << 1,
-                  lanedetection_B.idxCol2) + 1) >> 1;
+                imgCol += (div_s32_floor(lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol2) + 1) >> 1;
               } else {
-                max_idx -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
-                  lanedetection_B.idxCol2) + 1) >> 1;
+                imgCol -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol2) + 1) >> 1;
               }
 
-              iA = 0;
+              imgIdx = 0;
               prevEdgeIsVertical = true;
             } else {
               /* Violated CMax. */
-              lanedetection_B.numUniquePix = (239 - iA) *
+              lanedetection_B.numUniquePix = (239 - imgIdx) *
                 lanedetection_B.idxCol1;
               if ((lanedetection_B.numUniquePix > 1073741824) ||
                   (lanedetection_B.numUniquePix < -1073741824)) {
@@ -1150,25 +1209,25 @@ void lanedetection_step(void)
                           (lanedetection_B.idxCol2 >= 0)) ||
                          ((lanedetection_B.numUniquePix < 0) &&
                           (lanedetection_B.idxCol2 < 0))) {
-                max_idx += (div_s32_floor(lanedetection_B.numUniquePix << 1,
-                  lanedetection_B.idxCol2) + 1) >> 1;
+                imgCol += (div_s32_floor(lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol2) + 1) >> 1;
               } else {
-                max_idx -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
-                  lanedetection_B.idxCol2) + 1) >> 1;
+                imgCol -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol2) + 1) >> 1;
               }
 
-              iA = 239;
+              imgIdx = 239;
               prevEdgeIsVertical = true;
             }
           } else {
             /* Clip the 2nd point. */
             if (visited2) {
-              iC = cidx;
-              iB = lanedetection_B.acc3;
+              imgRow = qY;
+              p = lanedetection_B.acc3;
             }
 
-            lanedetection_B.idxCol1 = iC - max_idx;
-            lanedetection_B.idxCol2 = iB - iA;
+            lanedetection_B.idxCol1 = imgRow - imgCol;
+            lanedetection_B.idxCol2 = p - imgIdx;
             if ((lanedetection_B.idxCol1 > 1073741824) ||
                 (lanedetection_B.idxCol1 < -1073741824) ||
                 ((lanedetection_B.idxCol2 > 1073741824) ||
@@ -1179,7 +1238,7 @@ void lanedetection_step(void)
               visited2 = true;
             } else if ((lanedetection_B.loc & 4U) != 0U) {
               /* Violated RMin. */
-              lanedetection_B.numUniquePix = -iC * lanedetection_B.idxCol2;
+              lanedetection_B.numUniquePix = -imgRow * lanedetection_B.idxCol2;
               if ((lanedetection_B.numUniquePix > 1073741824) ||
                   (lanedetection_B.numUniquePix < -1073741824)) {
                 /* Check for Inf or Nan. */
@@ -1189,18 +1248,18 @@ void lanedetection_step(void)
                           (lanedetection_B.idxCol1 >= 0)) ||
                          ((lanedetection_B.numUniquePix < 0) &&
                           (lanedetection_B.idxCol1 < 0))) {
-                iB += (div_s32_floor(lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol1) + 1) >> 1;
+                p += (div_s32_floor(lanedetection_B.numUniquePix << 1,
+                                    lanedetection_B.idxCol1) + 1) >> 1;
               } else {
-                iB -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol1) + 1) >> 1;
+                p -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
+                                    lanedetection_B.idxCol1) + 1) >> 1;
               }
 
-              iC = 0;
+              imgRow = 0;
               visited2 = true;
             } else if ((lanedetection_B.loc & 8U) != 0U) {
               /* Violated RMax. */
-              lanedetection_B.numUniquePix = (319 - iC) *
+              lanedetection_B.numUniquePix = (319 - imgRow) *
                 lanedetection_B.idxCol2;
               if ((lanedetection_B.numUniquePix > 1073741824) ||
                   (lanedetection_B.numUniquePix < -1073741824)) {
@@ -1211,18 +1270,18 @@ void lanedetection_step(void)
                           (lanedetection_B.idxCol1 >= 0)) ||
                          ((lanedetection_B.numUniquePix < 0) &&
                           (lanedetection_B.idxCol1 < 0))) {
-                iB += (div_s32_floor(lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol1) + 1) >> 1;
+                p += (div_s32_floor(lanedetection_B.numUniquePix << 1,
+                                    lanedetection_B.idxCol1) + 1) >> 1;
               } else {
-                iB -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol1) + 1) >> 1;
+                p -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
+                                    lanedetection_B.idxCol1) + 1) >> 1;
               }
 
-              iC = 319;
+              imgRow = 319;
               visited2 = true;
             } else if ((lanedetection_B.loc & 1U) != 0U) {
               /* Violated CMin. */
-              lanedetection_B.numUniquePix = -iB * lanedetection_B.idxCol1;
+              lanedetection_B.numUniquePix = -p * lanedetection_B.idxCol1;
               if ((lanedetection_B.numUniquePix > 1073741824) ||
                   (lanedetection_B.numUniquePix < -1073741824)) {
                 /* Check for Inf or Nan. */
@@ -1232,19 +1291,18 @@ void lanedetection_step(void)
                           (lanedetection_B.idxCol2 >= 0)) ||
                          ((lanedetection_B.numUniquePix < 0) &&
                           (lanedetection_B.idxCol2 < 0))) {
-                iC += (div_s32_floor(lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol2) + 1) >> 1;
+                imgRow += (div_s32_floor(lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol2) + 1) >> 1;
               } else {
-                iC -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol2) + 1) >> 1;
+                imgRow -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol2) + 1) >> 1;
               }
 
-              iB = 0;
+              p = 0;
               visited2 = true;
             } else {
               /* Violated CMax. */
-              lanedetection_B.numUniquePix = (239 - iB) *
-                lanedetection_B.idxCol1;
+              lanedetection_B.numUniquePix = (239 - p) * lanedetection_B.idxCol1;
               if ((lanedetection_B.numUniquePix > 1073741824) ||
                   (lanedetection_B.numUniquePix < -1073741824)) {
                 /* Check for Inf or Nan. */
@@ -1254,14 +1312,14 @@ void lanedetection_step(void)
                           (lanedetection_B.idxCol2 >= 0)) ||
                          ((lanedetection_B.numUniquePix < 0) &&
                           (lanedetection_B.idxCol2 < 0))) {
-                iC += (div_s32_floor(lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol2) + 1) >> 1;
+                imgRow += (div_s32_floor(lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol2) + 1) >> 1;
               } else {
-                iC -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
-                                     lanedetection_B.idxCol2) + 1) >> 1;
+                imgRow -= (div_s32_floor(-lanedetection_B.numUniquePix << 1,
+                            lanedetection_B.idxCol2) + 1) >> 1;
               }
 
-              iB = 239;
+              p = 239;
               visited2 = true;
             }
           }
@@ -1270,75 +1328,74 @@ void lanedetection_step(void)
         if (isMore) {
           /* Draw a line using Bresenham algorithm. */
           /* Initialize the Bresenham algorithm. */
-          if (iC >= max_idx) {
-            aidx = iC - max_idx;
+          if (imgRow >= imgCol) {
+            q2 = imgRow - imgCol;
           } else {
-            aidx = max_idx - iC;
+            q2 = imgCol - imgRow;
           }
 
-          if (iB >= iA) {
-            lanedetection_B.intPart = iB - iA;
+          if (p >= imgIdx) {
+            jRowsIn = p - imgIdx;
           } else {
-            lanedetection_B.intPart = iA - iB;
+            jRowsIn = imgIdx - p;
           }
 
-          if (aidx > lanedetection_B.intPart) {
-            aidx = 1;
-            lanedetection_B.intPart = 320;
+          if (q2 > jRowsIn) {
+            q2 = 1;
+            jRowsIn = 320;
           } else {
-            aidx = 320;
-            lanedetection_B.intPart = 1;
-            cidx = max_idx;
-            max_idx = iA;
-            iA = cidx;
-            cidx = iC;
-            iC = iB;
-            iB = cidx;
+            q2 = 320;
+            jRowsIn = 1;
+            qY = imgCol;
+            imgCol = imgIdx;
+            imgIdx = qY;
+            qY = imgRow;
+            imgRow = p;
+            p = qY;
           }
 
-          if (max_idx > iC) {
-            cidx = max_idx;
-            max_idx = iC;
-            iC = cidx;
-            cidx = iA;
-            iA = iB;
-            iB = cidx;
+          if (imgCol > imgRow) {
+            qY = imgCol;
+            imgCol = imgRow;
+            imgRow = qY;
+            qY = imgIdx;
+            imgIdx = p;
+            p = qY;
           }
 
-          cidx = iC - max_idx;
-          if (iA <= iB) {
+          qY = imgRow - imgCol;
+          if (imgIdx <= p) {
             lanedetection_B.acc3 = 1;
-            iB -= iA;
+            p -= imgIdx;
           } else {
             lanedetection_B.acc3 = -1;
-            iB = iA - iB;
+            p = imgIdx - p;
           }
 
-          lanedetection_B.idxCol1 = -((cidx + 1) >> 1);
-          iA = max_idx * aidx + iA * lanedetection_B.intPart;
-          lanedetection_B.intPart = lanedetection_B.acc3 *
-            lanedetection_B.intPart + aidx;
-          done = (max_idx <= iC);
+          lanedetection_B.idxCol1 = -((qY + 1) >> 1);
+          imgIdx = imgCol * q2 + imgIdx * jRowsIn;
+          jRowsIn = lanedetection_B.acc3 * jRowsIn + q2;
+          done = (imgCol <= imgRow);
           while (done) {
-            lanedetection_B.DrawShapes_o1[iA] =
-              lanedetection_P.DrawShapes_color[0];
-            lanedetection_B.DrawShapes_o2[iA] =
-              lanedetection_P.DrawShapes_color[1];
-            lanedetection_B.DrawShapes_o3[iA] =
-              lanedetection_P.DrawShapes_color[2];
+            lanedetection_B.DrawShapes_o1[imgIdx] =
+              lanedetection_P.DrawShapes_RTP_FILLCOLOR[0];
+            lanedetection_B.DrawShapes_o2[imgIdx] =
+              lanedetection_P.DrawShapes_RTP_FILLCOLOR[1];
+            lanedetection_B.DrawShapes_o3[imgIdx] =
+              lanedetection_P.DrawShapes_RTP_FILLCOLOR[2];
 
             /* Compute the next location using Bresenham algorithm. */
             /* Move to the next pixel location. */
-            lanedetection_B.idxCol1 += iB;
+            lanedetection_B.idxCol1 += p;
             if (lanedetection_B.idxCol1 >= 0) {
-              lanedetection_B.idxCol1 -= cidx;
-              iA += lanedetection_B.intPart;
+              lanedetection_B.idxCol1 -= qY;
+              imgIdx += jRowsIn;
             } else {
-              iA += aidx;
+              imgIdx += q2;
             }
 
-            max_idx++;
-            done = (max_idx <= iC);
+            imgCol++;
+            done = (imgCol <= imgRow);
           }
         }
       }
@@ -1360,86 +1417,82 @@ void lanedetection_step(void)
     if (lanedetection_P.DrawShapes_lineWidth > 1) {
       /* convertLinePts2PolygonPts
        */
-      lastColA = lanedetection_P.DrawShapes_lineWidth >> 1;
+      i = lanedetection_P.DrawShapes_lineWidth >> 1;
 
       /* getLineParams-1
        */
       /* getLineParams-main fcn
        */
-      iC = lanedetection_B.HoughLines[2] - lanedetection_B.HoughLines[6];
-      iA = lanedetection_B.HoughLines[0] - lanedetection_B.HoughLines[4];
-      if (iA == 0) {
-        aidx = 0;
-        iB = 1;
-        max_idx = ((lanedetection_B.HoughLines[0] - lastColA) - 1) << 14;
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[0] + lastColA) -
-          1) << 14;
-        cidx = (lanedetection_B.HoughLines[2] - 1) << 14;
-      } else if (iC == 0) {
-        iB = 2;
-        aidx = 0;
-        max_idx = ((lanedetection_B.HoughLines[2] - lastColA) - 1) << 14;
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[2] + lastColA) -
-          1) << 14;
-        cidx = (lanedetection_B.HoughLines[0] - 1) << 14;
+      imgRow = lanedetection_B.HoughLines[2] - lanedetection_B.HoughLines[6];
+      imgIdx = lanedetection_B.HoughLines[0] - lanedetection_B.HoughLines[4];
+      if (imgIdx == 0) {
+        q2 = 0;
+        p = 1;
+        imgCol = ((lanedetection_B.HoughLines[0] - i) - 1) << 14;
+        jRowsIn = ((lanedetection_B.HoughLines[0] + i) - 1) << 14;
+        qY = (lanedetection_B.HoughLines[2] - 1) << 14;
+      } else if (imgRow == 0) {
+        p = 2;
+        q2 = 0;
+        imgCol = ((lanedetection_B.HoughLines[2] - i) - 1) << 14;
+        jRowsIn = ((lanedetection_B.HoughLines[2] + i) - 1) << 14;
+        qY = (lanedetection_B.HoughLines[0] - 1) << 14;
       } else {
-        iB = 0;
-        aidx = div_repeat_s32_floor(iC << 14, iA << 14, 14U);
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[2] - 1) << 14) -
-          mul_s32_loSR((lanedetection_B.HoughLines[0] - 1) << 14, aidx, 14U);
-        cidx = div_repeat_s32_floor(lastColA << 14, div_repeat_s32_floor(iA <<
-          14, rt_sqrt_Us32En14_Ys16E_tOJnWsQ0((iC * iC + iA * iA) << 14) << 7,
-          14U), 14U);
-        max_idx = lanedetection_B.intPart + cidx;
-        lanedetection_B.intPart -= cidx;
-        cidx = div_repeat_s32_floor((lanedetection_B.HoughLines[0] - 1) << 14,
-          aidx, 14U) + ((lanedetection_B.HoughLines[2] - 1) << 14);
+        p = 0;
+        q2 = div_repeat_s32_floor(imgRow << 14, imgIdx << 14, 14U);
+        jRowsIn = ((lanedetection_B.HoughLines[2] - 1) << 14) - mul_s32_loSR
+          ((lanedetection_B.HoughLines[0] - 1) << 14, q2, 14U);
+        qY = div_repeat_s32_floor(i << 14, div_repeat_s32_floor(imgIdx << 14,
+          rt_sqrt_Us32En14_Ys16E_tOJnWsQ0((imgRow * imgRow + imgIdx * imgIdx) <<
+          14) << 7, 14U), 14U);
+        imgCol = jRowsIn + qY;
+        jRowsIn -= qY;
+        qY = div_repeat_s32_floor((lanedetection_B.HoughLines[0] - 1) << 14, q2,
+          14U) + ((lanedetection_B.HoughLines[2] - 1) << 14);
       }
 
       /* findPointOfIntersectionNormal-1
        */
       /* findPointOfIntersectionNormal- main fcn
        */
-      if (iB == 1) {
-        lanedetection_DW.DrawShapes_DW_Points[0] = ((max_idx & 8192U) != 0U) +
-          (max_idx >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[2] = ((cidx & 8192U) != 0U) +
-          (cidx >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[12] = ((lanedetection_B.intPart &
-          8192U) != 0U) + (lanedetection_B.intPart >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[14] = ((cidx & 8192U) != 0U) +
-          (cidx >> 14);
+      if (p == 1) {
+        lanedetection_DW.DrawShapes_DW_Points[0] = ((imgCol & 8192U) != 0U) +
+          (imgCol >> 14);
+        lanedetection_DW.DrawShapes_DW_Points[2] = ((qY & 8192U) != 0U) + (qY >>
+          14);
+        lanedetection_DW.DrawShapes_DW_Points[12] = ((jRowsIn & 8192U) != 0U) +
+          (jRowsIn >> 14);
+        lanedetection_DW.DrawShapes_DW_Points[14] = ((qY & 8192U) != 0U) + (qY >>
+          14);
       } else {
-        if (iB == 2) {
-          lanedetection_DW.DrawShapes_DW_Points[0] = ((cidx & 8192U) != 0U) +
-            (cidx >> 14);
-          lanedetection_DW.DrawShapes_DW_Points[2] = ((max_idx & 8192U) != 0U) +
-            (max_idx >> 14);
+        if (p == 2) {
+          lanedetection_DW.DrawShapes_DW_Points[0] = ((qY & 8192U) != 0U) + (qY >>
+            14);
+          lanedetection_DW.DrawShapes_DW_Points[2] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         } else {
-          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(cidx -
-            max_idx, aidx, 14U), mul_s32_loSR(aidx, aidx, 14U) + 16384, 14U);
+          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(qY - imgCol,
+            q2, 14U), mul_s32_loSR(q2, q2, 14U) + 16384, 14U);
           lanedetection_DW.DrawShapes_DW_Points[0] = ((lanedetection_B.acc3 &
             8192U) != 0U) + (lanedetection_B.acc3 >> 14);
-          max_idx += mul_s32_loSR(aidx, lanedetection_B.acc3, 14U);
-          lanedetection_DW.DrawShapes_DW_Points[2] = ((max_idx & 8192U) != 0U) +
-            (max_idx >> 14);
+          imgCol += mul_s32_loSR(q2, lanedetection_B.acc3, 14U);
+          lanedetection_DW.DrawShapes_DW_Points[2] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         }
 
-        if (iB == 2) {
-          lanedetection_DW.DrawShapes_DW_Points[12] = ((cidx & 8192U) != 0U) +
-            (cidx >> 14);
-          lanedetection_DW.DrawShapes_DW_Points[14] = ((lanedetection_B.intPart
-            & 8192U) != 0U) + (lanedetection_B.intPart >> 14);
+        if (p == 2) {
+          lanedetection_DW.DrawShapes_DW_Points[12] = ((qY & 8192U) != 0U) + (qY
+            >> 14);
+          lanedetection_DW.DrawShapes_DW_Points[14] = ((jRowsIn & 8192U) != 0U)
+            + (jRowsIn >> 14);
         } else {
-          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(cidx -
-            lanedetection_B.intPart, aidx, 14U), mul_s32_loSR(aidx, aidx, 14U) +
-            16384, 14U);
+          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(qY - jRowsIn,
+            q2, 14U), mul_s32_loSR(q2, q2, 14U) + 16384, 14U);
           lanedetection_DW.DrawShapes_DW_Points[12] = ((lanedetection_B.acc3 &
             8192U) != 0U) + (lanedetection_B.acc3 >> 14);
-          max_idx = mul_s32_loSR(aidx, lanedetection_B.acc3, 14U) +
-            lanedetection_B.intPart;
-          lanedetection_DW.DrawShapes_DW_Points[14] = ((max_idx & 8192U) != 0U)
-            + (max_idx >> 14);
+          imgCol = mul_s32_loSR(q2, lanedetection_B.acc3, 14U) + jRowsIn;
+          lanedetection_DW.DrawShapes_DW_Points[14] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         }
       }
 
@@ -1451,78 +1504,74 @@ void lanedetection_step(void)
        */
       /* getLineParams-main fcn
        */
-      if (iA == 0) {
-        aidx = 0;
-        iB = 1;
-        max_idx = ((lanedetection_B.HoughLines[0] - lastColA) - 1) << 14;
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[0] + lastColA) -
-          1) << 14;
-        cidx = (lanedetection_B.HoughLines[6] - 1) << 14;
-      } else if (iC == 0) {
-        iB = 2;
-        aidx = 0;
-        max_idx = ((lanedetection_B.HoughLines[2] - lastColA) - 1) << 14;
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[2] + lastColA) -
-          1) << 14;
-        cidx = (lanedetection_B.HoughLines[4] - 1) << 14;
+      if (imgIdx == 0) {
+        q2 = 0;
+        p = 1;
+        imgCol = ((lanedetection_B.HoughLines[0] - i) - 1) << 14;
+        jRowsIn = ((lanedetection_B.HoughLines[0] + i) - 1) << 14;
+        qY = (lanedetection_B.HoughLines[6] - 1) << 14;
+      } else if (imgRow == 0) {
+        p = 2;
+        q2 = 0;
+        imgCol = ((lanedetection_B.HoughLines[2] - i) - 1) << 14;
+        jRowsIn = ((lanedetection_B.HoughLines[2] + i) - 1) << 14;
+        qY = (lanedetection_B.HoughLines[4] - 1) << 14;
       } else {
-        iB = 0;
-        aidx = div_repeat_s32_floor(iC << 14, iA << 14, 14U);
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[2] - 1) << 14) -
-          mul_s32_loSR((lanedetection_B.HoughLines[0] - 1) << 14, aidx, 14U);
-        cidx = div_repeat_s32_floor(lastColA << 14, div_repeat_s32_floor(iA <<
-          14, rt_sqrt_Us32En14_Ys16E_tOJnWsQ0((iC * iC + iA * iA) << 14) << 7,
-          14U), 14U);
-        max_idx = lanedetection_B.intPart + cidx;
-        lanedetection_B.intPart -= cidx;
-        cidx = div_repeat_s32_floor((lanedetection_B.HoughLines[4] - 1) << 14,
-          aidx, 14U) + ((lanedetection_B.HoughLines[6] - 1) << 14);
+        p = 0;
+        q2 = div_repeat_s32_floor(imgRow << 14, imgIdx << 14, 14U);
+        jRowsIn = ((lanedetection_B.HoughLines[2] - 1) << 14) - mul_s32_loSR
+          ((lanedetection_B.HoughLines[0] - 1) << 14, q2, 14U);
+        qY = div_repeat_s32_floor(i << 14, div_repeat_s32_floor(imgIdx << 14,
+          rt_sqrt_Us32En14_Ys16E_tOJnWsQ0((imgRow * imgRow + imgIdx * imgIdx) <<
+          14) << 7, 14U), 14U);
+        imgCol = jRowsIn + qY;
+        jRowsIn -= qY;
+        qY = div_repeat_s32_floor((lanedetection_B.HoughLines[4] - 1) << 14, q2,
+          14U) + ((lanedetection_B.HoughLines[6] - 1) << 14);
       }
 
       /* findPointOfIntersectionNormal-3
        */
       /* findPointOfIntersectionNormal- main fcn
        */
-      if (iB == 1) {
-        lanedetection_DW.DrawShapes_DW_Points[4] = ((max_idx & 8192U) != 0U) +
-          (max_idx >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[6] = ((cidx & 8192U) != 0U) +
-          (cidx >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[8] = ((lanedetection_B.intPart &
-          8192U) != 0U) + (lanedetection_B.intPart >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[10] = ((cidx & 8192U) != 0U) +
-          (cidx >> 14);
+      if (p == 1) {
+        lanedetection_DW.DrawShapes_DW_Points[4] = ((imgCol & 8192U) != 0U) +
+          (imgCol >> 14);
+        lanedetection_DW.DrawShapes_DW_Points[6] = ((qY & 8192U) != 0U) + (qY >>
+          14);
+        lanedetection_DW.DrawShapes_DW_Points[8] = ((jRowsIn & 8192U) != 0U) +
+          (jRowsIn >> 14);
+        lanedetection_DW.DrawShapes_DW_Points[10] = ((qY & 8192U) != 0U) + (qY >>
+          14);
       } else {
-        if (iB == 2) {
-          lanedetection_DW.DrawShapes_DW_Points[4] = ((cidx & 8192U) != 0U) +
-            (cidx >> 14);
-          lanedetection_DW.DrawShapes_DW_Points[6] = ((max_idx & 8192U) != 0U) +
-            (max_idx >> 14);
+        if (p == 2) {
+          lanedetection_DW.DrawShapes_DW_Points[4] = ((qY & 8192U) != 0U) + (qY >>
+            14);
+          lanedetection_DW.DrawShapes_DW_Points[6] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         } else {
-          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(cidx -
-            max_idx, aidx, 14U), mul_s32_loSR(aidx, aidx, 14U) + 16384, 14U);
+          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(qY - imgCol,
+            q2, 14U), mul_s32_loSR(q2, q2, 14U) + 16384, 14U);
           lanedetection_DW.DrawShapes_DW_Points[4] = ((lanedetection_B.acc3 &
             8192U) != 0U) + (lanedetection_B.acc3 >> 14);
-          max_idx += mul_s32_loSR(aidx, lanedetection_B.acc3, 14U);
-          lanedetection_DW.DrawShapes_DW_Points[6] = ((max_idx & 8192U) != 0U) +
-            (max_idx >> 14);
+          imgCol += mul_s32_loSR(q2, lanedetection_B.acc3, 14U);
+          lanedetection_DW.DrawShapes_DW_Points[6] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         }
 
-        if (iB == 2) {
-          lanedetection_DW.DrawShapes_DW_Points[8] = ((cidx & 8192U) != 0U) +
-            (cidx >> 14);
-          lanedetection_DW.DrawShapes_DW_Points[10] = ((lanedetection_B.intPart
-            & 8192U) != 0U) + (lanedetection_B.intPart >> 14);
+        if (p == 2) {
+          lanedetection_DW.DrawShapes_DW_Points[8] = ((qY & 8192U) != 0U) + (qY >>
+            14);
+          lanedetection_DW.DrawShapes_DW_Points[10] = ((jRowsIn & 8192U) != 0U)
+            + (jRowsIn >> 14);
         } else {
-          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(cidx -
-            lanedetection_B.intPart, aidx, 14U), mul_s32_loSR(aidx, aidx, 14U) +
-            16384, 14U);
+          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(qY - jRowsIn,
+            q2, 14U), mul_s32_loSR(q2, q2, 14U) + 16384, 14U);
           lanedetection_DW.DrawShapes_DW_Points[8] = ((lanedetection_B.acc3 &
             8192U) != 0U) + (lanedetection_B.acc3 >> 14);
-          max_idx = mul_s32_loSR(aidx, lanedetection_B.acc3, 14U) +
-            lanedetection_B.intPart;
-          lanedetection_DW.DrawShapes_DW_Points[10] = ((max_idx & 8192U) != 0U)
-            + (max_idx >> 14);
+          imgCol = mul_s32_loSR(q2, lanedetection_B.acc3, 14U) + jRowsIn;
+          lanedetection_DW.DrawShapes_DW_Points[10] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         }
       }
 
@@ -1530,86 +1579,82 @@ void lanedetection_step(void)
        */
       /* findPointOfIntersectionNormal- main fcn
        */
-      lastColA = lanedetection_P.DrawShapes_lineWidth >> 1;
+      i = lanedetection_P.DrawShapes_lineWidth >> 1;
 
       /* getLineParams-1
        */
       /* getLineParams-main fcn
        */
-      iC = lanedetection_B.HoughLines[3] - lanedetection_B.HoughLines[7];
-      iA = lanedetection_B.HoughLines[1] - lanedetection_B.HoughLines[5];
-      if (iA == 0) {
-        aidx = 0;
-        iB = 1;
-        max_idx = ((lanedetection_B.HoughLines[1] - lastColA) - 1) << 14;
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[1] + lastColA) -
-          1) << 14;
-        cidx = (lanedetection_B.HoughLines[3] - 1) << 14;
-      } else if (iC == 0) {
-        iB = 2;
-        aidx = 0;
-        max_idx = ((lanedetection_B.HoughLines[3] - lastColA) - 1) << 14;
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[3] + lastColA) -
-          1) << 14;
-        cidx = (lanedetection_B.HoughLines[1] - 1) << 14;
+      imgRow = lanedetection_B.HoughLines[3] - lanedetection_B.HoughLines[7];
+      imgIdx = lanedetection_B.HoughLines[1] - lanedetection_B.HoughLines[5];
+      if (imgIdx == 0) {
+        q2 = 0;
+        p = 1;
+        imgCol = ((lanedetection_B.HoughLines[1] - i) - 1) << 14;
+        jRowsIn = ((lanedetection_B.HoughLines[1] + i) - 1) << 14;
+        qY = (lanedetection_B.HoughLines[3] - 1) << 14;
+      } else if (imgRow == 0) {
+        p = 2;
+        q2 = 0;
+        imgCol = ((lanedetection_B.HoughLines[3] - i) - 1) << 14;
+        jRowsIn = ((lanedetection_B.HoughLines[3] + i) - 1) << 14;
+        qY = (lanedetection_B.HoughLines[1] - 1) << 14;
       } else {
-        iB = 0;
-        aidx = div_repeat_s32_floor(iC << 14, iA << 14, 14U);
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[3] - 1) << 14) -
-          mul_s32_loSR((lanedetection_B.HoughLines[1] - 1) << 14, aidx, 14U);
-        cidx = div_repeat_s32_floor(lastColA << 14, div_repeat_s32_floor(iA <<
-          14, rt_sqrt_Us32En14_Ys16E_tOJnWsQ0((iC * iC + iA * iA) << 14) << 7,
-          14U), 14U);
-        max_idx = lanedetection_B.intPart + cidx;
-        lanedetection_B.intPart -= cidx;
-        cidx = div_repeat_s32_floor((lanedetection_B.HoughLines[1] - 1) << 14,
-          aidx, 14U) + ((lanedetection_B.HoughLines[3] - 1) << 14);
+        p = 0;
+        q2 = div_repeat_s32_floor(imgRow << 14, imgIdx << 14, 14U);
+        jRowsIn = ((lanedetection_B.HoughLines[3] - 1) << 14) - mul_s32_loSR
+          ((lanedetection_B.HoughLines[1] - 1) << 14, q2, 14U);
+        qY = div_repeat_s32_floor(i << 14, div_repeat_s32_floor(imgIdx << 14,
+          rt_sqrt_Us32En14_Ys16E_tOJnWsQ0((imgRow * imgRow + imgIdx * imgIdx) <<
+          14) << 7, 14U), 14U);
+        imgCol = jRowsIn + qY;
+        jRowsIn -= qY;
+        qY = div_repeat_s32_floor((lanedetection_B.HoughLines[1] - 1) << 14, q2,
+          14U) + ((lanedetection_B.HoughLines[3] - 1) << 14);
       }
 
       /* findPointOfIntersectionNormal-1
        */
       /* findPointOfIntersectionNormal- main fcn
        */
-      if (iB == 1) {
-        lanedetection_DW.DrawShapes_DW_Points[1] = ((max_idx & 8192U) != 0U) +
-          (max_idx >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[3] = ((cidx & 8192U) != 0U) +
-          (cidx >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[13] = ((lanedetection_B.intPart &
-          8192U) != 0U) + (lanedetection_B.intPart >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[15] = ((cidx & 8192U) != 0U) +
-          (cidx >> 14);
+      if (p == 1) {
+        lanedetection_DW.DrawShapes_DW_Points[1] = ((imgCol & 8192U) != 0U) +
+          (imgCol >> 14);
+        lanedetection_DW.DrawShapes_DW_Points[3] = ((qY & 8192U) != 0U) + (qY >>
+          14);
+        lanedetection_DW.DrawShapes_DW_Points[13] = ((jRowsIn & 8192U) != 0U) +
+          (jRowsIn >> 14);
+        lanedetection_DW.DrawShapes_DW_Points[15] = ((qY & 8192U) != 0U) + (qY >>
+          14);
       } else {
-        if (iB == 2) {
-          lanedetection_DW.DrawShapes_DW_Points[1] = ((cidx & 8192U) != 0U) +
-            (cidx >> 14);
-          lanedetection_DW.DrawShapes_DW_Points[3] = ((max_idx & 8192U) != 0U) +
-            (max_idx >> 14);
+        if (p == 2) {
+          lanedetection_DW.DrawShapes_DW_Points[1] = ((qY & 8192U) != 0U) + (qY >>
+            14);
+          lanedetection_DW.DrawShapes_DW_Points[3] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         } else {
-          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(cidx -
-            max_idx, aidx, 14U), mul_s32_loSR(aidx, aidx, 14U) + 16384, 14U);
+          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(qY - imgCol,
+            q2, 14U), mul_s32_loSR(q2, q2, 14U) + 16384, 14U);
           lanedetection_DW.DrawShapes_DW_Points[1] = ((lanedetection_B.acc3 &
             8192U) != 0U) + (lanedetection_B.acc3 >> 14);
-          max_idx += mul_s32_loSR(aidx, lanedetection_B.acc3, 14U);
-          lanedetection_DW.DrawShapes_DW_Points[3] = ((max_idx & 8192U) != 0U) +
-            (max_idx >> 14);
+          imgCol += mul_s32_loSR(q2, lanedetection_B.acc3, 14U);
+          lanedetection_DW.DrawShapes_DW_Points[3] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         }
 
-        if (iB == 2) {
-          lanedetection_DW.DrawShapes_DW_Points[13] = ((cidx & 8192U) != 0U) +
-            (cidx >> 14);
-          lanedetection_DW.DrawShapes_DW_Points[15] = ((lanedetection_B.intPart
-            & 8192U) != 0U) + (lanedetection_B.intPart >> 14);
+        if (p == 2) {
+          lanedetection_DW.DrawShapes_DW_Points[13] = ((qY & 8192U) != 0U) + (qY
+            >> 14);
+          lanedetection_DW.DrawShapes_DW_Points[15] = ((jRowsIn & 8192U) != 0U)
+            + (jRowsIn >> 14);
         } else {
-          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(cidx -
-            lanedetection_B.intPart, aidx, 14U), mul_s32_loSR(aidx, aidx, 14U) +
-            16384, 14U);
+          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(qY - jRowsIn,
+            q2, 14U), mul_s32_loSR(q2, q2, 14U) + 16384, 14U);
           lanedetection_DW.DrawShapes_DW_Points[13] = ((lanedetection_B.acc3 &
             8192U) != 0U) + (lanedetection_B.acc3 >> 14);
-          max_idx = mul_s32_loSR(aidx, lanedetection_B.acc3, 14U) +
-            lanedetection_B.intPart;
-          lanedetection_DW.DrawShapes_DW_Points[15] = ((max_idx & 8192U) != 0U)
-            + (max_idx >> 14);
+          imgCol = mul_s32_loSR(q2, lanedetection_B.acc3, 14U) + jRowsIn;
+          lanedetection_DW.DrawShapes_DW_Points[15] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         }
       }
 
@@ -1621,78 +1666,74 @@ void lanedetection_step(void)
        */
       /* getLineParams-main fcn
        */
-      if (iA == 0) {
-        aidx = 0;
-        iB = 1;
-        max_idx = ((lanedetection_B.HoughLines[1] - lastColA) - 1) << 14;
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[1] + lastColA) -
-          1) << 14;
-        cidx = (lanedetection_B.HoughLines[7] - 1) << 14;
-      } else if (iC == 0) {
-        iB = 2;
-        aidx = 0;
-        max_idx = ((lanedetection_B.HoughLines[3] - lastColA) - 1) << 14;
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[3] + lastColA) -
-          1) << 14;
-        cidx = (lanedetection_B.HoughLines[5] - 1) << 14;
+      if (imgIdx == 0) {
+        q2 = 0;
+        p = 1;
+        imgCol = ((lanedetection_B.HoughLines[1] - i) - 1) << 14;
+        jRowsIn = ((lanedetection_B.HoughLines[1] + i) - 1) << 14;
+        qY = (lanedetection_B.HoughLines[7] - 1) << 14;
+      } else if (imgRow == 0) {
+        p = 2;
+        q2 = 0;
+        imgCol = ((lanedetection_B.HoughLines[3] - i) - 1) << 14;
+        jRowsIn = ((lanedetection_B.HoughLines[3] + i) - 1) << 14;
+        qY = (lanedetection_B.HoughLines[5] - 1) << 14;
       } else {
-        iB = 0;
-        aidx = div_repeat_s32_floor(iC << 14, iA << 14, 14U);
-        lanedetection_B.intPart = ((lanedetection_B.HoughLines[3] - 1) << 14) -
-          mul_s32_loSR((lanedetection_B.HoughLines[1] - 1) << 14, aidx, 14U);
-        cidx = div_repeat_s32_floor(lastColA << 14, div_repeat_s32_floor(iA <<
-          14, rt_sqrt_Us32En14_Ys16E_tOJnWsQ0((iC * iC + iA * iA) << 14) << 7,
-          14U), 14U);
-        max_idx = lanedetection_B.intPart + cidx;
-        lanedetection_B.intPart -= cidx;
-        cidx = div_repeat_s32_floor((lanedetection_B.HoughLines[5] - 1) << 14,
-          aidx, 14U) + ((lanedetection_B.HoughLines[7] - 1) << 14);
+        p = 0;
+        q2 = div_repeat_s32_floor(imgRow << 14, imgIdx << 14, 14U);
+        jRowsIn = ((lanedetection_B.HoughLines[3] - 1) << 14) - mul_s32_loSR
+          ((lanedetection_B.HoughLines[1] - 1) << 14, q2, 14U);
+        qY = div_repeat_s32_floor(i << 14, div_repeat_s32_floor(imgIdx << 14,
+          rt_sqrt_Us32En14_Ys16E_tOJnWsQ0((imgRow * imgRow + imgIdx * imgIdx) <<
+          14) << 7, 14U), 14U);
+        imgCol = jRowsIn + qY;
+        jRowsIn -= qY;
+        qY = div_repeat_s32_floor((lanedetection_B.HoughLines[5] - 1) << 14, q2,
+          14U) + ((lanedetection_B.HoughLines[7] - 1) << 14);
       }
 
       /* findPointOfIntersectionNormal-3
        */
       /* findPointOfIntersectionNormal- main fcn
        */
-      if (iB == 1) {
-        lanedetection_DW.DrawShapes_DW_Points[5] = ((max_idx & 8192U) != 0U) +
-          (max_idx >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[7] = ((cidx & 8192U) != 0U) +
-          (cidx >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[9] = ((lanedetection_B.intPart &
-          8192U) != 0U) + (lanedetection_B.intPart >> 14);
-        lanedetection_DW.DrawShapes_DW_Points[11] = ((cidx & 8192U) != 0U) +
-          (cidx >> 14);
+      if (p == 1) {
+        lanedetection_DW.DrawShapes_DW_Points[5] = ((imgCol & 8192U) != 0U) +
+          (imgCol >> 14);
+        lanedetection_DW.DrawShapes_DW_Points[7] = ((qY & 8192U) != 0U) + (qY >>
+          14);
+        lanedetection_DW.DrawShapes_DW_Points[9] = ((jRowsIn & 8192U) != 0U) +
+          (jRowsIn >> 14);
+        lanedetection_DW.DrawShapes_DW_Points[11] = ((qY & 8192U) != 0U) + (qY >>
+          14);
       } else {
-        if (iB == 2) {
-          lanedetection_DW.DrawShapes_DW_Points[5] = ((cidx & 8192U) != 0U) +
-            (cidx >> 14);
-          lanedetection_DW.DrawShapes_DW_Points[7] = ((max_idx & 8192U) != 0U) +
-            (max_idx >> 14);
+        if (p == 2) {
+          lanedetection_DW.DrawShapes_DW_Points[5] = ((qY & 8192U) != 0U) + (qY >>
+            14);
+          lanedetection_DW.DrawShapes_DW_Points[7] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         } else {
-          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(cidx -
-            max_idx, aidx, 14U), mul_s32_loSR(aidx, aidx, 14U) + 16384, 14U);
+          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(qY - imgCol,
+            q2, 14U), mul_s32_loSR(q2, q2, 14U) + 16384, 14U);
           lanedetection_DW.DrawShapes_DW_Points[5] = ((lanedetection_B.acc3 &
             8192U) != 0U) + (lanedetection_B.acc3 >> 14);
-          max_idx += mul_s32_loSR(aidx, lanedetection_B.acc3, 14U);
-          lanedetection_DW.DrawShapes_DW_Points[7] = ((max_idx & 8192U) != 0U) +
-            (max_idx >> 14);
+          imgCol += mul_s32_loSR(q2, lanedetection_B.acc3, 14U);
+          lanedetection_DW.DrawShapes_DW_Points[7] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         }
 
-        if (iB == 2) {
-          lanedetection_DW.DrawShapes_DW_Points[9] = ((cidx & 8192U) != 0U) +
-            (cidx >> 14);
-          lanedetection_DW.DrawShapes_DW_Points[11] = ((lanedetection_B.intPart
-            & 8192U) != 0U) + (lanedetection_B.intPart >> 14);
+        if (p == 2) {
+          lanedetection_DW.DrawShapes_DW_Points[9] = ((qY & 8192U) != 0U) + (qY >>
+            14);
+          lanedetection_DW.DrawShapes_DW_Points[11] = ((jRowsIn & 8192U) != 0U)
+            + (jRowsIn >> 14);
         } else {
-          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(cidx -
-            lanedetection_B.intPart, aidx, 14U), mul_s32_loSR(aidx, aidx, 14U) +
-            16384, 14U);
+          lanedetection_B.acc3 = div_repeat_s32_floor(mul_s32_loSR(qY - jRowsIn,
+            q2, 14U), mul_s32_loSR(q2, q2, 14U) + 16384, 14U);
           lanedetection_DW.DrawShapes_DW_Points[9] = ((lanedetection_B.acc3 &
             8192U) != 0U) + (lanedetection_B.acc3 >> 14);
-          max_idx = mul_s32_loSR(aidx, lanedetection_B.acc3, 14U) +
-            lanedetection_B.intPart;
-          lanedetection_DW.DrawShapes_DW_Points[11] = ((max_idx & 8192U) != 0U)
-            + (max_idx >> 14);
+          imgCol = mul_s32_loSR(q2, lanedetection_B.acc3, 14U) + jRowsIn;
+          lanedetection_DW.DrawShapes_DW_Points[11] = ((imgCol & 8192U) != 0U) +
+            (imgCol >> 14);
         }
       }
 
@@ -1704,37 +1745,37 @@ void lanedetection_step(void)
 
     /* ProcessStep-after poly points-1
      */
-    max_idx = 2;
+    imgCol = 2;
 
     /* just before call for cgpolygon
      */
     if (lanedetection_P.DrawShapes_lineWidth > 1) {
       /* just before call for cgpolygon-2
        */
-      max_idx = 4;
+      imgCol = 4;
     }
 
-    iC = max_idx << 1;
+    imgRow = imgCol << 1;
 
     /* Reset scanline states. */
-    iA = 0;
-    iB = 0;
-    idxTmpArray[0U] = (int8_T)(max_idx - 1);
+    imgIdx = 0;
+    p = 0;
+    idxTmpArray[0U] = (int8_T)(imgCol - 1);
     isMore = true;
     while (isMore) {
       /* Initialize the scanline. */
       /* Convert polygon vertices to boundaries. */
-      aidx = 0;
-      lanedetection_B.intPart = iA;
-      cidx = iA;
+      q2 = 0;
+      jRowsIn = imgIdx;
+      qY = imgIdx;
 
       /* start for loop
        */
-      lanedetection_B.acc3 = (((idxTmpArray[0] << 1) + 1) << 1) + iB;
-      lanedetection_B.idxCol1 = (idxTmpArray[0] << 2) + iB;
+      lanedetection_B.acc3 = (((idxTmpArray[0] << 1) + 1) << 1) + p;
+      lanedetection_B.idxCol1 = (idxTmpArray[0] << 2) + p;
       lanedetection_B.idxTmp = idxTmpArray[0];
-      lanedetection_B.idxCol2 = ((idxTmpArray[0] - 1) << 2) + iB;
-      lanedetection_B.numUniquePix = max_idx;
+      lanedetection_B.idxCol2 = ((idxTmpArray[0] - 1) << 2) + p;
+      lanedetection_B.numUniquePix = imgCol;
       if (lanedetection_P.DrawShapes_lineWidth > 1) {
         /* getLoc-1
          */
@@ -1743,7 +1784,7 @@ void lanedetection_step(void)
 
         /* getLoc-1
          */
-        lastColA = lanedetection_DW.DrawShapes_DW_Points[lanedetection_B.idxCol2];
+        i = lanedetection_DW.DrawShapes_DW_Points[lanedetection_B.idxCol2];
       } else {
         /* getLoc-2
          */
@@ -1751,23 +1792,22 @@ void lanedetection_step(void)
 
         /* getLoc-2
          */
-        lastColA = lanedetection_B.HoughLines[lanedetection_B.idxCol2];
+        i = lanedetection_B.HoughLines[lanedetection_B.idxCol2];
       }
 
-      while ((lanedetection_B.idxCol2 >= 0) && (lanedetection_B.loc - 1 ==
-              lastColA - 1)) {
+      while ((lanedetection_B.idxCol2 >= 0) && (lanedetection_B.loc - 1 == i - 1))
+      {
         lanedetection_B.idxTmp--;
-        lanedetection_B.idxCol2 = ((lanedetection_B.idxTmp - 1) << 2) + iB;
+        lanedetection_B.idxCol2 = ((lanedetection_B.idxTmp - 1) << 2) + p;
         lanedetection_B.numUniquePix--;
         if (lanedetection_P.DrawShapes_lineWidth > 1) {
           /* getLoc-1
            */
-          lastColA =
-            lanedetection_DW.DrawShapes_DW_Points[lanedetection_B.idxCol2];
+          i = lanedetection_DW.DrawShapes_DW_Points[lanedetection_B.idxCol2];
         } else {
           /* getLoc-2
            */
-          lastColA = lanedetection_B.HoughLines[lanedetection_B.idxCol2];
+          i = lanedetection_B.HoughLines[lanedetection_B.idxCol2];
         }
       }
 
@@ -1797,13 +1837,13 @@ void lanedetection_step(void)
       }
 
       done = (lanedetection_B.loc_m - 1 > lanedetection_B.loc - 1);
-      lanedetection_B.idxRow2 = 2 + iB;
-      lanedetection_B.idxCol2 = iB;
+      lanedetection_B.idxRow2 = 2 + p;
+      lanedetection_B.idxCol2 = p;
       prevEdgeIsVertical = false;
       if (lanedetection_P.DrawShapes_lineWidth > 1) {
         /* getLoc-1
          */
-        lanedetection_B.loc = lanedetection_DW.DrawShapes_DW_Points[iB];
+        lanedetection_B.loc = lanedetection_DW.DrawShapes_DW_Points[p];
 
         /* getLoc-1
          */
@@ -1812,7 +1852,7 @@ void lanedetection_step(void)
       } else {
         /* getLoc-2
          */
-        lanedetection_B.loc = lanedetection_B.HoughLines[iB];
+        lanedetection_B.loc = lanedetection_B.HoughLines[p];
 
         /* getLoc-2
          */
@@ -1820,7 +1860,7 @@ void lanedetection_step(void)
           lanedetection_B.HoughLines[lanedetection_B.idxCol1];
       }
 
-      for (lastColA = 0; lastColA < lanedetection_B.numUniquePix; lastColA++) {
+      for (i = 0; i < lanedetection_B.numUniquePix; i++) {
         if (lanedetection_P.DrawShapes_lineWidth > 1) {
           /* getLoc-1
            */
@@ -1829,7 +1869,7 @@ void lanedetection_step(void)
 
           /* getLoc-1
            */
-          numActiveEdge =
+          lanedetection_B.numActiveEdge =
             lanedetection_DW.DrawShapes_DW_Points[lanedetection_B.idxCol1];
         } else {
           /* getLoc-2
@@ -1839,10 +1879,11 @@ void lanedetection_step(void)
 
           /* getLoc-2
            */
-          numActiveEdge = lanedetection_B.HoughLines[lanedetection_B.idxCol1];
+          lanedetection_B.numActiveEdge =
+            lanedetection_B.HoughLines[lanedetection_B.idxCol1];
         }
 
-        if (numActiveEdge - 1 != lanedetection_B.idxTmp - 1) {
+        if (lanedetection_B.numActiveEdge - 1 != lanedetection_B.idxTmp - 1) {
           if (lanedetection_P.DrawShapes_lineWidth > 1) {
             /* getLoc-1
              */
@@ -1851,7 +1892,7 @@ void lanedetection_step(void)
 
             /* getLoc-1
              */
-            numActiveEdge =
+            lanedetection_B.numActiveEdge =
               lanedetection_DW.DrawShapes_DW_Points[lanedetection_B.idxCol1];
           } else {
             /* getLoc-2
@@ -1861,10 +1902,11 @@ void lanedetection_step(void)
 
             /* getLoc-2
              */
-            numActiveEdge = lanedetection_B.HoughLines[lanedetection_B.idxCol1];
+            lanedetection_B.numActiveEdge =
+              lanedetection_B.HoughLines[lanedetection_B.idxCol1];
           }
 
-          if (numActiveEdge - 1 < lanedetection_B.idxTmp - 1) {
+          if (lanedetection_B.numActiveEdge - 1 < lanedetection_B.idxTmp - 1) {
             isMore = false;
           } else {
             isMore = true;
@@ -1884,7 +1926,7 @@ void lanedetection_step(void)
 
             /* getLoc-1
              */
-            numActiveEdge =
+            lanedetection_B.numActiveEdge =
               lanedetection_DW.DrawShapes_DW_Points[lanedetection_B.idxRow2];
 
             /* getLoc-1
@@ -1904,7 +1946,8 @@ void lanedetection_step(void)
 
             /* getLoc-2
              */
-            numActiveEdge = lanedetection_B.HoughLines[lanedetection_B.idxRow2];
+            lanedetection_B.numActiveEdge =
+              lanedetection_B.HoughLines[lanedetection_B.idxRow2];
 
             /* getLoc-2
              */
@@ -1919,58 +1962,58 @@ void lanedetection_step(void)
 
           /* Initialize a Bresenham line. */
           edgeTmp_tmp = lanedetection_B.idxTmp - lanedetection_B.idxNew;
-          lanedetection_DW.DrawShapes_DW_Polygon[cidx] = 0;
-          lanedetection_DW.DrawShapes_DW_Polygon[cidx + 1] =
+          lanedetection_DW.DrawShapes_DW_Polygon[qY] = 0;
+          lanedetection_DW.DrawShapes_DW_Polygon[qY + 1] =
             lanedetection_B.idxOld - 1;
-          lanedetection_DW.DrawShapes_DW_Polygon[cidx + 2] =
+          lanedetection_DW.DrawShapes_DW_Polygon[qY + 2] =
             lanedetection_B.idxNew - 1;
-          lanedetection_DW.DrawShapes_DW_Polygon[cidx + 3] =
+          lanedetection_DW.DrawShapes_DW_Polygon[qY + 3] =
             lanedetection_B.idxTmp - 1;
-          lanedetection_DW.DrawShapes_DW_Polygon[cidx + 6] = 0;
-          if (numActiveEdge - 1 >= lanedetection_B.idxOld - 1) {
-            lanedetection_DW.DrawShapes_DW_Polygon[cidx + 8] = numActiveEdge -
-              lanedetection_B.idxOld;
+          lanedetection_DW.DrawShapes_DW_Polygon[qY + 6] = 0;
+          if (lanedetection_B.numActiveEdge - 1 >= lanedetection_B.idxOld - 1) {
+            lanedetection_DW.DrawShapes_DW_Polygon[qY + 8] =
+              lanedetection_B.numActiveEdge - lanedetection_B.idxOld;
           } else {
-            lanedetection_DW.DrawShapes_DW_Polygon[cidx + 8] =
-              lanedetection_B.idxOld - numActiveEdge;
+            lanedetection_DW.DrawShapes_DW_Polygon[qY + 8] =
+              lanedetection_B.idxOld - lanedetection_B.numActiveEdge;
           }
 
-          while (lanedetection_DW.DrawShapes_DW_Polygon[cidx + 8] >= 0) {
-            lanedetection_DW.DrawShapes_DW_Polygon[cidx + 6]++;
-            lanedetection_DW.DrawShapes_DW_Polygon[cidx + 8] -= edgeTmp_tmp;
+          while (lanedetection_DW.DrawShapes_DW_Polygon[qY + 8] >= 0) {
+            lanedetection_DW.DrawShapes_DW_Polygon[qY + 6]++;
+            lanedetection_DW.DrawShapes_DW_Polygon[qY + 8] -= edgeTmp_tmp;
           }
 
-          lanedetection_DW.DrawShapes_DW_Polygon[cidx + 5] =
-            lanedetection_DW.DrawShapes_DW_Polygon[cidx + 6] - 1;
-          lanedetection_DW.DrawShapes_DW_Polygon[cidx + 7] =
-            lanedetection_DW.DrawShapes_DW_Polygon[cidx + 8] + edgeTmp_tmp;
-          lanedetection_DW.DrawShapes_DW_Polygon[cidx + 4] = edgeTmp_tmp -
-            (lanedetection_DW.DrawShapes_DW_Polygon[cidx + 7] << 1);
-          if (lanedetection_B.idxOld - 1 > numActiveEdge - 1) {
-            lanedetection_DW.DrawShapes_DW_Polygon[cidx + 5] =
-              -lanedetection_DW.DrawShapes_DW_Polygon[cidx + 5];
-            lanedetection_DW.DrawShapes_DW_Polygon[cidx + 6] =
-              -lanedetection_DW.DrawShapes_DW_Polygon[cidx + 6];
+          lanedetection_DW.DrawShapes_DW_Polygon[qY + 5] =
+            lanedetection_DW.DrawShapes_DW_Polygon[qY + 6] - 1;
+          lanedetection_DW.DrawShapes_DW_Polygon[qY + 7] =
+            lanedetection_DW.DrawShapes_DW_Polygon[qY + 8] + edgeTmp_tmp;
+          lanedetection_DW.DrawShapes_DW_Polygon[qY + 4] = edgeTmp_tmp -
+            (lanedetection_DW.DrawShapes_DW_Polygon[qY + 7] << 1);
+          if (lanedetection_B.idxOld - 1 > lanedetection_B.numActiveEdge - 1) {
+            lanedetection_DW.DrawShapes_DW_Polygon[qY + 5] =
+              -lanedetection_DW.DrawShapes_DW_Polygon[qY + 5];
+            lanedetection_DW.DrawShapes_DW_Polygon[qY + 6] =
+              -lanedetection_DW.DrawShapes_DW_Polygon[qY + 6];
           }
 
           if ((!done) && (!isMore)) {
             /* Use Bresenham algorithm to calculate the polygon boundaries at the next column */
-            lanedetection_DW.DrawShapes_DW_Polygon[cidx + 2]++;
-            if ((lanedetection_DW.DrawShapes_DW_Polygon[cidx] << 1) >
-                lanedetection_DW.DrawShapes_DW_Polygon[cidx + 4]) {
-              lanedetection_DW.DrawShapes_DW_Polygon[cidx] +=
-                lanedetection_DW.DrawShapes_DW_Polygon[cidx + 8];
-              lanedetection_DW.DrawShapes_DW_Polygon[cidx + 1] +=
-                lanedetection_DW.DrawShapes_DW_Polygon[cidx + 6];
+            lanedetection_DW.DrawShapes_DW_Polygon[qY + 2]++;
+            if ((lanedetection_DW.DrawShapes_DW_Polygon[qY] << 1) >
+                lanedetection_DW.DrawShapes_DW_Polygon[qY + 4]) {
+              lanedetection_DW.DrawShapes_DW_Polygon[qY] +=
+                lanedetection_DW.DrawShapes_DW_Polygon[qY + 8];
+              lanedetection_DW.DrawShapes_DW_Polygon[qY + 1] +=
+                lanedetection_DW.DrawShapes_DW_Polygon[qY + 6];
             } else {
-              lanedetection_DW.DrawShapes_DW_Polygon[cidx] +=
-                lanedetection_DW.DrawShapes_DW_Polygon[cidx + 7];
-              lanedetection_DW.DrawShapes_DW_Polygon[cidx + 1] +=
-                lanedetection_DW.DrawShapes_DW_Polygon[cidx + 5];
+              lanedetection_DW.DrawShapes_DW_Polygon[qY] +=
+                lanedetection_DW.DrawShapes_DW_Polygon[qY + 7];
+              lanedetection_DW.DrawShapes_DW_Polygon[qY + 1] +=
+                lanedetection_DW.DrawShapes_DW_Polygon[qY + 5];
             }
           } else {
             if (done && isMore) {
-              lanedetection_DW.DrawShapes_DW_Polygon[cidx + 3]--;
+              lanedetection_DW.DrawShapes_DW_Polygon[qY + 3]--;
             }
           }
 
@@ -1978,44 +2021,42 @@ void lanedetection_step(void)
           if (!prevEdgeIsVertical) {
             /* Merge two Bresenham lines. */
             prevEdgeIsVertical = false;
-            if ((lanedetection_B.intPart != cidx) &&
-                ((lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                  + 5] == lanedetection_DW.DrawShapes_DW_Polygon[cidx + 5]) &&
-                 (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                  + 6] == lanedetection_DW.DrawShapes_DW_Polygon[cidx + 6]) &&
-                 (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                  + 7] == lanedetection_DW.DrawShapes_DW_Polygon[cidx + 7]) &&
-                 (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                  + 8] == lanedetection_DW.DrawShapes_DW_Polygon[cidx + 8]))) {
-              if (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                  + 3] + 1 == lanedetection_DW.DrawShapes_DW_Polygon[cidx + 2])
-              {
-                lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart +
-                  3] = lanedetection_DW.DrawShapes_DW_Polygon[cidx + 3];
+            if ((jRowsIn != qY) &&
+                ((lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 5] ==
+                  lanedetection_DW.DrawShapes_DW_Polygon[qY + 5]) &&
+                 (lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 6] ==
+                  lanedetection_DW.DrawShapes_DW_Polygon[qY + 6]) &&
+                 (lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 7] ==
+                  lanedetection_DW.DrawShapes_DW_Polygon[qY + 7]) &&
+                 (lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 8] ==
+                  lanedetection_DW.DrawShapes_DW_Polygon[qY + 8]))) {
+              if (lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 3] + 1 ==
+                  lanedetection_DW.DrawShapes_DW_Polygon[qY + 2]) {
+                lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 3] =
+                  lanedetection_DW.DrawShapes_DW_Polygon[qY + 3];
                 prevEdgeIsVertical = true;
               } else {
-                if (lanedetection_DW.DrawShapes_DW_Polygon[cidx + 3] + 1 ==
-                    lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                    + 2]) {
-                  lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                    + 1] = lanedetection_DW.DrawShapes_DW_Polygon[cidx + 1];
-                  lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                    + 2] = lanedetection_DW.DrawShapes_DW_Polygon[cidx + 2];
+                if (lanedetection_DW.DrawShapes_DW_Polygon[qY + 3] + 1 ==
+                    lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 2]) {
+                  lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 1] =
+                    lanedetection_DW.DrawShapes_DW_Polygon[qY + 1];
+                  lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 2] =
+                    lanedetection_DW.DrawShapes_DW_Polygon[qY + 2];
                   prevEdgeIsVertical = true;
                 }
               }
             }
 
             if (!prevEdgeIsVertical) {
-              lanedetection_B.intPart = cidx;
-              aidx++;
+              jRowsIn = qY;
+              q2++;
             }
           } else {
-            lanedetection_B.intPart = cidx;
-            aidx++;
+            jRowsIn = qY;
+            q2++;
           }
 
-          cidx = lanedetection_B.intPart + 9;
+          qY = jRowsIn + 9;
           if (!isMore) {
             lanedetection_B.acc3 = lanedetection_B.idxRow2;
             lanedetection_B.idxCol1 = lanedetection_B.idxCol2;
@@ -2036,71 +2077,67 @@ void lanedetection_step(void)
       if (!(lanedetection_B.loc_m - 1 == lanedetection_B.loc - 1)) {
         /* Merge two Bresenham lines. */
         done = false;
-        if ((iA != lanedetection_B.intPart) &&
-            ((lanedetection_DW.DrawShapes_DW_Polygon[iA + 5] ==
-              lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart + 5])
-             && (lanedetection_DW.DrawShapes_DW_Polygon[iA + 6] ==
-                 lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                 + 6]) && (lanedetection_DW.DrawShapes_DW_Polygon[iA + 7] ==
-                           lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart
-                           + 7]) && (lanedetection_DW.DrawShapes_DW_Polygon[iA +
-              8] ==
-              lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart + 8])))
-        {
-          if (lanedetection_DW.DrawShapes_DW_Polygon[iA + 3] + 1 ==
-              lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart + 2])
-          {
-            lanedetection_DW.DrawShapes_DW_Polygon[iA + 3] =
-              lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart + 3];
+        if ((imgIdx != jRowsIn) &&
+            ((lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 5] ==
+              lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 5]) &&
+             (lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 6] ==
+              lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 6]) &&
+             (lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 7] ==
+              lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 7]) &&
+             (lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 8] ==
+              lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 8]))) {
+          if (lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 3] + 1 ==
+              lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 2]) {
+            lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 3] =
+              lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 3];
             done = true;
           } else {
-            if (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart +
-                3] + 1 == lanedetection_DW.DrawShapes_DW_Polygon[iA + 2]) {
-              lanedetection_DW.DrawShapes_DW_Polygon[iA + 1] =
-                lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart +
-                1];
-              lanedetection_DW.DrawShapes_DW_Polygon[iA + 2] =
-                lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart +
-                2];
+            if (lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 3] + 1 ==
+                lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 2]) {
+              lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 1] =
+                lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 1];
+              lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 2] =
+                lanedetection_DW.DrawShapes_DW_Polygon[jRowsIn + 2];
               done = true;
             }
           }
         }
 
         if (done) {
-          aidx--;
-          cidx -= 9;
+          q2--;
+          qY -= 9;
         }
       }
 
       /* Set all other edges to invalid. */
-      for (lastColA = aidx; lastColA < max_idx; lastColA++) {
-        lanedetection_DW.DrawShapes_DW_Polygon[cidx + 2] = 1;
-        lanedetection_DW.DrawShapes_DW_Polygon[cidx + 3] = 0;
-        cidx += 9;
+      for (i = q2; i < imgCol; i++) {
+        lanedetection_DW.DrawShapes_DW_Polygon[qY + 2] = 1;
+        lanedetection_DW.DrawShapes_DW_Polygon[qY + 3] = 0;
+        qY += 9;
       }
 
       /* Sort the boundaries of the polygon. */
       isMore = true;
       while (isMore) {
-        lanedetection_B.idxNew = iA;
-        lanedetection_B.idxOld = iA + 9;
+        lanedetection_B.idxNew = imgIdx;
+        lanedetection_B.idxOld = imgIdx + 9;
         isMore = false;
-        for (lastColA = 1; lastColA < aidx; lastColA++) {
+        for (i = 1; i < q2; i++) {
           if (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxNew + 2]
               > lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld +
               2]) {
             isMore = true;
-            for (lanedetection_B.intPart = 0; lanedetection_B.intPart < 9;
-                 lanedetection_B.intPart++) {
-              edgeTmp_tmp = lanedetection_B.idxNew + lanedetection_B.intPart;
-              edgeTmp = lanedetection_DW.DrawShapes_DW_Polygon[edgeTmp_tmp];
+            for (lanedetection_B.idxRow2 = 0; lanedetection_B.idxRow2 < 9;
+                 lanedetection_B.idxRow2++) {
+              edgeTmp_tmp = lanedetection_B.idxNew + lanedetection_B.idxRow2;
+              lanedetection_B.edgeTmp =
+                lanedetection_DW.DrawShapes_DW_Polygon[edgeTmp_tmp];
               DrawShapes_DW_Polygon_tmp = lanedetection_B.idxOld +
-                lanedetection_B.intPart;
+                lanedetection_B.idxRow2;
               lanedetection_DW.DrawShapes_DW_Polygon[edgeTmp_tmp] =
                 lanedetection_DW.DrawShapes_DW_Polygon[DrawShapes_DW_Polygon_tmp];
               lanedetection_DW.DrawShapes_DW_Polygon[DrawShapes_DW_Polygon_tmp] =
-                edgeTmp;
+                lanedetection_B.edgeTmp;
             }
           }
 
@@ -2110,50 +2147,50 @@ void lanedetection_step(void)
       }
 
       /* Find out the last column of the polygon. */
-      lanedetection_B.intPart = iA + 3;
-      cidx = lanedetection_DW.DrawShapes_DW_Polygon[iA + 3];
-      for (lastColA = 1; lastColA < aidx; lastColA++) {
-        lanedetection_B.intPart += 9;
-        if (cidx <
-            lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart]) {
-          cidx = lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart];
+      lanedetection_B.acc3 = imgIdx + 3;
+      jRowsIn = lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 3];
+      for (i = 1; i < q2; i++) {
+        lanedetection_B.acc3 += 9;
+        if (jRowsIn <
+            lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.acc3]) {
+          jRowsIn = lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.acc3];
         }
       }
 
-      lanedetection_B.acc3 = cidx;
-      if (cidx > 239) {
-        lanedetection_B.acc3 = 239;
+      qY = jRowsIn;
+      if (jRowsIn > 239) {
+        qY = 239;
       }
 
       /* Find out the first column of the polygon. */
-      lanedetection_B.intPart = iA + 2;
-      cidx = lanedetection_DW.DrawShapes_DW_Polygon[iA + 2];
-      for (lastColA = 1; lastColA < aidx; lastColA++) {
-        lanedetection_B.intPart += 9;
-        if (cidx >
-            lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart]) {
-          cidx = lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.intPart];
+      lanedetection_B.acc3 = imgIdx + 2;
+      jRowsIn = lanedetection_DW.DrawShapes_DW_Polygon[imgIdx + 2];
+      for (i = 1; i < q2; i++) {
+        lanedetection_B.acc3 += 9;
+        if (jRowsIn >
+            lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.acc3]) {
+          jRowsIn = lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.acc3];
         }
       }
 
-      if (cidx < 0) {
-        cidx = 0;
+      if (jRowsIn < 0) {
+        jRowsIn = 0;
       }
 
       /* Move to the next column and find out boundaries of the polygon at this column. */
-      lanedetection_B.idxNew = iA;
-      lanedetection_B.idxOld = iA;
-      lanedetection_B.idxCol1 = iA;
-      lanedetection_B.idxCol2 = 0;
-      numActiveEdge = 0;
-      for (lastColA = 0; lastColA < aidx; lastColA++) {
+      lanedetection_B.idxNew = imgIdx;
+      lanedetection_B.idxOld = imgIdx;
+      lanedetection_B.acc3 = imgIdx;
+      lanedetection_B.idxCol1 = 0;
+      lanedetection_B.numActiveEdge = 0;
+      for (i = 0; i < q2; i++) {
         /* Find out the valid boundaries and bring them to the latest column. */
         if (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld + 3] >=
-            cidx) {
+            jRowsIn) {
           if (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld + 2]
-              <= cidx) {
+              <= jRowsIn) {
             while (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld
-                   + 2] < cidx) {
+                   + 2] < jRowsIn) {
               /* Use Bresenham algorithm to calculate the polygon boundaries at the next column */
               lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld + 2]
                 ++;
@@ -2179,22 +2216,22 @@ void lanedetection_step(void)
               }
             }
 
-            lanedetection_B.idxCol1 += 9;
-            numActiveEdge++;
+            lanedetection_B.acc3 += 9;
+            lanedetection_B.numActiveEdge++;
           }
 
           if (lanedetection_B.idxOld != lanedetection_B.idxNew) {
-            for (lanedetection_B.intPart = 0; lanedetection_B.intPart < 9;
-                 lanedetection_B.intPart++) {
+            for (lanedetection_B.idxRow2 = 0; lanedetection_B.idxRow2 < 9;
+                 lanedetection_B.idxRow2++) {
               lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxNew +
-                lanedetection_B.intPart] =
+                lanedetection_B.idxRow2] =
                 lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld +
-                lanedetection_B.intPart];
+                lanedetection_B.idxRow2];
             }
           }
 
           lanedetection_B.idxNew += 9;
-          lanedetection_B.idxCol2++;
+          lanedetection_B.idxCol1++;
         }
 
         lanedetection_B.idxOld += 9;
@@ -2204,24 +2241,25 @@ void lanedetection_step(void)
       /* Sort the boundaries of the polygon. */
       isMore = true;
       while (isMore) {
-        lanedetection_B.idxNew = iA;
-        lanedetection_B.idxOld = iA + 9;
+        lanedetection_B.idxNew = imgIdx;
+        lanedetection_B.idxOld = imgIdx + 9;
         isMore = false;
-        for (lastColA = 1; lastColA < numActiveEdge; lastColA++) {
+        for (i = 1; i < lanedetection_B.numActiveEdge; i++) {
           if (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxNew + 1]
               > lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld +
               1]) {
             isMore = true;
-            for (lanedetection_B.intPart = 0; lanedetection_B.intPart < 9;
-                 lanedetection_B.intPart++) {
-              edgeTmp_tmp = lanedetection_B.idxNew + lanedetection_B.intPart;
-              edgeTmp = lanedetection_DW.DrawShapes_DW_Polygon[edgeTmp_tmp];
+            for (lanedetection_B.idxRow2 = 0; lanedetection_B.idxRow2 < 9;
+                 lanedetection_B.idxRow2++) {
+              edgeTmp_tmp = lanedetection_B.idxNew + lanedetection_B.idxRow2;
+              lanedetection_B.edgeTmp =
+                lanedetection_DW.DrawShapes_DW_Polygon[edgeTmp_tmp];
               DrawShapes_DW_Polygon_tmp = lanedetection_B.idxOld +
-                lanedetection_B.intPart;
+                lanedetection_B.idxRow2;
               lanedetection_DW.DrawShapes_DW_Polygon[edgeTmp_tmp] =
                 lanedetection_DW.DrawShapes_DW_Polygon[DrawShapes_DW_Polygon_tmp];
               lanedetection_DW.DrawShapes_DW_Polygon[DrawShapes_DW_Polygon_tmp] =
-                edgeTmp;
+                lanedetection_B.edgeTmp;
             }
           }
 
@@ -2230,35 +2268,35 @@ void lanedetection_step(void)
         }
       }
 
-      aidx = iA;
-      lanedetection_B.numUniquePix = cidx + 1;
-      lanedetection_B.loc = 0;
-      lanedetection_B.intPart = 0;
-      numActiveEdge = -1;
-      isMore = (0 <= lanedetection_B.acc3);
+      q2 = imgIdx;
+      lanedetection_B.idxCol2 = jRowsIn + 1;
+      lanedetection_B.numUniquePix = 0;
+      lanedetection_B.idxRow2 = 0;
+      lanedetection_B.numActiveEdge = -1;
+      isMore = (0 <= qY);
       while (isMore) {
         /* Get a string of pixels */
         prevEdgeIsVertical = false;
-        done = (lanedetection_B.intPart != 0);
-        lanedetection_B.idxTmp = lanedetection_B.loc;
-        if ((lanedetection_B.loc >= cidx) && (lanedetection_B.loc <=
-             lanedetection_B.acc3)) {
-          if (aidx < lanedetection_B.idxCol1) {
-            lastColA = lanedetection_DW.DrawShapes_DW_Polygon[aidx + 1];
-            aidx += 9;
-            if ((lastColA == numActiveEdge) && (aidx < lanedetection_B.idxCol1))
-            {
-              lanedetection_B.loc_m =
-                lanedetection_DW.DrawShapes_DW_Polygon[aidx + 1];
-              isMore = (aidx < lanedetection_B.idxCol1);
-              while (isMore && (lastColA == lanedetection_B.loc_m)) {
+        done = (lanedetection_B.idxRow2 != 0);
+        lanedetection_B.idxTmp = lanedetection_B.numUniquePix;
+        if ((lanedetection_B.numUniquePix >= jRowsIn) &&
+            (lanedetection_B.numUniquePix <= qY)) {
+          if (q2 < lanedetection_B.acc3) {
+            i = lanedetection_DW.DrawShapes_DW_Polygon[q2 + 1];
+            q2 += 9;
+            if ((i == lanedetection_B.numActiveEdge) && (q2 <
+                 lanedetection_B.acc3)) {
+              lanedetection_B.loc = lanedetection_DW.DrawShapes_DW_Polygon[q2 +
+                1];
+              isMore = (q2 < lanedetection_B.acc3);
+              while (isMore && (i == lanedetection_B.loc)) {
                 prevEdgeIsVertical = true;
-                lastColA = lanedetection_DW.DrawShapes_DW_Polygon[aidx + 1];
-                aidx += 9;
-                isMore = (aidx < lanedetection_B.idxCol1);
+                i = lanedetection_DW.DrawShapes_DW_Polygon[q2 + 1];
+                q2 += 9;
+                isMore = (q2 < lanedetection_B.acc3);
                 if (isMore) {
-                  lanedetection_B.loc_m =
-                    lanedetection_DW.DrawShapes_DW_Polygon[aidx + 1];
+                  lanedetection_B.loc =
+                    lanedetection_DW.DrawShapes_DW_Polygon[q2 + 1];
                 }
               }
 
@@ -2267,53 +2305,53 @@ void lanedetection_step(void)
               }
             }
 
-            if (lanedetection_B.intPart != 0) {
-              lanedetection_B.loc_m = numActiveEdge;
-              if (lastColA <= 319) {
-                lanedetection_B.idxRow2 = lastColA;
-                numActiveEdge = lastColA;
+            if (lanedetection_B.idxRow2 != 0) {
+              lanedetection_B.loc = lanedetection_B.numActiveEdge;
+              if (i <= 319) {
+                lanedetection_B.loc_m = i;
+                lanedetection_B.numActiveEdge = i;
               } else {
-                lanedetection_B.idxRow2 = 319;
-                numActiveEdge = 319;
+                lanedetection_B.loc_m = 319;
+                lanedetection_B.numActiveEdge = 319;
               }
             } else {
-              lanedetection_B.loc_m = numActiveEdge + 1;
-              if ((lastColA > 0) && (lastColA <= 319)) {
-                lanedetection_B.idxRow2 = lastColA - 1;
-                numActiveEdge = lastColA;
-              } else if (lastColA <= 0) {
-                lanedetection_B.idxRow2 = -1;
-                numActiveEdge = 0;
+              lanedetection_B.loc = lanedetection_B.numActiveEdge + 1;
+              if ((i > 0) && (i <= 319)) {
+                lanedetection_B.loc_m = i - 1;
+                lanedetection_B.numActiveEdge = i;
+              } else if (i <= 0) {
+                lanedetection_B.loc_m = -1;
+                lanedetection_B.numActiveEdge = 0;
               } else {
-                lanedetection_B.idxRow2 = 319;
-                numActiveEdge = 320;
+                lanedetection_B.loc_m = 319;
+                lanedetection_B.numActiveEdge = 320;
               }
             }
 
             if (!prevEdgeIsVertical) {
-              lanedetection_B.intPart = !(lanedetection_B.intPart != 0);
+              lanedetection_B.idxRow2 = !(lanedetection_B.idxRow2 != 0);
             }
           } else {
             /* Reset states and move to the next column. */
             done = false;
-            lanedetection_B.loc_m = numActiveEdge + 1;
-            lanedetection_B.idxRow2 = 319;
+            lanedetection_B.loc = lanedetection_B.numActiveEdge + 1;
+            lanedetection_B.loc_m = 319;
 
             /* Move to the next column and find out boundaries of the polygon at this column. */
-            lanedetection_B.idxNew = iA;
-            lanedetection_B.idxOld = iA;
-            lanedetection_B.idxCol1 = iA;
-            aidx = 0;
-            numActiveEdge = 0;
-            for (lastColA = 0; lastColA < lanedetection_B.idxCol2; lastColA++) {
+            lanedetection_B.idxNew = imgIdx;
+            lanedetection_B.idxOld = imgIdx;
+            lanedetection_B.acc3 = imgIdx;
+            q2 = 0;
+            lanedetection_B.numActiveEdge = 0;
+            for (i = 0; i < lanedetection_B.idxCol1; i++) {
               /* Find out the valid boundaries and bring them to the latest column. */
               if (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld
-                  + 3] >= lanedetection_B.numUniquePix) {
+                  + 3] >= lanedetection_B.idxCol2) {
                 if (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld
-                    + 2] <= lanedetection_B.numUniquePix) {
+                    + 2] <= lanedetection_B.idxCol2) {
                   while
                       (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld
-                       + 2] < lanedetection_B.numUniquePix) {
+                       + 2] < lanedetection_B.idxCol2) {
                     /* Use Bresenham algorithm to calculate the polygon boundaries at the next column */
                     lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld
                       + 2]++;
@@ -2341,53 +2379,54 @@ void lanedetection_step(void)
                     }
                   }
 
-                  lanedetection_B.idxCol1 += 9;
-                  numActiveEdge++;
+                  lanedetection_B.acc3 += 9;
+                  lanedetection_B.numActiveEdge++;
                 }
 
                 if (lanedetection_B.idxOld != lanedetection_B.idxNew) {
-                  for (lanedetection_B.intPart = 0; lanedetection_B.intPart < 9;
-                       lanedetection_B.intPart++) {
+                  for (lanedetection_B.idxRow2 = 0; lanedetection_B.idxRow2 < 9;
+                       lanedetection_B.idxRow2++) {
                     lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxNew
-                      + lanedetection_B.intPart] =
+                      + lanedetection_B.idxRow2] =
                       lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld
-                      + lanedetection_B.intPart];
+                      + lanedetection_B.idxRow2];
                   }
                 }
 
                 lanedetection_B.idxNew += 9;
-                aidx++;
+                q2++;
               }
 
               lanedetection_B.idxOld += 9;
             }
 
-            lanedetection_B.idxCol2 = aidx;
+            lanedetection_B.idxCol1 = q2;
 
             /* Sort the boundaries of the polygon according to row values. */
             /* Sort the boundaries of the polygon. */
             isMore = true;
             while (isMore) {
-              lanedetection_B.idxNew = iA;
-              lanedetection_B.idxOld = iA + 9;
+              lanedetection_B.idxNew = imgIdx;
+              lanedetection_B.idxOld = imgIdx + 9;
               isMore = false;
-              for (lastColA = 1; lastColA < numActiveEdge; lastColA++) {
+              for (i = 1; i < lanedetection_B.numActiveEdge; i++) {
                 if (lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxNew
                     + 1] >
                     lanedetection_DW.DrawShapes_DW_Polygon[lanedetection_B.idxOld
                     + 1]) {
                   isMore = true;
-                  for (lanedetection_B.intPart = 0; lanedetection_B.intPart < 9;
-                       lanedetection_B.intPart++) {
+                  for (lanedetection_B.idxRow2 = 0; lanedetection_B.idxRow2 < 9;
+                       lanedetection_B.idxRow2++) {
                     edgeTmp_tmp = lanedetection_B.idxNew +
-                      lanedetection_B.intPart;
-                    edgeTmp = lanedetection_DW.DrawShapes_DW_Polygon[edgeTmp_tmp];
+                      lanedetection_B.idxRow2;
+                    lanedetection_B.edgeTmp =
+                      lanedetection_DW.DrawShapes_DW_Polygon[edgeTmp_tmp];
                     DrawShapes_DW_Polygon_tmp = lanedetection_B.idxOld +
-                      lanedetection_B.intPart;
+                      lanedetection_B.idxRow2;
                     lanedetection_DW.DrawShapes_DW_Polygon[edgeTmp_tmp] =
                       lanedetection_DW.DrawShapes_DW_Polygon[DrawShapes_DW_Polygon_tmp];
                     lanedetection_DW.DrawShapes_DW_Polygon[DrawShapes_DW_Polygon_tmp]
-                      = edgeTmp;
+                      = lanedetection_B.edgeTmp;
                   }
                 }
 
@@ -2396,37 +2435,36 @@ void lanedetection_step(void)
               }
             }
 
-            aidx = iA;
+            q2 = imgIdx;
+            lanedetection_B.idxCol2++;
+            lanedetection_B.idxRow2 = 0;
+            lanedetection_B.numActiveEdge = -1;
             lanedetection_B.numUniquePix++;
-            lanedetection_B.intPart = 0;
-            numActiveEdge = -1;
-            lanedetection_B.loc++;
           }
         } else {
-          lanedetection_B.loc_m = 0;
-          lanedetection_B.idxRow2 = 319;
-          lanedetection_B.loc++;
+          lanedetection_B.loc = 0;
+          lanedetection_B.loc_m = 319;
+          lanedetection_B.numUniquePix++;
         }
 
-        if (lanedetection_B.loc_m < 0) {
-          lanedetection_B.loc_m = 0;
+        if (lanedetection_B.loc < 0) {
+          lanedetection_B.loc = 0;
         }
 
-        if (lanedetection_B.idxRow2 < lanedetection_B.loc_m) {
-          lanedetection_B.idxRow2 = lanedetection_B.loc_m - 1;
+        if (lanedetection_B.loc_m < lanedetection_B.loc) {
+          lanedetection_B.loc_m = lanedetection_B.loc - 1;
         }
 
         if (done) {
           lanedetection_B.idxTmp = lanedetection_B.idxTmp * 320 +
-            lanedetection_B.loc_m;
+            lanedetection_B.loc;
           lanedetection_B.idxNew = 1;
           if (lanedetection_P.DrawShapes_lineWidth > 1) {
             lanedetection_B.idxNew = 0;
           }
 
           lanedetection_B.idxOld = lanedetection_B.idxTmp;
-          for (lastColA = lanedetection_B.loc_m; lastColA <=
-               lanedetection_B.idxRow2; lastColA++) {
+          for (i = lanedetection_B.loc; i <= lanedetection_B.loc_m; i++) {
             if (lanedetection_B.idxNew != 0) {
               lanedetection_B.DrawShapes_o1[lanedetection_B.idxOld] = (uint8_T)
                 (((int32_T)((uint32_T)
@@ -2434,10 +2472,10 @@ void lanedetection_step(void)
                             * lanedetection_B.DrawShapes_o1[0]) << 14) >> 14);
               lanedetection_B.DrawShapes_o1[lanedetection_B.idxOld] = (uint8_T)
                 ((uint32_T)lanedetection_B.DrawShapes_o1[lanedetection_B.idxOld]
-                 + lanedetection_P.DrawShapes_color[0]);
+                 + lanedetection_P.DrawShapes_RTP_FILLCOLOR[0]);
             } else {
               lanedetection_B.DrawShapes_o1[lanedetection_B.idxOld] =
-                lanedetection_P.DrawShapes_color[0];
+                lanedetection_P.DrawShapes_RTP_FILLCOLOR[0];
             }
 
             lanedetection_B.idxOld++;
@@ -2449,8 +2487,7 @@ void lanedetection_step(void)
           }
 
           lanedetection_B.idxOld = lanedetection_B.idxTmp;
-          for (lastColA = lanedetection_B.loc_m; lastColA <=
-               lanedetection_B.idxRow2; lastColA++) {
+          for (i = lanedetection_B.loc; i <= lanedetection_B.loc_m; i++) {
             if (lanedetection_B.idxNew != 0) {
               lanedetection_B.DrawShapes_o2[lanedetection_B.idxOld] = (uint8_T)
                 (((int32_T)((uint32_T)
@@ -2458,10 +2495,10 @@ void lanedetection_step(void)
                             * lanedetection_B.DrawShapes_o1[0]) << 14) >> 14);
               lanedetection_B.DrawShapes_o2[lanedetection_B.idxOld] = (uint8_T)
                 ((uint32_T)lanedetection_B.DrawShapes_o2[lanedetection_B.idxOld]
-                 + lanedetection_P.DrawShapes_color[1]);
+                 + lanedetection_P.DrawShapes_RTP_FILLCOLOR[1]);
             } else {
               lanedetection_B.DrawShapes_o2[lanedetection_B.idxOld] =
-                lanedetection_P.DrawShapes_color[1];
+                lanedetection_P.DrawShapes_RTP_FILLCOLOR[1];
             }
 
             lanedetection_B.idxOld++;
@@ -2472,7 +2509,7 @@ void lanedetection_step(void)
             lanedetection_B.idxNew = 0;
           }
 
-          while (lanedetection_B.loc_m <= lanedetection_B.idxRow2) {
+          while (lanedetection_B.loc <= lanedetection_B.loc_m) {
             if (lanedetection_B.idxNew != 0) {
               lanedetection_B.DrawShapes_o3[lanedetection_B.idxTmp] = (uint8_T)
                 (((int32_T)((uint32_T)
@@ -2480,29 +2517,29 @@ void lanedetection_step(void)
                             * lanedetection_B.DrawShapes_o1[0]) << 14) >> 14);
               lanedetection_B.DrawShapes_o3[lanedetection_B.idxTmp] = (uint8_T)
                 ((uint32_T)lanedetection_B.DrawShapes_o3[lanedetection_B.idxTmp]
-                 + lanedetection_P.DrawShapes_color[2]);
+                 + lanedetection_P.DrawShapes_RTP_FILLCOLOR[2]);
             } else {
               lanedetection_B.DrawShapes_o3[lanedetection_B.idxTmp] =
-                lanedetection_P.DrawShapes_color[2];
+                lanedetection_P.DrawShapes_RTP_FILLCOLOR[2];
             }
 
             lanedetection_B.idxTmp++;
-            lanedetection_B.loc_m++;
+            lanedetection_B.loc++;
           }
         }
 
-        isMore = (lanedetection_B.loc <= lanedetection_B.acc3);
+        isMore = (lanedetection_B.numUniquePix <= qY);
       }
 
       /* Move to the next polygon. */
-      iA += max_idx * 9;
-      if (iB >= div_s32_floor(iC, max_idx) - 1) {
-        iB = 0;
+      imgIdx += imgCol * 9;
+      if (p >= div_s32_floor(imgRow, imgCol) - 1) {
+        p = 0;
       } else {
-        iB++;
+        p++;
       }
 
-      isMore = (iA < (max_idx << 1) * 9);
+      isMore = (imgIdx < (imgCol << 1) * 9);
     }
   }
 
@@ -2510,78 +2547,79 @@ void lanedetection_step(void)
 
   /* S-Function (svipresize): '<Root>/Resize2' */
   /* use pre-computed weights and index table to perform interpolation */
-  aidx = 0;
+  q2 = 0;
 
   /* resize along X-axis direction */
-  for (iC = 0; iC < 320; iC++) {
-    max_idx = iC;
-    for (lastColA = 0; lastColA < 240; lastColA++) {
-      iA = (lanedetection_B.DrawShapes_o2[lastColA * 320 + iC] * 127) << 3;
-      lanedetection_DW.Resize2_IntBuffer[max_idx] = (uint8_T)(((iA & 512U) != 0U)
-        + (iA >> 10));
-      max_idx += 320;
+  for (i = 0; i < 320; i++) {
+    imgCol = i;
+    for (imgRow = 0; imgRow < 240; imgRow++) {
+      imgIdx = (lanedetection_B.DrawShapes_o2[imgRow * 320 + i] * 127) << 3;
+      lanedetection_DW.Resize2_IntBuffer[imgCol] = (uint8_T)(((imgIdx & 512U) !=
+        0U) + (imgIdx >> 10));
+      imgCol += 320;
     }
   }
 
   /* resize along Y-axis direction */
-  for (lastColA = 0; lastColA < 240; lastColA++) {
-    max_idx = lastColA * 320;
-    for (iC = 0; iC < 320; iC++) {
-      lanedetection_DW.Resize2_LineBuffer[iC] =
-        lanedetection_DW.Resize2_IntBuffer[max_idx];
-      max_idx++;
+  for (imgRow = 0; imgRow < 240; imgRow++) {
+    imgCol = imgRow * 320;
+    for (i = 0; i < 320; i++) {
+      lanedetection_DW.Resize2_LineBuffer[i] =
+        lanedetection_DW.Resize2_IntBuffer[imgCol];
+      imgCol++;
     }
 
-    for (iC = 0; iC < 160; iC++) {
-      iA = (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[iC]]
-            * lanedetection_ConstP.pooled7[iC]) << 3;
-      iB = iC + 160;
-      max_idx =
-        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[iB]] *
-         lanedetection_ConstP.pooled7[iB]) << 3;
-      if ((iA < 0) && (max_idx < MIN_int32_T - iA)) {
-        iA = MIN_int32_T;
-      } else if ((iA > 0) && (max_idx > MAX_int32_T - iA)) {
-        iA = MAX_int32_T;
+    for (i = 0; i < 160; i++) {
+      imgIdx =
+        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[i]] *
+         lanedetection_ConstP.pooled7[i]) << 3;
+      p = i + 160;
+      imgCol =
+        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[p]] *
+         lanedetection_ConstP.pooled7[p]) << 3;
+      if ((imgIdx < 0) && (imgCol < MIN_int32_T - imgIdx)) {
+        imgIdx = MIN_int32_T;
+      } else if ((imgIdx > 0) && (imgCol > MAX_int32_T - imgIdx)) {
+        imgIdx = MAX_int32_T;
       } else {
-        iA += max_idx;
+        imgIdx += imgCol;
       }
 
-      iB += 160;
-      max_idx =
-        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[iB]] *
-         lanedetection_ConstP.pooled7[iB]) << 3;
-      if ((iA < 0) && (max_idx < MIN_int32_T - iA)) {
-        iA = MIN_int32_T;
-      } else if ((iA > 0) && (max_idx > MAX_int32_T - iA)) {
-        iA = MAX_int32_T;
+      p += 160;
+      imgCol =
+        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[p]] *
+         lanedetection_ConstP.pooled7[p]) << 3;
+      if ((imgIdx < 0) && (imgCol < MIN_int32_T - imgIdx)) {
+        imgIdx = MIN_int32_T;
+      } else if ((imgIdx > 0) && (imgCol > MAX_int32_T - imgIdx)) {
+        imgIdx = MAX_int32_T;
       } else {
-        iA += max_idx;
+        imgIdx += imgCol;
       }
 
-      iB += 160;
-      max_idx =
-        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[iB]] *
-         lanedetection_ConstP.pooled7[iB]) << 3;
-      if ((iA < 0) && (max_idx < MIN_int32_T - iA)) {
-        iA = MIN_int32_T;
-      } else if ((iA > 0) && (max_idx > MAX_int32_T - iA)) {
-        iA = MAX_int32_T;
+      p += 160;
+      imgCol =
+        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[p]] *
+         lanedetection_ConstP.pooled7[p]) << 3;
+      if ((imgIdx < 0) && (imgCol < MIN_int32_T - imgIdx)) {
+        imgIdx = MIN_int32_T;
+      } else if ((imgIdx > 0) && (imgCol > MAX_int32_T - imgIdx)) {
+        imgIdx = MAX_int32_T;
       } else {
-        iA += max_idx;
+        imgIdx += imgCol;
       }
 
-      max_idx = ((iA & 512U) != 0U) + (iA >> 10);
-      if (max_idx < 0) {
-        max_idx = 0;
+      imgCol = ((imgIdx & 512U) != 0U) + (imgIdx >> 10);
+      if (imgCol < 0) {
+        imgCol = 0;
       } else {
-        if (max_idx > 255) {
-          max_idx = 255;
+        if (imgCol > 255) {
+          imgCol = 255;
         }
       }
 
-      lanedetection_B.Resize2[aidx] = (uint8_T)max_idx;
-      aidx++;
+      lanedetection_B.Resize2[q2] = (uint8_T)imgCol;
+      q2++;
     }
   }
 
@@ -2589,83 +2627,84 @@ void lanedetection_step(void)
 
   /* S-Function (svipresize): '<Root>/Resize3' */
   /* use pre-computed weights and index table to perform interpolation */
-  aidx = 0;
+  q2 = 0;
 
   /* resize along X-axis direction */
-  for (iC = 0; iC < 320; iC++) {
-    max_idx = iC;
-    for (lastColA = 0; lastColA < 240; lastColA++) {
-      iA = (lanedetection_B.DrawShapes_o3[lastColA * 320 + iC] * 127) << 3;
-      lanedetection_DW.Resize3_IntBuffer[max_idx] = (uint8_T)(((iA & 512U) != 0U)
-        + (iA >> 10));
-      max_idx += 320;
+  for (i = 0; i < 320; i++) {
+    imgCol = i;
+    for (imgRow = 0; imgRow < 240; imgRow++) {
+      imgIdx = (lanedetection_B.DrawShapes_o3[imgRow * 320 + i] * 127) << 3;
+      lanedetection_DW.Resize3_IntBuffer[imgCol] = (uint8_T)(((imgIdx & 512U) !=
+        0U) + (imgIdx >> 10));
+      imgCol += 320;
     }
   }
 
   /* resize along Y-axis direction */
-  for (lastColA = 0; lastColA < 240; lastColA++) {
-    max_idx = lastColA * 320;
-    for (iC = 0; iC < 320; iC++) {
-      lanedetection_DW.Resize2_LineBuffer[iC] =
-        lanedetection_DW.Resize3_IntBuffer[max_idx];
-      max_idx++;
+  for (imgRow = 0; imgRow < 240; imgRow++) {
+    imgCol = imgRow * 320;
+    for (i = 0; i < 320; i++) {
+      lanedetection_DW.Resize2_LineBuffer[i] =
+        lanedetection_DW.Resize3_IntBuffer[imgCol];
+      imgCol++;
     }
 
-    for (iC = 0; iC < 160; iC++) {
-      iA = (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[iC]]
-            * lanedetection_ConstP.pooled7[iC]) << 3;
-      iB = iC + 160;
-      max_idx =
-        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[iB]] *
-         lanedetection_ConstP.pooled7[iB]) << 3;
-      if ((iA < 0) && (max_idx < MIN_int32_T - iA)) {
-        iA = MIN_int32_T;
-      } else if ((iA > 0) && (max_idx > MAX_int32_T - iA)) {
-        iA = MAX_int32_T;
+    for (i = 0; i < 160; i++) {
+      imgIdx =
+        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[i]] *
+         lanedetection_ConstP.pooled7[i]) << 3;
+      p = i + 160;
+      imgCol =
+        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[p]] *
+         lanedetection_ConstP.pooled7[p]) << 3;
+      if ((imgIdx < 0) && (imgCol < MIN_int32_T - imgIdx)) {
+        imgIdx = MIN_int32_T;
+      } else if ((imgIdx > 0) && (imgCol > MAX_int32_T - imgIdx)) {
+        imgIdx = MAX_int32_T;
       } else {
-        iA += max_idx;
+        imgIdx += imgCol;
       }
 
-      iB += 160;
-      max_idx =
-        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[iB]] *
-         lanedetection_ConstP.pooled7[iB]) << 3;
-      if ((iA < 0) && (max_idx < MIN_int32_T - iA)) {
-        iA = MIN_int32_T;
-      } else if ((iA > 0) && (max_idx > MAX_int32_T - iA)) {
-        iA = MAX_int32_T;
+      p += 160;
+      imgCol =
+        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[p]] *
+         lanedetection_ConstP.pooled7[p]) << 3;
+      if ((imgIdx < 0) && (imgCol < MIN_int32_T - imgIdx)) {
+        imgIdx = MIN_int32_T;
+      } else if ((imgIdx > 0) && (imgCol > MAX_int32_T - imgIdx)) {
+        imgIdx = MAX_int32_T;
       } else {
-        iA += max_idx;
+        imgIdx += imgCol;
       }
 
-      iB += 160;
-      max_idx =
-        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[iB]] *
-         lanedetection_ConstP.pooled7[iB]) << 3;
-      if ((iA < 0) && (max_idx < MIN_int32_T - iA)) {
-        iA = MIN_int32_T;
-      } else if ((iA > 0) && (max_idx > MAX_int32_T - iA)) {
-        iA = MAX_int32_T;
+      p += 160;
+      imgCol =
+        (lanedetection_DW.Resize2_LineBuffer[lanedetection_ConstP.pooled2[p]] *
+         lanedetection_ConstP.pooled7[p]) << 3;
+      if ((imgIdx < 0) && (imgCol < MIN_int32_T - imgIdx)) {
+        imgIdx = MIN_int32_T;
+      } else if ((imgIdx > 0) && (imgCol > MAX_int32_T - imgIdx)) {
+        imgIdx = MAX_int32_T;
       } else {
-        iA += max_idx;
+        imgIdx += imgCol;
       }
 
-      max_idx = ((iA & 512U) != 0U) + (iA >> 10);
-      if (max_idx < 0) {
-        max_idx = 0;
+      imgCol = ((imgIdx & 512U) != 0U) + (imgIdx >> 10);
+      if (imgCol < 0) {
+        imgCol = 0;
       } else {
-        if (max_idx > 255) {
-          max_idx = 255;
+        if (imgCol > 255) {
+          imgCol = 255;
         }
       }
 
-      lanedetection_B.Resize3[aidx] = (uint8_T)max_idx;
-      aidx++;
+      lanedetection_B.Resize3[q2] = (uint8_T)imgCol;
+      q2++;
     }
   }
 
   /* End of S-Function (svipresize): '<Root>/Resize3' */
-  /* Start for MATLABSystem: '<S3>/MATLAB System' */
+  /* MATLABSystem: '<S3>/MATLAB System' */
   memcpy(&lanedetection_B.DrawShapes_o2[0], &lanedetection_B.DrawShapes_o1[0],
          76800U * sizeof(uint8_T));
   memcpy(&lanedetection_B.pln2[0], &lanedetection_B.Resize2[0], 38400U * sizeof
@@ -2676,10 +2715,10 @@ void lanedetection_step(void)
     lanedetection_B.pln3);
 
   /* Math: '<Root>/Transpose' */
-  for (max_idx = 0; max_idx < 320; max_idx++) {
-    for (lastColA = 0; lastColA < 100; lastColA++) {
-      lanedetection_B.Transpose[lastColA + 100 * max_idx] =
-        lanedetection_B.imgEdge[320 * lastColA + max_idx];
+  for (imgCol = 0; imgCol < 320; imgCol++) {
+    for (i = 0; i < 100; i++) {
+      lanedetection_B.Transpose[i + 100 * imgCol] =
+        lanedetection_B.EdgeDetection[320 * i + imgCol];
     }
   }
 
@@ -2727,10 +2766,10 @@ void lanedetection_initialize(void)
   lanedetection_M->Timing.stepSize0 = 0.05;
 
   /* External mode info */
-  lanedetection_M->Sizes.checksums[0] = (1260964239U);
-  lanedetection_M->Sizes.checksums[1] = (1201864594U);
-  lanedetection_M->Sizes.checksums[2] = (1678593302U);
-  lanedetection_M->Sizes.checksums[3] = (2177331807U);
+  lanedetection_M->Sizes.checksums[0] = (1296803369U);
+  lanedetection_M->Sizes.checksums[1] = (1334223898U);
+  lanedetection_M->Sizes.checksums[2] = (2078142638U);
+  lanedetection_M->Sizes.checksums[3] = (1390297388U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -3618,7 +3657,7 @@ void lanedetection_initialize(void)
     (void) memset((char_T *) &dtInfo, 0,
                   sizeof(dtInfo));
     lanedetection_M->SpecialInfo.mappingInfo = (&dtInfo);
-    dtInfo.numDataTypes = 21;
+    dtInfo.numDataTypes = 22;
     dtInfo.dataTypeSizes = &rtDataTypeSizes[0];
     dtInfo.dataTypeNames = &rtDataTypeNames[0];
 
@@ -3629,22 +3668,175 @@ void lanedetection_initialize(void)
     dtInfo.PTransTable = &rtPTransTable;
   }
 
-  /* Start for S-Function (v4l2_video_capture_sfcn): '<Root>/V4L2 Video Capture' */
-  MW_videoCaptureInit(lanedetection_ConstP.V4L2VideoCapture_p1, 0, 0, 0, 0, 320U,
-                      240U, 1U, 2U, 1U, 0.05);
+  {
+    int32_T nonZeroIdx;
+    int32_T EdgeDetection_VO_DW_tmp;
 
-  /* Start for MATLABSystem: '<S3>/MATLAB System' */
-  lanedetection_DW.obj.matlabCodegenIsDeleted = true;
-  lanedetection_DW.obj.isInitialized = 0;
-  lanedetection_DW.obj.matlabCodegenIsDeleted = false;
-  lanedetection_DW.obj.isSetupComplete = false;
-  lanedetection_DW.obj.isInitialized = 1;
-  lanedetection_DW.obj.PixelFormatEnum = 2;
-  MW_SDL_videoDisplayInit(lanedetection_DW.obj.PixelFormatEnum, 1, 1, 320.0,
-    240.0);
-  lanedetection_DW.obj.isSetupComplete = true;
+    /* Start for S-Function (v4l2_video_capture_sfcn): '<Root>/V4L2 Video Capture' */
+    MW_videoCaptureInit(lanedetection_ConstP.V4L2VideoCapture_p1, 0, 0, 0, 0,
+                        320U, 240U, 1U, 2U, 1U, 0.05);
 
-  /* End of Start for SubSystem: '<Root>/SDL Video Display' */
+    /* Start for S-Function (svipedge): '<Root>/Edge Detection' */
+    for (nonZeroIdx = 0; nonZeroIdx < 6; nonZeroIdx++) {
+      EdgeDetection_VO_DW_tmp =
+        lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] * 320 +
+        lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx];
+      lanedetection_DW.EdgeDetection_VO_DW[nonZeroIdx] = EdgeDetection_VO_DW_tmp;
+      if (lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx] > 0) {
+        lanedetection_DW.EdgeDetection_VOU_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_VOD_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] * 320;
+      } else {
+        lanedetection_DW.EdgeDetection_VOU_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] * 320;
+        lanedetection_DW.EdgeDetection_VOD_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+      }
+
+      if (lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] > 0) {
+        lanedetection_DW.EdgeDetection_VOL_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_VOR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx];
+      } else {
+        lanedetection_DW.EdgeDetection_VOL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx];
+        lanedetection_DW.EdgeDetection_VOR_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+      }
+
+      if ((lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx] < 0) &&
+          (lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] < 0)) {
+        lanedetection_DW.EdgeDetection_VOUL_DW[nonZeroIdx] = 0;
+        lanedetection_DW.EdgeDetection_VOLR_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_VOLL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx];
+        lanedetection_DW.EdgeDetection_VOUR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] * 320;
+      }
+
+      if ((lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx] >= 0) &&
+          (lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] < 0)) {
+        lanedetection_DW.EdgeDetection_VOLL_DW[nonZeroIdx] = 0;
+        lanedetection_DW.EdgeDetection_VOUR_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_VOUL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx];
+        lanedetection_DW.EdgeDetection_VOLR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] * 320;
+      }
+
+      if ((lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx] < 0) &&
+          (lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] >= 0)) {
+        lanedetection_DW.EdgeDetection_VOUR_DW[nonZeroIdx] = 0;
+        lanedetection_DW.EdgeDetection_VOLL_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_VOUL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] * 320;
+        lanedetection_DW.EdgeDetection_VOLR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx];
+      }
+
+      if ((lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx] >= 0) &&
+          (lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] >= 0)) {
+        lanedetection_DW.EdgeDetection_VOLR_DW[nonZeroIdx] = 0;
+        lanedetection_DW.EdgeDetection_VOUL_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_VOLL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VRO_RTP[nonZeroIdx] * 320;
+        lanedetection_DW.EdgeDetection_VOUR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_VCO_RTP[nonZeroIdx];
+      }
+
+      EdgeDetection_VO_DW_tmp =
+        lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] * 320 +
+        lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx];
+      lanedetection_DW.EdgeDetection_HO_DW[nonZeroIdx] = EdgeDetection_VO_DW_tmp;
+      if (lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx] > 0) {
+        lanedetection_DW.EdgeDetection_HOU_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_HOD_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] * 320;
+      } else {
+        lanedetection_DW.EdgeDetection_HOU_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] * 320;
+        lanedetection_DW.EdgeDetection_HOD_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+      }
+
+      if (lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] > 0) {
+        lanedetection_DW.EdgeDetection_HOL_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_HOR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx];
+      } else {
+        lanedetection_DW.EdgeDetection_HOL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx];
+        lanedetection_DW.EdgeDetection_HOR_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+      }
+
+      if ((lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx] < 0) &&
+          (lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] < 0)) {
+        lanedetection_DW.EdgeDetection_HOUL_DW[nonZeroIdx] = 0;
+        lanedetection_DW.EdgeDetection_HOLR_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_HOLL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx];
+        lanedetection_DW.EdgeDetection_HOUR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] * 320;
+      }
+
+      if ((lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx] >= 0) &&
+          (lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] < 0)) {
+        lanedetection_DW.EdgeDetection_HOLL_DW[nonZeroIdx] = 0;
+        lanedetection_DW.EdgeDetection_HOUR_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_HOUL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx];
+        lanedetection_DW.EdgeDetection_HOLR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] * 320;
+      }
+
+      if ((lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx] < 0) &&
+          (lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] >= 0)) {
+        lanedetection_DW.EdgeDetection_HOUR_DW[nonZeroIdx] = 0;
+        lanedetection_DW.EdgeDetection_HOLL_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_HOUL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] * 320;
+        lanedetection_DW.EdgeDetection_HOLR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx];
+      }
+
+      if ((lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx] >= 0) &&
+          (lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] >= 0)) {
+        lanedetection_DW.EdgeDetection_HOLR_DW[nonZeroIdx] = 0;
+        lanedetection_DW.EdgeDetection_HOUL_DW[nonZeroIdx] =
+          EdgeDetection_VO_DW_tmp;
+        lanedetection_DW.EdgeDetection_HOLL_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HRO_RTP[nonZeroIdx] * 320;
+        lanedetection_DW.EdgeDetection_HOUR_DW[nonZeroIdx] =
+          lanedetection_ConstP.EdgeDetection_HCO_RTP[nonZeroIdx];
+      }
+    }
+
+    /* End of Start for S-Function (svipedge): '<Root>/Edge Detection' */
+    /* Start for MATLABSystem: '<S3>/MATLAB System' */
+    lanedetection_DW.obj.matlabCodegenIsDeleted = true;
+    lanedetection_DW.obj.isInitialized = 0;
+    lanedetection_DW.obj.matlabCodegenIsDeleted = false;
+    lanedetection_DW.obj.isSetupComplete = false;
+    lanedetection_DW.obj.isInitialized = 1;
+    lanedetection_DW.obj.PixelFormatEnum = 2;
+    MW_SDL_videoDisplayInit(lanedetection_DW.obj.PixelFormatEnum, 1, 1, 320.0,
+      240.0);
+    lanedetection_DW.obj.isSetupComplete = true;
+
+    /* End of Start for SubSystem: '<Root>/SDL Video Display' */
+  }
 }
 
 /* Model terminate function */
