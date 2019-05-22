@@ -1,3 +1,5 @@
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
@@ -6,12 +8,16 @@
 
 using namespace std;
 using namespace cv;
+using namespace boost::geometry::model::d2;
+
+static const int IMAGEWIDTH 	= 640;
+static const int IMAGEHEIGHT	= 480;
 
 int main()
 {
 	VideoCapture cap(0);
-	cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
-	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+	cap.set(CV_CAP_PROP_FRAME_WIDTH, IMAGEWIDTH);
+	cap.set(CV_CAP_PROP_FRAME_HEIGHT, IMAGEHEIGHT);
 
 	// Kamera verfügbar?
 	if(!cap.isOpened()) {
@@ -20,8 +26,13 @@ int main()
 	}
 	// Matrix für Bilder
 	Mat frame, grayImg, LinesImg;
-	// Bildausschnitt 
-	Rect region_of_interest = Rect(1, 200, 638, 190);
+	// Bildausschnitt
+	int roi_x1 = 1;
+	int roi_x2 = (IMAGEHEIGHT / 2.4);
+	int roi_y1 = (IMAGEWIDTH - 2);
+	int roi_y2 = (IMAGEHEIGHT / 1.23) - (IMAGEHEIGHT / 2.4);
+	
+	Rect region_of_interest = Rect(roi_x1, roi_x2, roi_y1, roi_y2);	// 1, 200, 638, 190
 
 	while(1) {
 		cap >> frame;
@@ -74,7 +85,7 @@ int main()
 		HoughLinesP(LinesImg, lines, rho, theta, threshold, minLinLength, maxLineGap);
 
 		//draw lines
-		cout << "lines.size = " << lines.size() << endl;
+		//cout << "lines.size = " << lines.size() << endl;
 		int counter_left = 0;
 		int counter_right = 0;
 		
@@ -84,8 +95,8 @@ int main()
 			// static_cast<double> wird verwendet, da ab c++ 11 integer-Division die Nachkommastellen weghaut.
 			steigung = (static_cast<double>(l[3] - l[1]) / static_cast<double>(l[2] - l[0]));
 			//Ausgabe der Steigung und Punktkoordinaten
-			cout << "steigung = " << steigung << endl;
-			cout << "l[0,1,2,3] = " << l << endl;
+			//cout << "steigung = " << steigung << endl;
+			//cout << "l[0,1,2,3] = " << l << endl;
 			// Vergleich der Steigung kleiner 0? groeßer 0? und addieren diese auf einen neuen Vektor um anschließend Durchschnitt zu bilden.
 			if(steigung < 0){
 				counter_left++;
@@ -100,8 +111,8 @@ int main()
 		right = right / counter_right;
 		left = left / counter_left;
 		
-		cout << "left = " << left << endl;
-		cout << "right = " << right << endl;
+		//cout << "left = " << left << endl;
+		//cout << "right = " << right << endl;
 		
 		// Zeichen der Linien mit den Durchschnittswerten
 		Scalar left_Color = Scalar(0,250,0);  // B=0 G=250 R=0
@@ -109,10 +120,24 @@ int main()
 		line(frame_roi, Point(left[0], left[1]), Point(left[2], left[3]), left_Color, 3, CV_NORMAL); // CV_AA vorher			
 		line(frame_roi, Point(right[0], right[1]), Point(right[2], right[3]), right_Color, 3, CV_NORMAL); // CV_AA vorher			
 		
+		
+		// Berechnung Abstand zu linker Linie
+		// ANNAHME:
+		//	Breite SmartVideoCar:	180mm ()
+		//	Breite der Strecke:		590mm
+		point_xy<float> pCenter(319.0, left[1]), pLeft(left[0], left[1]);
+		float distanceLeft = boost::geometry::distance(pCenter, pLeft);
+		//cout << "Distance left lane: " << distanceLeft << endl;
+
+		string distance_Left = "Distance left lane: " + to_string(distanceLeft);
+		
+		Point textPosition(10, (frame.rows - 10));
+		putText(frame, distance_Left, textPosition, FONT_HERSHEY_SIMPLEX, 1, Scalar::all(255), 2, 8);
+		
 		namedWindow("frame");
 		moveWindow("frame", 50, 30);
 		imshow("frame", frame);
-
+		
 		// 50 = 50 ms | 27 = ESC zum abbrechen des Programms
 		if(waitKey(50) == 27) {
 			cout << "finish successful\n";
