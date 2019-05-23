@@ -58,7 +58,7 @@ int main()
 		createTrackbar("Min Threshold:", "edges", &minCannyThreshold, max_lowThreshold);
 
 		// Morphological Operation
-		Mat k = getStructuringElement(CV_SHAPE_RECT, Size(13, 13)); // falls dilate 5,5
+		Mat k = getStructuringElement(CV_SHAPE_RECT, Size(15, 15)); // falls dilate 5,5
 		
 		//kleiner Test
 		// dilate(LinesImg, LinesImg, k);
@@ -71,15 +71,17 @@ int main()
 		// hough transform
 		double rho = 2; //4 war eingestellt
 		double theta = CV_PI/180;
-		int threshold = 45; // 200 war eingestellt threshold = 500/400, ist zu viel, reagiert nicht mehr! 120 
-		double minLinLength = 110; //35 war eingestellt
-		double maxLineGap = 60; //20 war eingestellt
-		double steigung;
+		int threshold = 30; // 200 war eingestellt threshold = 500/400, ist zu viel, reagiert nicht mehr! 120   45
+		double minLinLength = 80; //110 war eingestellt
+		double maxLineGap = 20; //20, 60, 150 war eingestellt
+		double steigung, steigung_left, y_achsenabschnitt_left, x_Schnitt_left;
+		double steigung_right, y_achsenabschnitt_right, x_Schnitt_right;
 		
 		// Vektoren 
 		vector<Vec4i> lines;
 		Vec4i left;
 		Vec4i right;
+		vector<Vec4i> left_right;
 		
 		
 		HoughLinesP(LinesImg, lines, rho, theta, threshold, minLinLength, maxLineGap);
@@ -111,6 +113,27 @@ int main()
 		right = right / counter_right;
 		left = left / counter_left;
 		
+		// steigung links
+		steigung_left = (static_cast<double>(left[3] - left[1]) / static_cast<double>(left[2] - left[0]));
+		// steigung rechts
+		steigung_right= (static_cast<double>(right[3] - right[1]) / static_cast<double>(right[2] - right[0]));
+		
+		// y = b wenn x = 0!
+		y_achsenabschnitt_left = left[1] - steigung_left * left[0];
+		y_achsenabschnitt_right = right[3] - steigung_right * right[2];
+		
+		// Schnitt mit der x-Achse auf Höhe des Fahrzeugs (y=480)
+		x_Schnitt_left = (480.0 - y_achsenabschnitt_left) / steigung_left; 
+		x_Schnitt_right = (480.0 - y_achsenabschnitt_right) / steigung_right; 
+		
+		// Berechnung Abstand zu linker Linie
+		// ANNAHME:
+		//	Breite SmartVideoCar:	180mm ()
+		//	Breite der Strecke:		590mm		
+		// 	Breite d
+		float distance_L = 0.0 - (x_Schnitt_left);
+		float distance_R = x_Schnitt_right - 640.0;
+		
 		//cout << "left = " << left << endl;
 		//cout << "right = " << right << endl;
 		
@@ -118,21 +141,21 @@ int main()
 		Scalar left_Color = Scalar(0,250,0);  // B=0 G=250 R=0
 		Scalar right_Color = Scalar(0,0,250);  // B=0 G=250 R=0
 		line(frame_roi, Point(left[0], left[1]), Point(left[2], left[3]), left_Color, 3, CV_NORMAL); // CV_AA vorher			
-		line(frame_roi, Point(right[0], right[1]), Point(right[2], right[3]), right_Color, 3, CV_NORMAL); // CV_AA vorher			
+		line(frame_roi, Point(right[0], right[1]), Point(right[2], right[3]), right_Color, 3, CV_NORMAL); // CV_AA vorher					
 		
-		
-		// Berechnung Abstand zu linker Linie
-		// ANNAHME:
-		//	Breite SmartVideoCar:	180mm ()
-		//	Breite der Strecke:		590mm
-		point_xy<float> pCenter(319.0, left[1]), pLeft(left[0], left[1]);
-		float distanceLeft = boost::geometry::distance(pCenter, pLeft);
 		//cout << "Distance left lane: " << distanceLeft << endl;
 
-		string distance_Left = "Distance left lane: " + to_string(distanceLeft);
+		left_right.push_back(left);
+		left_right.push_back(right);
+
+
+		string distance_Left = "Distance left lane:  " + to_string(distance_L);
+		string distance_Right= "Distance right lane: " + to_string(distance_R);
 		
-		Point textPosition(10, (frame.rows - 10));
-		putText(frame, distance_Left, textPosition, FONT_HERSHEY_SIMPLEX, 1, Scalar::all(255), 2, 8);
+		Point textPositionLeft (10, (frame.rows - 30));
+		Point textPositionRight(10, (frame.rows - 10));
+		putText(frame, distance_Left, textPositionLeft, FONT_HERSHEY_SIMPLEX, 0.5, Scalar::all(255), 1, 8);
+		putText(frame, distance_Right,textPositionRight,FONT_HERSHEY_SIMPLEX, 0.5, Scalar::all(255), 1, 8);
 		
 		namedWindow("frame");
 		moveWindow("frame", 50, 30);
