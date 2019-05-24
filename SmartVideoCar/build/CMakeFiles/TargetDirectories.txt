@@ -1,0 +1,13 @@
+/home/pi/Desktop/SmartVideoCar/build/CMakeFiles/install/local.dir
+/home/pi/Desktop/SmartVideoCar/build/CMakeFiles/install/strip.dir
+/home/pi/Desktop/SmartVideoCar/build/CMakeFiles/edit_cache.dir
+/home/pi/Desktop/SmartVideoCar/build/CMakeFiles/rebuild_cache.dir
+/home/pi/Desktop/SmartVideoCar/build/CMakeFiles/list_install_components.dir
+/home/pi/Desktop/SmartVideoCar/build/CMakeFiles/install.dir
+/home/pi/Desktop/SmartVideoCar/build/src/CMakeFiles/install/local.dir
+/home/pi/Desktop/SmartVideoCar/build/src/CMakeFiles/install.dir
+/home/pi/Desktop/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir
+/home/pi/Desktop/SmartVideoCar/build/src/CMakeFiles/list_install_components.dir
+/home/pi/Desktop/SmartVideoCar/build/src/CMakeFiles/install/strip.dir
+/home/pi/Desktop/SmartVideoCar/build/src/CMakeFiles/edit_cache.dir
+/home/pi/Desktop/SmartVideoCar/build/src/CMakeFiles/rebuild_cache.dir

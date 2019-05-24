@@ -27,12 +27,12 @@ int main()
 	// Matrix für Bilder
 	Mat frame, grayImg, LinesImg;
 	// Bildausschnitt
-	int roi_x1 = 1;
-	int roi_x2 = (IMAGEHEIGHT / 2.4);
-	int roi_y1 = (IMAGEWIDTH - 2);
-	int roi_y2 = (IMAGEHEIGHT / 1.23) - (IMAGEHEIGHT / 2.4);
+	int roi_x = 1;
+	int roi_y = (IMAGEHEIGHT / 2.6);
+	int roi_width = (IMAGEWIDTH - 2);
+	int roi_height = (IMAGEHEIGHT / 1.28) - roi_y;
 	
-	Rect region_of_interest = Rect(roi_x1, roi_x2, roi_y1, roi_y2);	// 1, 200, 638, 190
+	Rect region_of_interest = Rect(roi_x, roi_y, roi_width, roi_height);	// 1, 185, 638, 190
 
 	while(1) {
 		cap >> frame;
@@ -48,24 +48,31 @@ int main()
 		blur(grayImg, LinesImg, Size(3, 3));
 
 		// Edge detection using canny detector
-		int minCannyThreshold;		// min 230, max 500 funzt ganz gut
-		int const max_lowThreshold = 170; // 1500 mag a gar ned //230 zuletzt nicht schlecht!
-		int maxCannyThreshold = 170;
-		//Sobel(LinesImg, LinesImg, -1, 0, 1, 3, BORDER_DEFAULT);
+		static int minCannyThreshold = 47;		// min 230, max 500 funzt ganz gut
+		int const max_lowThreshold = 800; // 1500 mag a gar ned //230 zuletzt nicht schlecht!
+		int maxCannyThreshold = 3*minCannyThreshold;
 		Canny(LinesImg, LinesImg, minCannyThreshold, maxCannyThreshold, 3, true);
-	
 		// Create a Trackbar for user to enter threshold
 		createTrackbar("Min Threshold:", "edges", &minCannyThreshold, max_lowThreshold);
-
-		// Morphological Operation
-		Mat k = getStructuringElement(CV_SHAPE_RECT, Size(15, 15)); // falls dilate 5,5
 		
-		//kleiner Test
-		// dilate(LinesImg, LinesImg, k);
-		morphologyEx(LinesImg, LinesImg, MORPH_CLOSE, k);
+		/*static int const_thresh = 200;
+		int const max_const = 240;
+		static int val_neighbour = 5;
+		
+		//createTrackbar("const:", "edges", &const_thresh, max_const);
+				
+		// Edge detection using sobel & binary threshold
+		Sobel(LinesImg, LinesImg, CV_8U, 1, 0, 3, BORDER_DEFAULT);
+		adaptiveThreshold(LinesImg, LinesImg, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, val_neighbour, -(const_thresh));
+		*/
+		
+		// Morphological Operation
+		Mat k = getStructuringElement(CV_SHAPE_RECT, Size(3, 3)); // falls dilate 5,5
+		morphologyEx(LinesImg, LinesImg, MORPH_DILATE, k);
+		//morphologyEx(LinesImg, LinesImg, MORPH_CLOSE, k);
 		
 		namedWindow("edges");
-		moveWindow("edges", 50, 550);
+		moveWindow("edges", 10, 550);
 		imshow("edges", LinesImg);
 
 		// hough transform
@@ -73,7 +80,7 @@ int main()
 		double theta = CV_PI/180;
 		int threshold = 30; // 200 war eingestellt threshold = 500/400, ist zu viel, reagiert nicht mehr! 120   45
 		double minLinLength = 80; //110 war eingestellt
-		double maxLineGap = 20; //20, 60, 150 war eingestellt
+		double maxLineGap = 60; //20, 60, 150 war eingestellt
 		double steigung, steigung_left, y_achsenabschnitt_left, x_Schnitt_left;
 		double steigung_right, y_achsenabschnitt_right, x_Schnitt_right;
 		
@@ -87,18 +94,18 @@ int main()
 		HoughLinesP(LinesImg, lines, rho, theta, threshold, minLinLength, maxLineGap);
 
 		//draw lines
-		//cout << "lines.size = " << lines.size() << endl;
+		///cout << "lines.size = " << lines.size() << endl;
 		int counter_left = 0;
 		int counter_right = 0;
 		
 		for(int i = 0; i < lines.size(); i++) {			
 			Vec4i l = lines[i];  // p1=x1,y1  p2=x2,y2
 			//Berechnung der Steigung aus dem Punkt mit m = ((y2 - y1) / (x2 -x1))
-			// static_cast<double> wird verwendet, da ab c++ 11 integer-Division die Nachkommastellen weghaut.
+			/// static_cast<double> wird verwendet, da ab c++ 11 integer-Division die Nachkommastellen weghaut.
 			steigung = (static_cast<double>(l[3] - l[1]) / static_cast<double>(l[2] - l[0]));
 			//Ausgabe der Steigung und Punktkoordinaten
-			//cout << "steigung = " << steigung << endl;
-			//cout << "l[0,1,2,3] = " << l << endl;
+			///cout << "steigung = " << steigung << endl;
+			///cout << "l[0,1,2,3] = " << l << endl;
 			// Vergleich der Steigung kleiner 0? groeßer 0? und addieren diese auf einen neuen Vektor um anschließend Durchschnitt zu bilden.
 			if(steigung < 0){
 				counter_left++;
@@ -131,11 +138,11 @@ int main()
 		//	Breite SmartVideoCar:	180mm ()
 		//	Breite der Strecke:		590mm		
 		// 	Breite d
-		float distance_L = 0.0 - (x_Schnitt_left);
-		float distance_R = x_Schnitt_right - 640.0;
+		int distance_L = (0 - x_Schnitt_left) * 0.034;		// Distanz in Millimeter (Faktor 0,34)
+		int distance_R = (x_Schnitt_right - 640) * 0.034;	// Distanz in Millimeter (Faktor 0,34)
 		
-		//cout << "left = " << left << endl;
-		//cout << "right = " << right << endl;
+		///cout << "left = " << left << endl;
+		///cout << "right = " << right << endl;
 		
 		// Zeichen der Linien mit den Durchschnittswerten
 		Scalar left_Color = Scalar(0,250,0);  // B=0 G=250 R=0
@@ -149,8 +156,8 @@ int main()
 		left_right.push_back(right);
 
 
-		string distance_Left = "Distance left lane:  " + to_string(distance_L);
-		string distance_Right= "Distance right lane: " + to_string(distance_R);
+		string distance_Left = "Distance left lane:  " + to_string(distance_L) + " cm";
+		string distance_Right= "Distance right lane: " + to_string(distance_R) + " cm";
 		
 		Point textPositionLeft (10, (frame.rows - 30));
 		Point textPositionRight(10, (frame.rows - 10));
@@ -158,7 +165,7 @@ int main()
 		putText(frame, distance_Right,textPositionRight,FONT_HERSHEY_SIMPLEX, 0.5, Scalar::all(255), 1, 8);
 		
 		namedWindow("frame");
-		moveWindow("frame", 50, 30);
+		moveWindow("frame", 10, 30);
 		imshow("frame", frame);
 		
 		// 50 = 50 ms | 27 = ESC zum abbrechen des Programms
