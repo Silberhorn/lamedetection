@@ -1,16 +1,5 @@
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
-
-#include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
-#include <iostream>
-
-using namespace std;
-using namespace cv;
-using namespace boost::geometry::model::d2;
+#ifndef LANEDETECTION_H
+#define LANEDETECTION_H
 
 class lanedetection
 {
@@ -26,8 +15,7 @@ private:
 	Rect region_of_interest;
 	
 	// Canny
-	static int minCannyThreshold;
-	int const max_lowThreshold;	// Max Value for Trackbar
+	int minCannyThreshold;
 	int maxCannyThreshold;
 	
 	// Morphological Operation
@@ -73,3 +61,5 @@ public:
 	Mat getLaneImage();
 	string getStringDistance();
 };
+
+#endif	// LANEDETECTION_H
