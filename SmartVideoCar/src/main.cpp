@@ -40,23 +40,29 @@ int main()
 		lanedetection laneDetect;
 		laneDetect(frame);
 
+		Vec4i left_detect = laneDetect.getLeft();
+		Vec4i right_detect = laneDetect.getRight();
+
 		lanecalculation laneCalc;
-		laneCalc(laneDetect::getLeft(), laneDetect::getRight());
+		laneCalc(left_detect, right_detect);
 
 		// Punkt für Position des Textes
 		Point textPosition (10, (frame.rows - 30));
+		Mat frame_lines = laneDetect.getLaneImage();
+		Mat frame_edges = laneDetect.getEdgeImage();
+		string distance = laneCalc.getStringDistance();
 		
 		// Text einfügen
-		putText(laneDetect::getLaneImage(), laneCalc::getStringDistance(), textPosition, FONT_HERSHEY_SIMPLEX, 0.5, Scalar::all(255), 1, 8);
+		putText(frame_lines, distance, textPosition, FONT_HERSHEY_SIMPLEX, 0.5, Scalar::all(255), 1, 8);
 		
 		namedWindow("OrgImage");
 		moveWindow("OrgImage", 10, 30);
-		imshow("OrgImage", laneDetect::getLaneImage());
+		imshow("OrgImage", frame_lines);
 		
 		// Window to show Edge Detection
 		namedWindow("EdgeImage");
 		moveWindow("EdgeImage", 10, 550);
-		imshow("EdgeImage", laneDetect::getEdgeImage());
+		imshow("EdgeImage", frame_edges);
 		
 		// 50 = 50 ms | 27 = ESC zum abbrechen des Programms
 		if(waitKey(50) == 27) {

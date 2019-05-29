@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/pi/Desktop/SmartVideoCar -isystem /usr/local/include/opencv4 
+CXX_INCLUDES = -I/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar -isystem /usr/local/include/opencv4 
 

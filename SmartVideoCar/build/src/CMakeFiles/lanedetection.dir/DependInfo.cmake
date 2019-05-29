@@ -4,8 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/pi/Desktop/SmartVideoCar/src/lanedetection.cpp" "/home/pi/Desktop/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir/lanedetection.cpp.o"
-  "/home/pi/Desktop/SmartVideoCar/src/main.cpp" "/home/pi/Desktop/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir/main.cpp.o"
+  "/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.cpp" "/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.o"
+  "/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.cpp" "/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir/lanedetection.cpp.o"
+  "/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/main.cpp" "/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

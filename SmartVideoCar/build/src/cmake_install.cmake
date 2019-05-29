@@ -1,4 +1,4 @@
-# Install script for directory: /home/pi/Desktop/SmartVideoCar/src
+# Install script for directory: /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

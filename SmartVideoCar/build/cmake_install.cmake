@@ -1,4 +1,4 @@
-# Install script for directory: /home/pi/Desktop/SmartVideoCar
+# Install script for directory: /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,12 +38,12 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/SmartVideoCar/" TYPE DIRECTORY FILES "/home/pi/Desktop/SmartVideoCar/build/bin/" FILES_MATCHING REGEX "/lanedetection$" PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/SmartVideoCar/" TYPE DIRECTORY FILES "/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/bin/" FILES_MATCHING REGEX "/lanedetection$" PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/pi/Desktop/SmartVideoCar/build/src/cmake_install.cmake")
+  include("/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/cmake_install.cmake")
 
 endif()
 
@@ -55,5 +55,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/pi/Desktop/SmartVideoCar/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

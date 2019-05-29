@@ -13,6 +13,25 @@ using namespace std;
 using namespace cv;
 using namespace boost::geometry::model::d2;
 
+// Vektoren für erkannte Koordinaten
+Vec4i left;
+Vec4i right;
+
+// Steigungen
+double steigung_left;
+double y_achsenabschnitt_left;
+double x_Schnitt_left;
+double steigung_right;
+double y_achsenabschnitt_right;
+double x_Schnitt_right;
+
+int counter_left;
+int counter_right;
+
+// Distanz zum Fahrbahnrand
+int distance_L;
+int distance_R;
+
 lanecalculation::lanecalculation(const Vec4i left, const Vec4i right)
 {
     // Steigung links berechnen
@@ -39,7 +58,7 @@ lanecalculation::lanecalculation(const Vec4i left, const Vec4i right)
 
 lanecalculation::~lanecalculation() {}
 
-string lanecalculation::getStringDistance()
+lanecalculation::getStringDistance()
 {
 	return "Distance left lane:  " + to_string(distance_L) + " cm\n" + "Distance right lane: " + to_string(distance_R) + " cm";
 }
