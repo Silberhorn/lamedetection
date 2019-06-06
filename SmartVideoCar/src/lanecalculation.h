@@ -1,6 +1,10 @@
 #ifndef LANECALCULATION_H_
 #define LANECALCULATION_H_
 
+using namespace std;
+using namespace cv;
+using namespace boost::geometry::model::d2;
+
 class lanecalculation
 {
 private:
@@ -19,10 +23,13 @@ private:
 	// Distanz zum Fahrbahnrand
 	int distance_L;
 	int distance_R;
-	
+
 public:
 	lanecalculation(Vec4i, Vec4i);
     ~lanecalculation();
+
+	int getDistanceLeft();
+	int getDistanceRight();
 
 	string getStringDistance();
 };

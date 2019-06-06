@@ -1,6 +1,10 @@
 #ifndef LANEDETECTION_H_
 #define LANEDETECTION_H_
 
+using namespace std;
+using namespace cv;
+using namespace boost::geometry::model::d2;
+
 class lanedetection
 {
 private:
@@ -40,6 +44,9 @@ private:
 	double steigung_right;
 	double y_achsenabschnitt_right;
 	double x_Schnitt_right;
+		
+	bool noLineLeft;
+	bool noLineRight;
 
 	// Vektoren fuer erkannte Koordinaten
 	vector<Vec4i> lines;
@@ -47,22 +54,33 @@ private:
 	vector<Vec4i> lines_right;
 	Vec4i left;
 	Vec4i right;
+	Vec4i middle;
 
 	// Farbe Fahrbahnmarkierung
 	Scalar left_Color;
 	Scalar right_Color;
-	
+	Scalar middle_Color;
+
 public:
-	extern const int IMAGEWIDTH;
-	extern const int IMAGEHEIGHT;
+//	extern int IMAGEWIDTH;
+//	extern int IMAGEHEIGHT;
 
 	lanedetection(Mat);
     ~lanedetection();
-    
+
 	Mat getEdgeImage();
 	Mat getLaneImage();
 	Vec4i getLeft();
 	Vec4i getRight();
+	Vec4i getMiddle();
+	int getSteeringAngle();
+
+	double getSteigungLeft();
+	double getSteigungRight();
+	double getSteigungMiddle();
+
+	bool getNoLineLeft();
+	bool getNoLineRight();
 };
 
 #endif	// LANEDETECTION_H_
