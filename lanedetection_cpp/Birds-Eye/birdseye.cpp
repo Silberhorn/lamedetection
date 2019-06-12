@@ -10,59 +10,21 @@ using namespace std;
 using namespace cv;
 #define PI 3.1415926
 
+Mat frame, frame2;
 
-int frameWidth = 640;
-int frameHeight = 480;
+Mat birdsEyeView(Mat imgSource, int alpha_, int focalLength, int dist) {
+		Mat birdImg;
+		double alpha, beta, gamma; 
 
-/*
- * This code illustrates bird's eye view perspective transformation using opencv
- * Paper: Distance Determination for an Automobile Environment using Inverse Perspective Mapping in OpenCV  
- * Link to paper: https://www.researchgate.net/publication/224195999_Distance_determination_for_an_automobile_environment_using_Inverse_Perspective_Mapping_in_OpenCV
- * Code taken from: http://www.aizac.info/birds-eye-view-homography-using-opencv/
- */ 
+		alpha =((double)alpha_ -90) * CV_PI/180;
+		beta = 0.0;
+		gamma = 0.0;
 
-int main()
-{
-	VideoCapture capture(0);
-	capture.set(CV_CAP_PROP_FRAME_WIDTH, 640);
-	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-
-	// Kamera verfügbar?
-	if(!capture.isOpened()) {
-		cout<<"open error\n";
-	        return -1;
-	}
-
-	Mat source, destination;
-
-	int alpha_ = 90, beta_ = 90, gamma_ = 90;
-	int f_ = 500, dist_ = 500;
-
-	namedWindow("Result", 1);
-
-	createTrackbar("Alpha", "Result", &alpha_, 180);
-	createTrackbar("Beta", "Result", &beta_, 180);
-	createTrackbar("Gamma", "Result", &gamma_, 180);
-	createTrackbar("f", "Result", &f_, 2000);
-	createTrackbar("Distance", "Result", &dist_, 2000);
-
-	while( true ) {
-		
-		capture >> source;
-
-		double focalLength, dist, alpha, beta, gamma; 
-
-		alpha =((double)alpha_ -90) * PI/180;
-		beta =((double)beta_ -90) * PI/180;
-		gamma =((double)gamma_ -90) * PI/180;
-		focalLength = (double)f_;
-		dist = (double)dist_;
-
-		Size image_size = source.size();
+		Size image_size = imgSource.size();
 		double w = (double)image_size.width, h = (double)image_size.height;
 
 
-		// Projecion matrix 2D -> 3D
+		// Projection matrix 2D -> 3D
 		Mat A1 = (Mat_<float>(4, 3)<< 
 			1, 0, -w/2,
 			0, 1, -h/2,
@@ -111,10 +73,109 @@ int main()
 
 		Mat transformationMat = K * (T * (R * A1));
 
+		warpPerspective(imgSource, birdImg, transformationMat, image_size, INTER_CUBIC | WARP_INVERSE_MAP);
+
+		return birdImg;
+}
+
+/*
+ * This code illustrates bird's eye view perspective transformation using opencv
+ * Paper: Distance Determination for an Automobile Environment using Inverse Perspective Mapping in OpenCV  
+ * Link to paper: https://www.researchgate.net/publication/224195999_Distance_determination_for_an_automobile_environment_using_Inverse_Perspective_Mapping_in_OpenCV
+ * Code taken from: http://www.aizac.info/birds-eye-view-homography-using-opencv/
+ */ 
+
+int main()
+{
+	Mat source, destination;
+
+	int alpha_ = 96;
+	int f_ = 10, dist_ = 10;
+
+	namedWindow("Result");
+	namedWindow("frame");
+	moveWindow("frame", 10, 50);
+
+	createTrackbar("Alpha", "Result", &alpha_, 180);
+	createTrackbar("f", "Result", &f_, 2000);
+	createTrackbar("Distance", "Result", &dist_, 2000);
+
+	frame = imread("./pipicture.jpg");
+
+	if(frame.empty()) {
+		cout << "capture error\n" << endl;
+	}
+
+	frame2 = birdsEyeView(frame, 12, 500, 500);		// 90, 500, 500
+	imshow("frame", frame2);
+
+	while( true ) {
+		
+		source = frame2;
+
+		double focalLength, dist, alpha, beta, gamma; 
+
+		alpha =((double)alpha_ -90) * PI/180;
+		focalLength = (double)f_;
+		dist = (double)dist_;
+
+		Size image_size = source.size();
+		double w = (double)image_size.width, h = (double)image_size.height;
+
+
+		// Projecion matrix 2D -> 3D
+		Mat A1 = (Mat_<float>(4, 3)<< 
+			1, 0, -w/2,
+			0, 1, -h/2,
+			0, 0, 0,
+			0, 0, 1 );
+
+	
+		// Rotation matrices Rx, Ry, Rz
+
+		Mat RX = (Mat_<float>(4, 4) << 
+			1, 0, 0, 0,
+			0, cos(alpha), -sin(alpha), 0,
+			0, sin(alpha), cos(alpha), 0,
+			0, 0, 0, 1 );
+
+		Mat RY = (Mat_<float>(4, 4) << 
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1	);
+
+		Mat RZ = (Mat_<float>(4, 4) << 
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1	);
+
+
+		// R - rotation matrix
+		Mat R = RX * RY * RZ;
+
+		// T - translation matrix
+		Mat T = (Mat_<float>(4, 4) << 
+			1, 0, 0, 0,  
+			0, 1, 0, 0,  
+			0, 0, 1, dist,  
+			0, 0, 0, 1); 
+		
+		// K - intrinsic matrix 
+		Mat K = (Mat_<float>(3, 4) << 
+			focalLength, 0, w/2, 0,
+			0, focalLength, h/2, 0,
+			0, 0, 1, 0
+			); 
+
+
+		Mat transformationMat = K * (T * (R * A1));
+
 		warpPerspective(source, destination, transformationMat, image_size, INTER_CUBIC | WARP_INVERSE_MAP);
 
 		imshow("Result", destination);
-		waitKey(100);
+		waitKey(1);
 	}
 
 

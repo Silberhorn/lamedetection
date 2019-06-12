@@ -6,11 +6,61 @@
 
 #IncludeRegexTransform: 
 
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.h
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.cpp
+opencv2/imgproc/imgproc.hpp
+-
+iostream
+-
+birdseyeview.h
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.h
 
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.h
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.h
 
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/main.cpp
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.cpp
+iostream
+-
+stdlib.h
+-
+opencv2/opencv.hpp
+-
+opencv2/core/core.hpp
+-
+opencv2/highgui/highgui.hpp
+-
+opencv2/imgproc/imgproc.hpp
+-
+boost/geometry.hpp
+-
+boost/geometry/geometries/point_xy.hpp
+-
+lanecalculation.h
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.h
+
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.h
+
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.cpp
+iostream
+-
+stdlib.h
+-
+opencv2/opencv.hpp
+-
+opencv2/core/core.hpp
+-
+opencv2/highgui/highgui.hpp
+-
+opencv2/imgproc/imgproc.hpp
+-
+boost/geometry.hpp
+-
+boost/geometry/geometries/point_xy.hpp
+-
+lanedetection.h
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.h
+
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.h
+
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/main.cpp
 iostream
 -
 stdlib.h
@@ -30,37 +80,11 @@ boost/geometry.hpp
 boost/geometry/geometries/point_xy.hpp
 -
 lanedetection.h
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.h
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.h
 lanecalculation.h
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.h
-rs232.h
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/rs232.h
-
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/rs232.h
-stdio.h
--
-string.h
--
-termios.h
--
-sys/ioctl.h
--
-unistd.h
--
-fcntl.h
--
-sys/types.h
--
-sys/stat.h
--
-limits.h
--
-sys/file.h
--
-errno.h
--
-windows.h
--
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.h
+birdseyeview.h
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.h
 
 /usr/local/include/opencv4/opencv2/calib3d.hpp
 opencv2/core.hpp

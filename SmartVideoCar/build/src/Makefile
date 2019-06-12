@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/local/Cellar/cmake/3.14.4/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E remove -f
+RM = /usr/local/Cellar/cmake/3.14.4/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar
+CMAKE_SOURCE_DIR = "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build
+CMAKE_BINARY_DIR = "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,25 +59,37 @@ CMAKE_BINARY_DIR = /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/usr/local/Cellar/cmake/3.14.4/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local
 
 # Special rule for the target install/local
 install/local/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/usr/local/Cellar/cmake/3.14.4/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/local/Cellar/cmake/3.14.4/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/local/Cellar/cmake/3.14.4/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
 
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/local/bin/cmake -P cmake_install.cmake
+	/usr/local/Cellar/cmake/3.14.4/bin/cmake -P cmake_install.cmake
 .PHONY : install
 
 # Special rule for the target install
 install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/local/bin/cmake -P cmake_install.cmake
+	/usr/local/Cellar/cmake/3.14.4/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
 # Special rule for the target list_install_components
@@ -90,33 +102,10 @@ list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/local/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/local/Cellar/cmake/3.14.4/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -124,16 +113,27 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/local/Cellar/cmake/3.14.4/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
 # The main all target
 all: cmake_check_build_system
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/progress.marks
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles 0
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(CMAKE_COMMAND) -E cmake_progress_start "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles" "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/progress.marks"
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,22 +143,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/lanedetection.dir/rule:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/lanedetection.dir/rule
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/lanedetection.dir/rule
 .PHONY : src/CMakeFiles/lanedetection.dir/rule
 
 # Convenience name for target.
@@ -168,8 +168,35 @@ lanedetection: src/CMakeFiles/lanedetection.dir/rule
 
 # fast build rule for target.
 lanedetection/fast:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/build
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/build
 .PHONY : lanedetection/fast
+
+birdseyeview.o: birdseyeview.cpp.o
+
+.PHONY : birdseyeview.o
+
+# target to build an object file
+birdseyeview.cpp.o:
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/birdseyeview.cpp.o
+.PHONY : birdseyeview.cpp.o
+
+birdseyeview.i: birdseyeview.cpp.i
+
+.PHONY : birdseyeview.i
+
+# target to preprocess a source file
+birdseyeview.cpp.i:
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/birdseyeview.cpp.i
+.PHONY : birdseyeview.cpp.i
+
+birdseyeview.s: birdseyeview.cpp.s
+
+.PHONY : birdseyeview.s
+
+# target to generate assembly for a file
+birdseyeview.cpp.s:
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/birdseyeview.cpp.s
+.PHONY : birdseyeview.cpp.s
 
 lanecalculation.o: lanecalculation.cpp.o
 
@@ -177,7 +204,7 @@ lanecalculation.o: lanecalculation.cpp.o
 
 # target to build an object file
 lanecalculation.cpp.o:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.o
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.o
 .PHONY : lanecalculation.cpp.o
 
 lanecalculation.i: lanecalculation.cpp.i
@@ -186,7 +213,7 @@ lanecalculation.i: lanecalculation.cpp.i
 
 # target to preprocess a source file
 lanecalculation.cpp.i:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.i
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.i
 .PHONY : lanecalculation.cpp.i
 
 lanecalculation.s: lanecalculation.cpp.s
@@ -195,7 +222,7 @@ lanecalculation.s: lanecalculation.cpp.s
 
 # target to generate assembly for a file
 lanecalculation.cpp.s:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.s
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.s
 .PHONY : lanecalculation.cpp.s
 
 lanedetection.o: lanedetection.cpp.o
@@ -204,7 +231,7 @@ lanedetection.o: lanedetection.cpp.o
 
 # target to build an object file
 lanedetection.cpp.o:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanedetection.cpp.o
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanedetection.cpp.o
 .PHONY : lanedetection.cpp.o
 
 lanedetection.i: lanedetection.cpp.i
@@ -213,7 +240,7 @@ lanedetection.i: lanedetection.cpp.i
 
 # target to preprocess a source file
 lanedetection.cpp.i:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanedetection.cpp.i
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanedetection.cpp.i
 .PHONY : lanedetection.cpp.i
 
 lanedetection.s: lanedetection.cpp.s
@@ -222,7 +249,7 @@ lanedetection.s: lanedetection.cpp.s
 
 # target to generate assembly for a file
 lanedetection.cpp.s:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanedetection.cpp.s
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/lanedetection.cpp.s
 .PHONY : lanedetection.cpp.s
 
 main.o: main.cpp.o
@@ -231,7 +258,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/main.cpp.o
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -240,7 +267,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/main.cpp.i
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -249,35 +276,8 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/main.cpp.s
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/main.cpp.s
 .PHONY : main.cpp.s
-
-rs232.o: rs232.c.o
-
-.PHONY : rs232.o
-
-# target to build an object file
-rs232.c.o:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/rs232.c.o
-.PHONY : rs232.c.o
-
-rs232.i: rs232.c.i
-
-.PHONY : rs232.i
-
-# target to preprocess a source file
-rs232.c.i:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/rs232.c.i
-.PHONY : rs232.c.i
-
-rs232.s: rs232.c.s
-
-.PHONY : rs232.s
-
-# target to generate assembly for a file
-rs232.c.s:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(MAKE) -f src/CMakeFiles/lanedetection.dir/build.make src/CMakeFiles/lanedetection.dir/rs232.c.s
-.PHONY : rs232.c.s
 
 # Help Target
 help:
@@ -286,12 +286,15 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... install"
 	@echo "... lanedetection"
 	@echo "... list_install_components"
-	@echo "... install/strip"
-	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... edit_cache"
+	@echo "... birdseyeview.o"
+	@echo "... birdseyeview.i"
+	@echo "... birdseyeview.s"
 	@echo "... lanecalculation.o"
 	@echo "... lanecalculation.i"
 	@echo "... lanecalculation.s"
@@ -301,9 +304,6 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... rs232.o"
-	@echo "... rs232.i"
-	@echo "... rs232.s"
 .PHONY : help
 
 
@@ -315,6 +315,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

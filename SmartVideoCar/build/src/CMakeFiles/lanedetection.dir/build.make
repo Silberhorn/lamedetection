@@ -34,19 +34,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/local/Cellar/cmake/3.14.4/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E remove -f
+RM = /usr/local/Cellar/cmake/3.14.4/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar
+CMAKE_SOURCE_DIR = "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build
+CMAKE_BINARY_DIR = "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build"
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/lanedetection.dir/depend.make
@@ -59,62 +59,62 @@ include src/CMakeFiles/lanedetection.dir/flags.make
 
 src/CMakeFiles/lanedetection.dir/main.cpp.o: src/CMakeFiles/lanedetection.dir/flags.make
 src/CMakeFiles/lanedetection.dir/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/lanedetection.dir/main.cpp.o"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/lanedetection.dir/main.cpp.o -c /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/lanedetection.dir/main.cpp.o"
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/lanedetection.dir/main.cpp.o -c "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/main.cpp"
 
 src/CMakeFiles/lanedetection.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lanedetection.dir/main.cpp.i"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/main.cpp > CMakeFiles/lanedetection.dir/main.cpp.i
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/main.cpp" > CMakeFiles/lanedetection.dir/main.cpp.i
 
 src/CMakeFiles/lanedetection.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lanedetection.dir/main.cpp.s"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/main.cpp -o CMakeFiles/lanedetection.dir/main.cpp.s
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/main.cpp" -o CMakeFiles/lanedetection.dir/main.cpp.s
 
 src/CMakeFiles/lanedetection.dir/lanedetection.cpp.o: src/CMakeFiles/lanedetection.dir/flags.make
 src/CMakeFiles/lanedetection.dir/lanedetection.cpp.o: ../src/lanedetection.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/lanedetection.dir/lanedetection.cpp.o"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/lanedetection.dir/lanedetection.cpp.o -c /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/lanedetection.dir/lanedetection.cpp.o"
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/lanedetection.dir/lanedetection.cpp.o -c "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.cpp"
 
 src/CMakeFiles/lanedetection.dir/lanedetection.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lanedetection.dir/lanedetection.cpp.i"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.cpp > CMakeFiles/lanedetection.dir/lanedetection.cpp.i
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.cpp" > CMakeFiles/lanedetection.dir/lanedetection.cpp.i
 
 src/CMakeFiles/lanedetection.dir/lanedetection.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lanedetection.dir/lanedetection.cpp.s"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.cpp -o CMakeFiles/lanedetection.dir/lanedetection.cpp.s
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.cpp" -o CMakeFiles/lanedetection.dir/lanedetection.cpp.s
 
 src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.o: src/CMakeFiles/lanedetection.dir/flags.make
 src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.o: ../src/lanecalculation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.o"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/lanedetection.dir/lanecalculation.cpp.o -c /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.o"
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/lanedetection.dir/lanecalculation.cpp.o -c "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.cpp"
 
 src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lanedetection.dir/lanecalculation.cpp.i"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.cpp > CMakeFiles/lanedetection.dir/lanecalculation.cpp.i
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.cpp" > CMakeFiles/lanedetection.dir/lanecalculation.cpp.i
 
 src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lanedetection.dir/lanecalculation.cpp.s"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.cpp -o CMakeFiles/lanedetection.dir/lanecalculation.cpp.s
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.cpp" -o CMakeFiles/lanedetection.dir/lanecalculation.cpp.s
 
-src/CMakeFiles/lanedetection.dir/rs232.c.o: src/CMakeFiles/lanedetection.dir/flags.make
-src/CMakeFiles/lanedetection.dir/rs232.c.o: ../src/rs232.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object src/CMakeFiles/lanedetection.dir/rs232.c.o"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lanedetection.dir/rs232.c.o   -c /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/rs232.c
+src/CMakeFiles/lanedetection.dir/birdseyeview.cpp.o: src/CMakeFiles/lanedetection.dir/flags.make
+src/CMakeFiles/lanedetection.dir/birdseyeview.cpp.o: ../src/birdseyeview.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/lanedetection.dir/birdseyeview.cpp.o"
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/lanedetection.dir/birdseyeview.cpp.o -c "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.cpp"
 
-src/CMakeFiles/lanedetection.dir/rs232.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lanedetection.dir/rs232.c.i"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/rs232.c > CMakeFiles/lanedetection.dir/rs232.c.i
+src/CMakeFiles/lanedetection.dir/birdseyeview.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lanedetection.dir/birdseyeview.cpp.i"
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.cpp" > CMakeFiles/lanedetection.dir/birdseyeview.cpp.i
 
-src/CMakeFiles/lanedetection.dir/rs232.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lanedetection.dir/rs232.c.s"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/rs232.c -o CMakeFiles/lanedetection.dir/rs232.c.s
+src/CMakeFiles/lanedetection.dir/birdseyeview.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lanedetection.dir/birdseyeview.cpp.s"
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.cpp" -o CMakeFiles/lanedetection.dir/birdseyeview.cpp.s
 
 # Object files for target lanedetection
 lanedetection_OBJECTS = \
 "CMakeFiles/lanedetection.dir/main.cpp.o" \
 "CMakeFiles/lanedetection.dir/lanedetection.cpp.o" \
 "CMakeFiles/lanedetection.dir/lanecalculation.cpp.o" \
-"CMakeFiles/lanedetection.dir/rs232.c.o"
+"CMakeFiles/lanedetection.dir/birdseyeview.cpp.o"
 
 # External object files for target lanedetection
 lanedetection_EXTERNAL_OBJECTS =
@@ -122,57 +122,59 @@ lanedetection_EXTERNAL_OBJECTS =
 bin/lanedetection: src/CMakeFiles/lanedetection.dir/main.cpp.o
 bin/lanedetection: src/CMakeFiles/lanedetection.dir/lanedetection.cpp.o
 bin/lanedetection: src/CMakeFiles/lanedetection.dir/lanecalculation.cpp.o
-bin/lanedetection: src/CMakeFiles/lanedetection.dir/rs232.c.o
+bin/lanedetection: src/CMakeFiles/lanedetection.dir/birdseyeview.cpp.o
 bin/lanedetection: src/CMakeFiles/lanedetection.dir/build.make
-bin/lanedetection: /usr/local/lib/libopencv_stitching.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_aruco.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_bgsegm.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_bioinspired.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_ccalib.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_dnn_objdetect.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_dpm.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_face.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_freetype.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_fuzzy.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_hfs.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_img_hash.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_line_descriptor.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_quality.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_reg.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_rgbd.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_saliency.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_stereo.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_structured_light.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_superres.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_surface_matching.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_tracking.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_videostab.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_xfeatures2d.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_xobjdetect.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_xphoto.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_shape.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_datasets.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_plot.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_text.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_dnn.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_ml.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_phase_unwrapping.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_optflow.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_ximgproc.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_video.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_objdetect.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_calib3d.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_features2d.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_flann.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_highgui.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_videoio.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_imgcodecs.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_photo.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_imgproc.so.4.1.0
-bin/lanedetection: /usr/local/lib/libopencv_core.so.4.1.0
+bin/lanedetection: /usr/local/lib/libopencv_gapi.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_stitching.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_aruco.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_bgsegm.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_bioinspired.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_ccalib.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_dnn_objdetect.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_dpm.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_face.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_freetype.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_fuzzy.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_hfs.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_img_hash.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_line_descriptor.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_quality.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_reg.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_rgbd.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_saliency.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_sfm.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_stereo.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_structured_light.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_superres.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_surface_matching.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_tracking.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_videostab.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_xfeatures2d.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_xobjdetect.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_xphoto.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_shape.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_datasets.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_plot.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_text.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_dnn.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_ml.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_phase_unwrapping.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_optflow.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_ximgproc.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_video.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_objdetect.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_calib3d.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_features2d.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_flann.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_highgui.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_videoio.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_imgcodecs.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_photo.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_imgproc.4.1.0.dylib
+bin/lanedetection: /usr/local/lib/libopencv_core.4.1.0.dylib
 bin/lanedetection: src/CMakeFiles/lanedetection.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable ../bin/lanedetection"
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/lanedetection.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable ../bin/lanedetection"
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/lanedetection.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/lanedetection.dir/build: bin/lanedetection
@@ -180,10 +182,10 @@ src/CMakeFiles/lanedetection.dir/build: bin/lanedetection
 .PHONY : src/CMakeFiles/lanedetection.dir/build
 
 src/CMakeFiles/lanedetection.dir/clean:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src && $(CMAKE_COMMAND) -P CMakeFiles/lanedetection.dir/cmake_clean.cmake
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" && $(CMAKE_COMMAND) -P CMakeFiles/lanedetection.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/lanedetection.dir/clean
 
 src/CMakeFiles/lanedetection.dir/depend:
-	cd /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src /home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir/DependInfo.cmake --color=$(COLOR)
+	cd "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar" "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src" "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build" "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src" "/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : src/CMakeFiles/lanedetection.dir/depend
 

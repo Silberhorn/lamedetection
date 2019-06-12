@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(lanedetection)
+set(CMAKE_CXX_FLAGS "-std=c++0x")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -12,3 +13,5 @@ install(DIRECTORY build/bin/
         FILES_MATCHING PATTERN lanedetection
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
                     GROUP_EXECUTE GROUP_READ)
+install(DIRECTORY video/
+        DESTINATION lanedetection/)

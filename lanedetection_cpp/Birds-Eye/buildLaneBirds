@@ -1,2 +1,2 @@
 #!/bin/bash
-g++ -O2 `pkg-config --cflags --libs opencv` lanedetect_birdseye.cpp -o lanedetect_birdseye
+g++ -O2 -std=c++0x `pkg-config --cflags --libs opencv4` lanedetect_birdseye.cpp -o lanedetect_birdseye

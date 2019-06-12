@@ -103,10 +103,10 @@ lanedetection::lanedetection(Mat frame)
 	}
 
 	if(left[0] == 0 && left[1] == 0 && left[2] == 0 && left[3] == 0) {
-		left[0] = IMAGEWIDTH - right[2];
-		left[1] = right[3];
-		left[2] = IMAGEWIDTH - right[0];
-		left[3] = right[1];
+		//left[0] = IMAGEWIDTH - right[2];
+		//left[1] = right[3];
+		//left[2] = IMAGEWIDTH - right[0];
+		//left[3] = right[1];
 
 		noLineLeft = true;
 	} else {
@@ -114,10 +114,10 @@ lanedetection::lanedetection(Mat frame)
 	}
 
 	if(right[0] == 0 && right[1] == 0 && right[2] == 0 && right[3] == 0) {
-		right[0] = IMAGEWIDTH - left[2];
-		right[1] = left[3];
-		right[2] = IMAGEWIDTH - left[0];
-		right[3] = left[1];
+		//right[0] = IMAGEWIDTH - left[2];
+		//right[1] = left[3];
+		//right[2] = IMAGEWIDTH - left[0];
+		//right[3] = left[1];
 
 		noLineRight = true;
 	} else {
@@ -168,23 +168,23 @@ Vec4i lanedetection::getMiddle()
 int lanedetection::getSteeringAngle()
 {
 	int8_t steering = 0;
-	int temp_forever;
+	int middle_point_offset;
 
-	temp_forever = ((middle[0] + middle[2]) / 2) - 320;
+	middle_point_offset = ((middle[0] + middle[2]) / 2) - 320;
 
 	// Faktor und Offset
-	temp_forever = temp_forever * 0.35 + 90;	// 0.28
+	middle_point_offset = middle_point_offset * 0.28 + 90;	// 0.28
 
-	cout << "Steering: " << temp_forever << endl;
+	cout << "Steering: " << middle_point_offset << endl;
 
-	if(temp_forever < 0) {
-		temp_forever = 0;
+	if(middle_point_offset < 0) {
+		middle_point_offset = 0;
 	}
-	if(temp_forever > 180) {
-		temp_forever = 180;
+	if(middle_point_offset > 180) {
+		middle_point_offset = 180;
 	}
 
-	steering = temp_forever;
+	steering = middle_point_offset;
 
 	return steering;
 }

@@ -1,1 +1,2 @@
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/../lanedetection//lanedetection
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/../lanedetection//lanedetection
+/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/../lanedetection//project_video.mp4
