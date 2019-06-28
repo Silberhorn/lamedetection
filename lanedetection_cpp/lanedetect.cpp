@@ -5,13 +5,14 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
 #include <iostream>
+#include <chrono>
 
 using namespace std;
 using namespace cv;
 using namespace boost::geometry::model::d2;
 
-static const int IMAGEWIDTH 	= 640;
-static const int IMAGEHEIGHT	= 480;
+static const int IMAGEWIDTH 	= 320;
+static const int IMAGEHEIGHT	= 180;
 
 int main()
 {
@@ -35,10 +36,13 @@ int main()
 	Rect region_of_interest = Rect(roi_x, roi_y, roi_width, roi_height);	// 1, 185, 638, 190
 
 	while(1) {
+		auto start = chrono::steady_clock::now();
 		cap >> frame;
+		
 		if(frame.empty()) {
 			cout << "capture error\n" << endl;
 		}
+		auto end = chrono::steady_clock::now();
 
 		// Region of Interest
 		Mat frame_roi = frame(region_of_interest);
@@ -144,8 +148,8 @@ int main()
 		y_achsenabschnitt_right = right[3] - steigung_right * right[2];
 		
 		// Schnitt mit der x-Achse auf Höhe des Fahrzeugs (y=480)
-		x_Schnitt_left = (480.0 - y_achsenabschnitt_left) / steigung_left; 
-		x_Schnitt_right = (480.0 - y_achsenabschnitt_right) / steigung_right; 
+		x_Schnitt_left = (180.0 - y_achsenabschnitt_left) / steigung_left; 
+		x_Schnitt_right = (180.0 - y_achsenabschnitt_right) / steigung_right; 
 		
 		// Berechnung Abstand zu linker Linie
 		// ANNAHME:
@@ -177,6 +181,7 @@ int main()
 			cout << "finish successful\n";
 			break;
 		}
+		cout << "capture time: " << chrono::duration_cast<chrono::milliseconds>(end-start).count() << " ms " << endl;
 	}
 	return 0;
 }

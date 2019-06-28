@@ -13,5 +13,5 @@ install(DIRECTORY build/bin/
         FILES_MATCHING PATTERN lanedetection
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
                     GROUP_EXECUTE GROUP_READ)
-install(DIRECTORY video/
-        DESTINATION lanedetection/)
+install(DIRECTORY cascade_data/
+	DESTINATION lanedetection/)

@@ -6,67 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.cpp
-opencv2/imgproc/imgproc.hpp
--
-iostream
--
-birdseyeview.h
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.h
-
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.h
-
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.cpp
-iostream
--
-stdlib.h
--
-opencv2/opencv.hpp
--
-opencv2/core/core.hpp
--
-opencv2/highgui/highgui.hpp
--
-opencv2/imgproc/imgproc.hpp
--
-boost/geometry.hpp
--
-boost/geometry/geometries/point_xy.hpp
--
-lanecalculation.h
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.h
-
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.h
-
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.cpp
-iostream
--
-stdlib.h
--
-opencv2/opencv.hpp
--
-opencv2/core/core.hpp
--
-opencv2/highgui/highgui.hpp
--
-opencv2/imgproc/imgproc.hpp
--
-boost/geometry.hpp
--
-boost/geometry/geometries/point_xy.hpp
--
-lanedetection.h
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.h
-
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.h
-
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/main.cpp
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/signdetection.cpp
 iostream
 -
 stdlib.h
 -
 unistd.h
 -
+opencv/cv.h
+-
 opencv2/opencv.hpp
 -
 opencv2/core/core.hpp
@@ -75,16 +23,14 @@ opencv2/highgui/highgui.hpp
 -
 opencv2/imgproc/imgproc.hpp
 -
-boost/geometry.hpp
+opencv2/objdetect/objdetect.hpp
 -
-boost/geometry/geometries/point_xy.hpp
+wiringPi.h
 -
-lanedetection.h
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanedetection.h
-lanecalculation.h
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/lanecalculation.h
-birdseyeview.h
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/src/birdseyeview.h
+signdetection.h
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/signdetection.h
+
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/src/signdetection.h
 
 /usr/local/include/opencv4/opencv2/calib3d.hpp
 opencv2/core.hpp
@@ -933,6 +879,10 @@ opencv2/core.hpp
 -
 vector
 -
+
+/usr/local/include/opencv4/opencv2/objdetect/objdetect.hpp
+opencv2/objdetect.hpp
+/usr/local/include/opencv4/opencv2/objdetect/opencv2/objdetect.hpp
 
 /usr/local/include/opencv4/opencv2/opencv.hpp
 opencv2/opencv_modules.hpp

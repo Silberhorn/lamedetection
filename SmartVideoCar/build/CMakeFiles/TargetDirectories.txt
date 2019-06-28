@@ -1,13 +1,13 @@
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/install/local.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/install/strip.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/install.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/list_install_components.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/rebuild_cache.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/edit_cache.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/install/local.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/install/strip.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/install.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/list_install_components.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/rebuild_cache.dir
-/Users/tim/Documents/Documents - MacLucky/HAW Landshut/Smart_Video_Car/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/edit_cache.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/install/local.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/install/strip.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/edit_cache.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/rebuild_cache.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/list_install_components.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/CMakeFiles/install.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/install/local.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/install.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/lanedetection.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/list_install_components.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/install/strip.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/edit_cache.dir
+/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/src/CMakeFiles/rebuild_cache.dir
