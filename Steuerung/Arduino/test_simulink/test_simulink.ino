@@ -12,12 +12,13 @@ int in2_2 = 6;
 
 //Servo
 Servo servo1;
-int motorspeed = 0;
-int steeringangle = 90;
+int motorspeedLeft = 0;
+int motorspeedRight = 0;
+int steeringAngle = 0;
 
 void setup() {
 
-  Serial.begin(115200);
+  Serial.begin(19200);
   
   pinMode(enA, OUTPUT);
   pinMode(enB, OUTPUT);
@@ -33,27 +34,40 @@ void setup() {
 
 void loop() {
 
-  while (!Serial.available()){}
+  while(!Serial.available()) {}
 
-//  int val = Serial.read();
-
-//  if (val <= 0){
-//    motorspeed = 0 - val - 1;
-//  }
-//  else{
-//    steeringangle = val;
-//  }
-
-int steeringangle = Serial.read();
-  
   digitalWrite(in1_1, HIGH);
   digitalWrite(in1_2, LOW);
   digitalWrite(in2_1, HIGH);
   digitalWrite(in2_2, LOW);
-//  analogWrite(enA, motorspeed);
-//  analogWrite(enB, motorspeed);
-  analogWrite(enA, 250);
-  analogWrite(enB, 250);
+  //analogWrite(enA, 0);
+  //analogWrite(enB, 0);
+
+  int serialMsg = Serial.read();
+  // 200 = Stop
+  if(serialMsg == 200){
+    motorspeedLeft = 0;
+    motorspeedRight = 0;
+  }
+  // 210 = GO!
+  if(serialMsg == 210) {
+    motorspeedLeft = 200;
+    motorspeedRight = 200;
+  }
   
-  servo1.write(steeringangle);
+  if(serialMsg >= 0 && serialMsg <= 180) {
+    servo1.write(serialMsg);
+  }
+
+  steeringAngle = serialMsg - 90;
+  if(steeringAngle > 0) {
+    motorspeedRight = motorspeedRight - steeringAngle;
+  }
+  if(steeringAngle < 0) {
+    motorspeedLeft = motorspeedLeft - steeringAngle;
+  }
+
+  analogWrite(enA, motorspeedLeft);
+  analogWrite(enB, motorspeedRight);
+
 }
