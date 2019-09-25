@@ -1,3 +1,0 @@
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/../lanedetection//lanedetection
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/../lanedetection//stopSignDetector_yellow.xml
-/home/pi/Desktop/GitHub/smartvideocar/SmartVideoCar/build/../lanedetection//cascade.xml

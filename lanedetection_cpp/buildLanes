@@ -1,2 +1,0 @@
-#!/bin/bash
-g++ -O2 `pkg-config --cflags --libs opencv` lanedetect.cpp -o lanedetect
